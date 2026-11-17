@@ -1,0 +1,47 @@
+# V4 Winiger Frères : à confirmer avant publication
+
+Le site n'affiche que des informations vérifiées. Tout ce qui suit a été retiré de l'interface ou reste à compléter.
+Source des informations vérifiées : ancien site winiger-artcar.ch, compte Instagram de l'atelier, enseigne et photos fournies.
+
+## 1. Identité et images
+
+- [ ] **Logo vectoriel original** (SVG, AI ou PDF), à demander à Winiger ou au fabricant de l'enseigne. Le logo actuel est extrait de la photo de l'enseigne : il est fidèle (lettrage et proportions d'origine), mais c'est une image matricielle. Les redessins SVG faits pour la V3 ne sont pas fidèles et ne sont plus utilisés. Pour le fond blanc, une version claire a été dérivée de la même extraction : seuls les blancs de l'enseigne passent en noir, lettrage et proportions inchangés. À remplacer par la déclinaison officielle « fond clair » si elle existe.
+- [ ] **Droits des photos de compétition** : autorisation écrite de Sébastien Montagny / Sport-Auto.ch pour un usage sur le site.
+- [ ] **Photos issues d'Instagram** : confirmer qu'elles sont bien à l'atelier, et obtenir les originaux en haute définition (surtout le gardiennage, aujourd'hui en 744 px).
+- [ ] Une photo récente de la nouvelle réception et du showroom, si elle existe.
+
+## 2. Mentions légales et données
+
+- [ ] Numéro IDE **CHE-111.985.169** : vérifier sur zefix.ch.
+- [ ] Personnes autorisées à représenter la société (registre du commerce).
+- [ ] Hébergeur du site : nom et adresse.
+- [ ] Service d'envoi du formulaire, adresse de réception des demandes, lieu de stockage et durée de conservation des données.
+- [ ] Nom de domaine final et adresse canonique, pour compléter les balises de partage (`og:url`) et un plan du site.
+
+## 3. Gardiennage
+
+- [ ] **Emplacement** : le sous-sol est-il à l'adresse de l'atelier (Route de l'Industrie-Ouest 11) ? Le site ne le précise pas.
+- [ ] **Tarifs** : les tarifs 2021 de l'ancien site n'ont pas été repris. Le site indique « tarif sur demande ».
+- [ ] Disponibilité, nombre de places, équipements de sécurité, assurance, accès du propriétaire au véhicule, services pendant le stockage (batterie, lavage…) : rien n'est affiché tant que ce n'est pas confirmé.
+- [ ] Modalités de dépôt et de retrait (horaires, préavis).
+
+## 4. Prestations et entreprise
+
+- [ ] **Céramique, film de protection (PPF), lavage** : offre vue seulement sur Instagram, retirée du site. À confirmer si elle doit apparaître.
+- [ ] Noms des **trois métiers CFC** enseignés aux apprentis.
+- [ ] Preuve d'adhésion à **carrosserie suisse** (pour afficher le logo de l'association, si souhaité).
+- [ ] Urgence WhatsApp 079 457 00 37 : toujours active, et à quels horaires ?
+- [ ] Horaires d'ouverture : toujours valables en 2026 ? Fermetures annuelles ?
+- [ ] Voiture de remplacement et aide au sinistre : conditions éventuelles.
+
+## 5. Restauration et compétition
+
+- [ ] Porsche 911 en restauration : version et année exactes, étapes suivantes à publier au fil du chantier.
+- [ ] Porsche 993 et véhicule de décembre 2020 : modèles exacts et accord des propriétaires pour publier.
+- [ ] Compétition : nom du pilote, championnat ou épreuves, saison, autres voitures. La page reste volontairement courte en attendant.
+
+## 6. Intégrations à brancher
+
+- [ ] Envoi du formulaire (voir README, section Formulaire).
+- [ ] Mesure d'audience éventuelle : si un outil est ajouté, mettre à jour la page confidentialité (aujourd'hui « aucun outil de suivi »).
+- [ ] Fiche Google Business Profile : vérifier que nom, adresse, téléphone et horaires sont identiques au site.
