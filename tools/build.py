@@ -278,7 +278,7 @@ def page_index():
     <div class="hx-text">
       <p class="eyebrow">Carrosserie de Grolley · depuis 2004</p>
       <h1 class="display h1" id="h-hero">Votre voiture mérite <span class="accent">un vrai atelier.</span></h1>
-      <p class="lead">Réparation toutes marques, peinture en cabine, restauration de véhicules anciens et gardiennage en sous-sol chauffé, par Richard et Fabrice Winiger et leur équipe.</p>
+      <p class="lead">Réparation toutes marques, peinture en cabine, restauration et gardiennage en sous-sol chauffé.</p>
       <div class="btns">{btn("contact.html#demande", "Demander un devis")}{btn("gardiennage.html", "Réserver une place", "ghost")}</div>
       <p class="hero-tel">Ou appelez l'atelier : <a href="{TEL_HREF}">{TEL}</a></p>
     </div>
