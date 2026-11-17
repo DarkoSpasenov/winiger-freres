@@ -217,6 +217,7 @@ def document(file, title, desc, body, wrapped=True, jsonld=False):
 {body}
 </main>
 {footer()}
+<nav class="mbar" aria-label="Contact rapide"><a class="mbar-tel" href="{TEL_HREF}"><span aria-hidden="true">☎</span> Appeler</a><a class="mbar-dv" href="contact.html#demande">Demander un devis <span aria-hidden="true">→</span></a></nav>
 <script src="assets/js/site.js" defer></script>'''
     if not wrapped:
         # Variante pour l'aperçu Artifact : la page principale est enveloppée par l'hébergeur.
@@ -276,11 +277,15 @@ def page_index():
   <p class="hx-credit">Photo : Sébastien Montagny / Sport-Auto.ch</p>
   <div class="wrap hx-in"><div class="inner">
     <div class="hx-text">
+      <div class="hx-head">
       <p class="eyebrow">Carrosserie de Grolley · depuis 2004</p>
       <h1 class="display h1" id="h-hero">Votre voiture mérite <span class="accent">un vrai atelier.</span></h1>
       <p class="lead">Réparation toutes marques, peinture en cabine, restauration et gardiennage en sous-sol chauffé.</p>
+      </div>
+      <div class="hx-cta">
       <div class="btns">{btn("contact.html#demande", "Demander un devis")}{btn("gardiennage.html", "Réserver une place", "ghost")}</div>
       <p class="hero-tel">Ou appelez l'atelier : <a href="{TEL_HREF}">{TEL}</a></p>
+      </div>
     </div>
   </div></div>
   </div>
