@@ -238,7 +238,7 @@ def document(file, title, desc, body, wrapped=True, jsonld=False):
 def page_index():
     hours = "".join(f"<li><span>{d}</span><span>{h}</span></li>" for d, h in HOURS)
     rail = "".join(
-        f'<a class="rail-i" href="{h}"><span class="rail-th">{img(k, "", "120px")}</span><span><span class="rail-n">{i+1:02d}</span><b>{t}</b><small>{d}</small></span></a>'
+        f'<a class="rail-i" href="{h}"><span class="rail-th">{img(k, "", "120px")}</span><span><span class="rail-n">{i+1:02d}</span><b>{t}</b><small>{d}</small></span><span class="rail-go" aria-hidden="true">→</span></a>'
         for i, (h, k, t, d) in enumerate([
             ("prestations.html#carrosserie", "mazda-giclage", "Carrosserie et peinture", "Toutes marques, en cabine"),
             ("gardiennage.html", "gardiennage", "Gardiennage", "Sous-sol chauffé, à l'année"),
@@ -283,16 +283,6 @@ def page_index():
     </div>
   </div></div>
   <nav class="rail" aria-label="Accès rapide aux prestations">{rail}</nav>
-</section>
-
-<section class="section wrap" aria-labelledby="h-svc">
-  <div class="inner">
-    <div class="sec-head">
-      <div class="stack"><p class="eyebrow">Ce que nous faisons</p><h2 class="display h2" id="h-svc">Un atelier, <span class="accent">toutes les étapes.</span></h2></div>
-      <p class="muted">Un seul interlocuteur du devis à la livraison, que votre voiture sorte d'un accrochage ou d'un long sommeil.</p>
-    </div>
-    <div class="bento">{bento}</div>
-  </div>
 </section>
 
 <section class="gfiche dark" aria-labelledby="h-gard">
