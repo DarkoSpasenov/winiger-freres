@@ -130,3 +130,8 @@
     });
   }
 })();
+
+// Barre d'action mobile : masquée tant que le hero de l'accueil est visible
+(function(){var hx=document.querySelector('.hx'),mb=document.querySelector('.mbar');
+if(!hx||!mb||!('IntersectionObserver' in window))return;mb.classList.add('off');
+new IntersectionObserver(function(es){mb.classList.toggle('off',es[0].isIntersecting)}).observe(hx)})();
