@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 IMGINFO = {
     # nom : (largeur, hauteur, tailles webp disponibles)
     "atelier-peintre": (1568, 1045, [1568, 800]),
-    "gardiennage": (744, 496, [744]),
+    "gardiennage": (1488, 992, [1488, 744]),
     "pieces-cabine": (744, 744, [744]),
     "mazda-giclage": (744, 744, [744]),
     "tesla-model3": (744, 744, [744]),
