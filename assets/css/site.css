@@ -420,10 +420,10 @@ body.menu-open{overflow:hidden}
 @media (max-width:860px){
   .hx{min-height:0}
   .hx-bg{inset:0;width:auto;clip-path:none}
-  .hx-bg img{position:absolute;bottom:0;left:50%;width:max(170vw,720px);height:auto;max-width:none;transform:translateX(-50%);object-fit:fill}
-  .hx-bg::after{background:linear-gradient(180deg,#0B0B0C 0%,rgba(11,11,12,.9) 30%,rgba(11,11,12,.45) 52%,rgba(11,11,12,.05) 72%,rgba(11,11,12,.35) 92%,#0B0B0C)}
+  .hx-bg img{object-position:56% 50%}
+  .hx-bg::after{background:linear-gradient(180deg,rgba(11,11,12,.92) 0%,rgba(11,11,12,.7) 45%,rgba(11,11,12,.45) 75%,#0B0B0C 100%)}
   .hx-credit{top:auto;right:16px;bottom:10px;font-size:10px}
-  .hx-text{padding-block:28px max(250px,58vw)}
+  .hx-text{padding-block:32px 48px}
   .hx .btns{flex-direction:column;align-items:stretch}.hx .btns .btn{width:100%}
 }
 @media (max-width:520px){.rail-i{flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px}.rail-th{width:100%;height:64px}.rail-i small{display:none}}
