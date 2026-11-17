@@ -270,6 +270,7 @@ def page_index():
         ("huracan-avant", "Lamborghini Huracán, bloc avant démonté"), ("911-interieur-appret", "Intérieur de caisse de 911 en apprêt")])
     return f'''
 <section class="hx dark" aria-labelledby="h-hero">
+  <div class="hx-top">
   <div class="hx-bg">{img("course-438-profil", "Porsche 911 numéro 438 aux couleurs Winiger Frères, Carrosserie de Grolley, en piste", "(max-width:860px) 100vw, 70vw", eager=True)}</div>
   <div class="lisere" aria-hidden="true"><i></i><i></i><i></i></div>
   <p class="hx-credit">Photo : Sébastien Montagny / Sport-Auto.ch</p>
@@ -282,6 +283,7 @@ def page_index():
       <p class="hero-tel">Ou appelez l'atelier : <a href="{TEL_HREF}">{TEL}</a></p>
     </div>
   </div></div>
+  </div>
   <nav class="rail" aria-label="Accès rapide aux prestations">{rail}</nav>
 </section>
 
