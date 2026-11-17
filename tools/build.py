@@ -270,6 +270,7 @@ def page_index():
         ("huracan-avant", "Lamborghini Huracán, bloc avant démonté"), ("911-interieur-appret", "Intérieur de caisse de 911 en apprêt")])
     return f'''
 <section class="hx dark" aria-labelledby="h-hero">
+  <div class="hx-top">
   <div class="hx-bg">{img("course-438-profil", "Porsche 911 numéro 438 aux couleurs Winiger Frères, Carrosserie de Grolley, en piste", "(max-width:860px) 100vw, 70vw", eager=True)}</div>
   <div class="lisere" aria-hidden="true"><i></i><i></i><i></i></div>
   <p class="hx-credit">Photo : Sébastien Montagny / Sport-Auto.ch</p>
@@ -277,11 +278,12 @@ def page_index():
     <div class="hx-text">
       <p class="eyebrow">Carrosserie de Grolley · depuis 2004</p>
       <h1 class="display h1" id="h-hero">Votre voiture mérite <span class="accent">un vrai atelier.</span></h1>
-      <p class="lead">Réparation toutes marques, peinture en cabine, restauration de véhicules anciens et gardiennage en sous-sol chauffé, par Richard et Fabrice Winiger et leur équipe.</p>
+      <p class="lead">Réparation toutes marques, peinture en cabine, restauration et gardiennage en sous-sol chauffé.</p>
       <div class="btns">{btn("contact.html#demande", "Demander un devis")}{btn("gardiennage.html", "Réserver une place", "ghost")}</div>
       <p class="hero-tel">Ou appelez l'atelier : <a href="{TEL_HREF}">{TEL}</a></p>
     </div>
   </div></div>
+  </div>
   <nav class="rail" aria-label="Accès rapide aux prestations">{rail}</nav>
 </section>
 
