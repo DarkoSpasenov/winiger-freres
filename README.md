@@ -1,12 +1,31 @@
-# Winiger Frères : site V5
+# Winiger Frères : site V6 (accueil 3D)
 
-Site statique en HTML, CSS et JavaScript, sans dépendance externe. Il fonctionne chez n'importe quel hébergeur (Infomaniak ou autre).
+Site statique en HTML, CSS et JavaScript. Il fonctionne chez n'importe quel hébergeur (GitHub Pages, Infomaniak ou autre) : aucun serveur, aucune base de données, aucun service externe.
+
+## Accueil 3D
+
+La page d'accueil pose le récit de l'atelier sur une maquette 3D du bâtiment (Three.js), pilotée par le défilement :
+le bâtiment s'ouvre, la caméra entre dans l'atelier, descend au sous-sol, passe à la restauration, à la voiture n° 438,
+à la station de lavage, puis à l'histoire, aux réalisations et au contact. Le bouton « Explorer le bâtiment en 3D » ouvre
+un mode libre (rotation, zoom, repères cliquables).
+
+- Code source de la 3D : `src/3d/` (`building.js` bâtiment et décors, `car.js` véhicules, `story.js` plans de caméra par chapitre, `main.js` rendu et interactions).
+- Fichier publié : `assets/js/experience.js`, généré par `npm run build:3d` (esbuild). Il faut relancer cette commande après toute modification de `src/3d/`.
+- Les plans de caméra sont exprimés en « blocs de texte » : `s: 0` = bloc d'introduction du chapitre, `s: 1` = première étape, etc.
+- Sans WebGL, si l'utilisateur choisit « Version sans 3D », ou si le chargement échoue, la page s'affiche en mise en page classique avec les photos réelles. Le contenu est toujours dans le HTML (référencement).
+- Aucun modèle n'est téléchargé : le bâtiment et les véhicules sont générés dans le navigateur. La maquette est **conceptuelle** et l'indique à l'écran (voir `A-CONFIRMER.md`, section 6).
+
+```
+npm install          # une seule fois (esbuild et three)
+npm run build        # pages HTML + 3D
+```
 
 ## Contenu du dossier
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Accueil : vue d'ensemble, gardiennage mis en avant, choix de la prestation |
+| `index.html` | Accueil 3D : récit par espace, histoire, réalisations, contact |
+| `lavage.html` | Station de lavage (informations publiées par l'atelier) |
 | `prestations.html` | Carrosserie, peinture, Tesla, sinistre et vitrage, réalisation Huracán |
 | `restauration.html` | Restauration, avec le dossier de la Porsche 911 en cours |
 | `gardiennage.html` | Gardiennage : ce que l'on trouve, comment réserver, questions fréquentes |
@@ -18,7 +37,10 @@ Site statique en HTML, CSS et JavaScript, sans dépendance externe. Il fonctionn
 | `assets/js/site.js` | Menu mobile, apparitions, dossier 911, formulaire |
 | `assets/img/` | Images au format WebP, redimensionnées |
 | `assets/fonts/` | Polices Montserrat et Inter, hébergées avec le site |
-| `tools/build.py` | Génère les 8 pages à partir d'un en-tête et d'un pied de page communs |
+| `assets/css/experience.css` | Mise en forme de l'accueil 3D |
+| `assets/js/experience.js` | Maquette 3D (généré, ne pas modifier à la main) |
+| `src/3d/` | Sources de la maquette 3D |
+| `tools/build.py` | Génère les 9 pages à partir d'un en-tête et d'un pied de page communs |
 
 ## Modifier le site
 
@@ -29,7 +51,7 @@ Téléphone, adresse, horaires et liens sont définis une seule fois en haut du 
 python3 tools/build.py
 ```
 
-Le script réécrit les 8 fichiers HTML. Ne modifiez pas les fichiers HTML à la main, sinon la prochaine génération écrasera vos changements.
+Le script réécrit les 9 fichiers HTML. Ne modifiez pas les fichiers HTML à la main, sinon la prochaine génération écrasera vos changements.
 
 ## Formulaire
 

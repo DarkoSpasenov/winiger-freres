@@ -618,3 +618,8 @@ a.tile:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .rail-i:hover b,.rail-i:focus-visible b{color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:4px}
 .rail-i:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
 @media (max-width:520px){.rail-i{padding-right:16px}.rail-go{top:auto;bottom:14px;right:12px;margin-top:0;width:28px;height:28px;font-size:14px}.rail-i b{padding-right:30px}}
+
+/* Listes à coches (page Station de lavage) */
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.checks li{position:relative;padding-left:30px;font-weight:500}
+.checks li::before{content:"";position:absolute;left:0;top:.55em;width:16px;height:4px;background:var(--red);transform:skewX(-20deg)}

@@ -27,7 +27,16 @@ Source des informations vérifiées : ancien site winiger-artcar.ch, compte Inst
 
 ## 4. Prestations et entreprise
 
-- [ ] **Céramique, film de protection (PPF), lavage** : offre vue seulement sur Instagram, retirée du site. À confirmer si elle doit apparaître.
+- [ ] **Céramique et film de protection (PPF)** : vus seulement sur Instagram (Ferrari, février-mars 2026 ; Huracán, janvier 2026). Non affichés. À confirmer s'ils doivent apparaître.
+
+## 4 bis. Station de lavage (ajoutée en novembre 2026)
+
+Source unique : publication Instagram de l'atelier du 22 août 2026 (enseigne « Station Lavage – Chez les Frères Winiger », pistes « Lavage Haute Pression » sous auvent, paiement par carte et Twint). Rien sur winiger-artcar.ch.
+- [ ] Nombre de pistes, présence éventuelle d'un portique ou d'un local fermé équipé, aspirateurs, produits.
+- [ ] Libre-service ou non, accès 24 h/24 ou horaires.
+- [ ] Tarifs et programmes de lavage.
+- [ ] Adresse exacte de la station (même parcelle que l'atelier ?).
+- [ ] Une vraie photo de la station, en bonne définition, pour la page et la maquette 3D.
 - [ ] Noms des **trois métiers CFC** enseignés aux apprentis.
 - [ ] Preuve d'adhésion à **carrosserie suisse** (pour afficher le logo de l'association, si souhaité).
 - [ ] Urgence WhatsApp 079 457 00 37 : toujours active, et à quels horaires ?
@@ -40,7 +49,16 @@ Source des informations vérifiées : ancien site winiger-artcar.ch, compte Inst
 - [ ] Porsche 993 et véhicule de décembre 2020 : modèles exacts et accord des propriétaires pour publier.
 - [ ] Compétition : nom du pilote, championnat ou épreuves, saison, autres voitures. La page reste volontairement courte en attendant.
 
-## 6. Intégrations à brancher
+## 6. Maquette 3D de l'accueil
+
+La maquette est une représentation conceptuelle, signalée comme telle sur la page.
+- [ ] Plans ou cotes du bâtiment (longueur, largeur, hauteur, sous-sol), pour caler les volumes.
+- [ ] Disposition réelle de l'atelier : emplacement de la cabine de peinture, des ponts, de la réception, de l'ascenseur à véhicules.
+- [ ] Nombre de places du sous-sol (la maquette en montre 18, à titre indicatif).
+- [ ] Position et forme de l'agrandissement 2026 (la charpente est placée à titre indicatif).
+- [ ] Modèles 3D des véhicules (911 n° 438 en particulier) : les voitures actuelles sont des volumes simplifiés.
+
+## 7. Intégrations à brancher
 
 - [ ] Envoi du formulaire (voir README, section Formulaire).
 - [ ] Mesure d'audience éventuelle : si un outil est ajouté, mettre à jour la page confidentialité (aujourd'hui « aucun outil de suivi »).

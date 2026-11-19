@@ -129,4 +129,16 @@
       status.hidden = false;
     });
   }
+
+  /* ---------- Accueil : bouton « Version sans 3D » / « Activer la 3D » ---------- */
+  var tg = document.getElementById('xp-toggle');
+  if (tg) {
+    var off = root.classList.contains('xp-off');
+    tg.textContent = off ? tg.dataset.off : tg.dataset.on;
+    if (root.classList.contains('xp-failed')) tg.hidden = true;
+    tg.addEventListener('click', function () {
+      try { if (off) localStorage.removeItem('wf3d'); else localStorage.setItem('wf3d', 'off'); } catch (e) {}
+      location.reload();
+    });
+  }
 })();
