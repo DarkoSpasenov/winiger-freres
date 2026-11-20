@@ -3,6 +3,7 @@
 // intérieure, les dimensions et le nombre de places sont indicatifs.
 import * as THREE from 'three';
 import * as T from './textures.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { makeCar, paint, addRearWing, carMaterials } from './car.js';
 
 const RED = 0xc8101a;
@@ -35,10 +36,13 @@ function span(x0, x1, y0, y1, z0, z1, mat, opts) {
   return box(x1 - x0, y1 - y0, z1 - z0, mat, (x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, opts);
 }
 
+const PH = {};
 function clad(w, h) {
   const t = T.claddingTexture(); t.repeat.set(Math.max(1, w / 2.4), 1);
   const b = T.claddingBump(); b.repeat.set(Math.max(1, w / 2.4), 1);
-  return new THREE.MeshStandardMaterial({ map: t, bumpMap: b, bumpScale: 0.6, roughness: 0.55, metalness: 0.35, color: 0xffffff });
+  const m = new THREE.MeshStandardMaterial({ map: t, bumpMap: b, bumpScale: 0.6, roughness: 0.55, metalness: 0.35, color: 0xffffff });
+  if (PH.clad) { m.normalMap = PH.clad(w); m.bumpMap = null; m.normalScale.set(0.7, 0.7); m.roughness = 0.62; }
+  return m;
 }
 
 const glassMat = () => new THREE.MeshPhysicalMaterial({ color: 0x2b3a44, roughness: 0.04, metalness: 0.1, transparent: true, opacity: 0.38, envMapIntensity: 1.5, depthWrite: false });
@@ -98,9 +102,21 @@ export function setFade(group, f) {
 
 export function buildWorld({ logoUrl, mobile }) {
   // sols réalistes : gazon autour, enrobé sur la cour et les accès
-  M.ground.map = T.grassTexture(); M.ground.map.repeat.set(36, 36);
-  M.paving.map = T.asphaltTexture(); M.paving.map.repeat.set(10, 3);
-  M.paving.roughnessMap = T.asphaltRough(); M.paving.roughnessMap.repeat.set(10, 3);
+  // textures photographiques Poly Haven (CC0), chargées en tâche de fond ; repli sur les textures générées
+  const tl = new THREE.TextureLoader();
+  const ph = (name, rep, srgb = true) => {
+    const t = tl.load(`assets/tex/${name}.webp`);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); t.anisotropy = 8;
+    if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  };
+  M.ground.map = ph('leafy_grass_diff', [70, 70]); M.ground.normalMap = ph('leafy_grass_nor', [70, 70], false);
+  M.ground.color.set(0xffffff); M.ground.normalScale.set(0.6, 0.6);
+  M.paving.map = ph('clean_asphalt_diff', [20, 14]); M.paving.normalMap = ph('clean_asphalt_nor', [20, 14], false);
+  M.paving.color.set(0xffffff); M.paving.roughness = 0.88;
+  const cladNor = (w) => ph('box_profile_metal_sheet_nor', [Math.max(1, w / 1.6), 1], false);
+  const shutter = (w, h) => new THREE.MeshStandardMaterial({ map: ph('painted_metal_shutter_diff', [Math.max(1, w / 3), Math.max(1, h / 3)]), normalMap: ph('painted_metal_shutter_nor', [Math.max(1, w / 3), Math.max(1, h / 3)], false), roughness: 0.55, metalness: 0.4 });
+  PH.clad = cladNor; PH.shutter = shutter;
   // Le bâtiment est construit dans « root », retourné en miroir (scale.x = -1) pour respecter l'orientation réelle :
   // réception à l'extrémité est (droite) de la façade, porte d'atelier à l'ouest. Les textes sont remis à l'endroit.
   // Les abords (cour, voisins, lavage, voiture n° 438) sont dans « site », en coordonnées réelles, sans miroir.
@@ -141,7 +157,7 @@ export function buildWorld({ logoUrl, mobile }) {
   neigh.map = T.panelTexture(); neigh.map.repeat.set(6, 2.2);
   // détails génériques des voisins : bandeaux vitrés, portes sectionnelles, acrotères (sans enseigne)
   const dGlass = new THREE.MeshStandardMaterial({ color: 0x2c3640, roughness: 0.15, metalness: 0.6 });
-  const dDoor = new THREE.MeshStandardMaterial({ color: 0x9fa3a6, roughness: 0.6, metalness: 0.3 });
+  const dDoor = PH.shutter(4, 3.8);
   const dEdge = new THREE.MeshStandardMaterial({ color: 0x6d6f6d, roughness: 0.7, metalness: 0.3 });
   const parapet = (x0, x1, z0, z1, h) => { site.add(span(x0 - 0.05, x1 + 0.05, h, h + 0.35, z0 - 0.05, z0 + 0.15, dEdge), span(x0 - 0.05, x1 + 0.05, h, h + 0.35, z1 - 0.15, z1 + 0.05, dEdge), span(x0 - 0.05, x0 + 0.15, h, h + 0.35, z0, z1, dEdge), span(x1 - 0.15, x1 + 0.05, h, h + 0.35, z0, z1, dEdge)); };
   parapet(-27, -9.4, 18.7, 56.6, 7.2); parapet(5.9, 18.3, 25.4, 41.3, 6);
@@ -190,19 +206,39 @@ export function buildWorld({ logoUrl, mobile }) {
   root.add(W.basementFront);
   // piliers rouges, places marquées, voitures sous housse (comme sur la photo du sous-sol)
   for (const x of [-14, -6.5, 1, 8.5]) for (const z of [-4.4, 4.4]) bs.add(box(0.45, 3.85, 0.45, M.red, x, -2.3, z));
+  const coverSlots = [];
   const coverCar = makeCar({ type: 'coupe', mode: 'cover' });
   const coverSedan = makeCar({ type: 'sedan', mode: 'cover' });
   const bayX = [-18.2, -15.6, -12.4, -9.8, -7.2, -4.0, -1.4, 2.0, 4.6, 7.2, 10.4, 13.0];
   bayX.forEach((x, i) => {
     const c = (i % 3 === 1 ? coverSedan : coverCar).clone();
-    c.rotation.y = Math.PI / 2; c.position.set(x, -4.2, -8.3); bs.add(c);
+    c.rotation.y = Math.PI / 2; c.position.set(x, -4.2, -8.3); bs.add(c); coverSlots.push(c);
     bs.add(span(x - 1.32, x - 1.28, -4.19, -4.18, -11, -5.6, M.line, { cast: false }));
     const n = textPlane(String(i + 1), 0.6, 0.6, { w: 128, h: 128, font: '600 90px Inter, Arial', color: '#ffffff' });
     n.rotation.x = -Math.PI / 2; n.position.set(x, -4.17, -5.2); bs.add(n);
   });
   [-16.5, -12.8, -9.1, -2.6, 1.1, 4.8].forEach((x, i) => {
     const c = (i % 2 ? coverSedan : coverCar).clone();
-    c.rotation.y = -Math.PI / 2; c.position.set(x, -4.2, 7.6); bs.add(c);
+    c.rotation.y = -Math.PI / 2; c.position.set(x, -4.2, 7.6); bs.add(c); coverSlots.push(c);
+  });
+  // voiture sous housse photoréaliste (« Covered Car », Poly Haven, CC0) : remplace les volumes simples une fois chargée
+  new GLTFLoader().load('assets/models/covered_car/covered_car.gltf', (g) => {
+    const model = g.scene;
+    model.traverse((o) => {
+      if (!o.isMesh) return;
+      o.castShadow = true; o.receiveShadow = true;
+      if (/cover/.test(o.name)) { o.material = o.material.clone(); o.material.map = null; o.material.color.set(0x9c1218); o.material.roughness = 0.85; }
+    });
+    const bb = new THREE.Box3().setFromObject(model), size = bb.getSize(new THREE.Vector3());
+    const wrap = new THREE.Group(); wrap.add(model);
+    if (size.z > size.x) model.rotation.y = Math.PI / 2;
+    const k = 4.5 / Math.max(size.x, size.z); model.scale.setScalar(k);
+    const b2 = new THREE.Box3().setFromObject(wrap), c2 = b2.getCenter(new THREE.Vector3());
+    model.position.set(-c2.x, -b2.min.y, -c2.z);
+    coverSlots.forEach((slot, i) => {
+      const m = wrap.clone(); m.position.copy(slot.position); m.rotation.copy(slot.rotation);
+      m.rotation.y += (i % 2 ? Math.PI : 0); slot.parent.add(m); slot.visible = false;
+    });
   });
   bs.add(span(-20, 14, -4.19, -4.18, -5.62, -5.58, M.line, { cast: false }));
   // éclairage du sous-sol
@@ -245,7 +281,7 @@ export function buildWorld({ logoUrl, mobile }) {
   F.add(span(-20.3, 6, 3.32, 3.42, 11.0, 11.26, M.steel));
   // porte sectionnelle de l'atelier
   W.door = new THREE.Group();
-  for (let i = 0; i < 7; i++) W.door.add(span(8.05, 13.95, i * 0.655, i * 0.655 + 0.62, 11.05, 11.15, M.lightGrey));
+  W.door.add(span(8.05, 13.95, 0, 4.55, 11.05, 11.15, PH.shutter(5.9, 4.6)));
   F.add(W.door);
   // marquises
   F.add(span(-20.6, -12.5, 3.55, 3.85, 11.3, 13.6, M.steel));
@@ -425,7 +461,7 @@ export function buildWorld({ logoUrl, mobile }) {
   const la = new THREE.Group(); site.add(la);
   la.add(span(-27.05, -9.3, 0, 5.6, 49.2, 56.7, clad(17.75, 5.6)));
   // traversant : entrée sur la face est (côté cour), sortie tout droit sur la face ouest (indications de l'atelier, nov. 2026)
-  const doorMat = new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.9 });
+  const doorMat = PH.shutter(4.6, 3.6); doorMat.color.set(0x55585c);
   la.add(span(-9.27, -9.2, 0, 3.6, 50.6, 55.2, doorMat, { cast: false }));
   la.add(span(-9.27, -9.12, 3.6, 3.75, 50.5, 55.3, M.red));
   la.add(span(-27.12, -27.05, 0, 3.6, 50.6, 55.2, doorMat, { cast: false }));
