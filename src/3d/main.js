@@ -46,8 +46,8 @@ function start() {
   let dpr = dprMax;
   renderer.setPixelRatio(dpr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 0.95;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -253,7 +253,18 @@ function start() {
   canvas.addEventListener('pointerleave', () => { hover.visible = false; });
 
   // ---------------------------------------------------------------- mode exploration libre
-  let exploring = false, fly = null;
+  let exploring = false, fly = null, trip = null;
+  const SHAFT_TOP = new THREE.Vector3(-15, 4.2, 7.6), SHAFT_BOTTOM = new THREE.Vector3(-15, -1.8, 7.6);
+  function makeTrip(from, fromT, to) {
+    const pts = [from.clone()], under = (v) => v.y < 0.3;
+    if (under(from)) pts.push(SHAFT_BOTTOM.clone(), SHAFT_TOP.clone());
+    const a = pts[pts.length - 1], b = under(to) ? SHAFT_TOP : to, d = a.distanceTo(b);
+    if (d > 20) { const m = a.clone().lerp(b, 0.5); m.y = Math.max(a.y, b.y, 0) + Math.min(40, 6 + d * 0.3); pts.push(m); }
+    if (under(to)) pts.push(SHAFT_TOP.clone(), SHAFT_BOTTOM.clone());
+    pts.push(to.clone());
+    const curve = new THREE.CatmullRomCurve3(pts, false, 'centripetal');
+    return { curve, t: 0, t0: fromT.clone(), dur: clamp(0.9 + curve.getLength() / 70, 1.1, 2.6) };
+  }
   const controls = new OrbitControls(camera, canvas);
   controls.enabled = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
   controls.minDistance = 5; controls.maxDistance = 140; controls.maxPolarAngle = Math.PI * 0.49;
@@ -399,6 +410,8 @@ function start() {
       activeCh = id;
       doc.dataset.ch = id;
       rail.forEach((a) => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + (chapters.find((c) => c.id === id)?.el.id)));
+      const on = rail.find((a) => a.hasAttribute('aria-current')), bar = on && on.parentElement;
+      if (on && bar && bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: on.offsetLeft - (bar.clientWidth - on.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
     }
     for (const c of chapters) for (const s of c.steps) {
       const r = s.getBoundingClientRect();
@@ -436,12 +449,23 @@ function start() {
     if (!exploring) {
       sample(scrollY + vh * 0.5);
       const k = INSTANT ? 1 : 1 - Math.exp(-dt * (reduce ? 12 : 4.2));
-      cur.pos.lerp(want.pos, k); cur.tgt.lerp(want.tgt, k);
+      // grands sauts (navigation directe, défilement rapide) : trajet courbe par le ciel, et par la trémie pour le sous-sol
+      if (!INSTANT && !reduce && !trip) {
+        const d = cur.pos.distanceTo(want.pos), under = (v) => v.y < 0.3;
+        if (d > 28 || (under(cur.pos) !== under(want.pos) && d > 4)) trip = makeTrip(cur.pos, cur.tgt, want.pos);
+      }
+      if (trip) {
+        trip.t = Math.min(1, trip.t + dt / trip.dur);
+        const u = smooth(trip.t);
+        trip.curve.getPoint(u, cur.pos); cur.tgt.lerpVectors(trip.t0, want.tgt, smooth(range(trip.t, 0.15, 1)));
+        if (trip.t >= 1) trip = null;
+      } else { cur.pos.lerp(want.pos, k); cur.tgt.lerp(want.tgt, k); }
       for (const key of ['open', 'cut', 'ext', 'dim']) cur[key] = lerp(cur[key], want[key], INSTANT ? 1 : 1 - Math.exp(-dt * 5));
       if (!drag && performance.now() - lastInteract > 3500) { yaw *= 1 - Math.min(1, dt * 1.2); pitch *= 1 - Math.min(1, dt * 1.2); }
       const idle = activeCh === 'hero' && !reduce ? Math.sin(time * 0.12) * 0.12 : 0;
       off.copy(cur.pos).sub(cur.tgt);
-      if (cur.pos.y > 0.5) off.multiplyScalar(camera.aspect < 0.8 ? 1.45 : camera.aspect < 1.2 ? 1.2 : 1); // écrans étroits : on recule (pas au sous-sol)
+      const pull = camera.aspect < 0.8 ? 1.45 : camera.aspect < 1.2 ? 1.2 : 1; // écrans étroits : on recule (progressivement nul au sous-sol)
+      off.multiplyScalar(lerp(1, pull, smooth(clamp((cur.pos.y - 0.5) / 3))));
       sph.setFromVector3(off);
       sph.theta += yaw + idle; sph.phi = clamp(sph.phi - pitch, 0.25, 1.62);
       off.setFromSpherical(sph);
@@ -483,10 +507,23 @@ function start() {
     if (acc > 2) {
       const fps = frames / acc; frames = 0; acc = 0;
       if (fps < 40 && dpr > 0.75) { dpr = Math.max(0.75, dpr - 0.25); renderer.setPixelRatio(dpr); resize(); slow++; }
+      else if (fps < 22 && dpr <= 0.75 && !document.hidden) { if (++crawl >= 2) offerLite(); }
       else if (fps > 57 && dpr < dprMax && slow < 3) { dpr = Math.min(dprMax, dpr + 0.25); renderer.setPixelRatio(dpr); resize(); }
     }
     requestAnimationFrame(tick);
   }
+
+  // appareil trop lent ou contexte WebGL perdu : proposer la version sans animation (photos réelles, même contenu)
+  let crawl = 0, offered = false;
+  function offerLite(lost) {
+    if (offered) return; offered = true;
+    const t = document.createElement('div'); t.className = 'xp-lite'; t.setAttribute('role', 'status');
+    t.innerHTML = `<p>${lost ? 'La maquette 3D s’est interrompue sur cet appareil.' : 'La maquette 3D semble lente sur cet appareil.'}</p><button type="button" class="xbtn xbtn-red">Version sans animation</button><button type="button" class="xbtn xbtn-line" data-close>Continuer</button>`;
+    t.querySelector('.xbtn-red').addEventListener('click', () => { try { localStorage.setItem('wfmode', 'off'); } catch (e) {} location.reload(); });
+    t.querySelector('[data-close]').addEventListener('click', () => t.remove());
+    document.body.appendChild(t);
+  }
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); offerLite(true); });
 
   resize();
   sample(scrollY + vh * 0.5);
@@ -505,6 +542,6 @@ function start() {
     else doc.classList.add('xp-on');
     tick();
     doc.classList.remove('xp-pending');
-    window.__xp = { renderer, scene, camera, W }; // pour le débogage
+    window.__xp = { renderer, scene, camera, W, THREE }; // pour le débogage
   });
 }

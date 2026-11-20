@@ -223,3 +223,33 @@ html.im .ch-more .xlink{background:#111214;color:#fff}
   html.im .ch-step:not(.ch-intro) .ch-box{padding-left:22px}
   html.im .ch-more{padding:0 0 18vh}
 }
+
+/* ---------- téléphone : navigation directe entre les espaces et cartes compactes ---------- */
+@media (max-width:900px){
+  html.im .xp-rail{display:flex;position:fixed;top:var(--hdr);left:0;right:0;transform:none;flex-direction:row;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:8px 12px 10px;z-index:6;background:linear-gradient(rgba(17,18,20,.55),rgba(17,18,20,0))}
+  html.im .xp-rail::-webkit-scrollbar{display:none}
+  html.im .xp-rail a{flex:none;justify-content:center;gap:6px;padding:7px 10px;min-height:34px;background:rgba(17,18,20,.86);color:#fff;font-size:12px;letter-spacing:.01em}
+  html.im .xp-rail a span{color:rgba(255,255,255,.55)}
+  html.im .xp-rail a em{opacity:1;transform:none;background:none;padding:0;color:inherit}
+  html.im .xp-rail a::after{display:none}
+  html.im .xp-rail a[aria-current]{background:var(--red)}
+  html.im .xp-rail a[aria-current] span{color:#fff}
+  html.im .xp-rail a[href="#accueil"]{display:none}
+  .xp-badge{top:58px;left:12px;font-size:9.5px;letter-spacing:.08em;color:rgba(19,20,21,.6)}
+  html.im .ch-box{padding:14px 16px 16px 18px;gap:8px}
+  html.im .ch-step:not(.ch-intro) .ch-box{padding-left:18px}
+  html.im .ch-box h2{font-size:23px;line-height:1.08}
+  html.im .ch-box h3{font-size:18px}
+  html.im .ch-box p{font-size:14.5px;line-height:1.45}
+  html.im .ch-box .lead{font-size:15px;line-height:1.45}
+  html.im .ch-box .note{font-size:11.5px}
+  html.im .ch-n{font-size:10.5px}
+  html.im .ch-step:not(.ch-intro) .ch-box{opacity:0;transform:translateY(10px)}
+  html.im .ch-step.on .ch-box{opacity:1;transform:none}
+  html.im .ch-more{padding:0 0 14vh}
+  html.im .ch-more .xlink{font-size:14px;padding:9px 12px}
+}
+.xp-lite{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;max-width:440px;margin:0 auto;padding:14px 16px;background:#111214;color:#fff;box-shadow:inset 3px 0 0 var(--red);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xp-lite p{margin:0 0 4px;flex-basis:100%;font-size:14px}
+.xp-lite .xbtn{min-height:40px;font-size:14px;padding:0 14px}
+.xp-lite .xbtn-line{border-color:#fff;color:#fff}

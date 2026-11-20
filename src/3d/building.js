@@ -249,9 +249,11 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
     });
   });
   bs.add(span(-20, 14, -4.19, -4.18, -5.62, -5.58, M.line, { cast: false }));
+  // extincteurs muraux (équipement obligatoire usuel, emplacement indicatif)
+  for (const x of [-19.8, 0, 13.5]) { const e = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.55, 12), M.red); e.position.set(x, -3.2, -10.85); bs.add(e); }
   // éclairage du sous-sol
   for (const x of [-16, -10, -3, 4, 11]) for (const z of [-7, 0, 7]) bs.add(box(1.6, 0.05, 0.16, M.led, x, -0.42, z, { cast: false }));
-  anchors.gardiennage = new THREE.Vector3(-3, -2.2, 0);
+  anchors.gardiennage = new THREE.Vector3(-10, -2.2, 6);
 
   // ------------------------------------------------------------ dalle du rez (trémie de l'ascenseur à véhicules)
   const epoxy = new THREE.MeshStandardMaterial({ map: T.epoxyTexture(), roughness: 0.35, metalness: 0.05 }); epoxy.map.repeat.set(10, 6);
@@ -347,6 +349,22 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   const coupe = makeCar({ type: 'coupe', color: 0x8e9196 }); coupe.rotation.y = Math.PI / 2 + 0.2; coupe.position.set(-5.5, 0, 6.5); at.add(coupe);
   at.add(span(-9.5, 7.5, 0, 0.95, -10.95, -10.2, M.grey), span(-9.5, 7.5, 0.95, 1.0, -10.95, -10.1, M.lightGrey));
   for (const x of [-8, -2.5, 5]) at.add(box(0.9, 1.0, 0.5, M.red, x, 0.5, -9.4));
+  // équipement générique d'atelier (indicatif) : panneau d'outils, étagère de pièces, banc de redressage, pneus, enrouleurs
+  const pegMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, roughness: 0.8 });
+  at.add(span(-9.3, -1.2, 1.25, 2.55, -10.95, -10.9, pegMat, { cast: false }));
+  for (let i = 0; i < 22; i++) { const x = -9 + (i % 11) * 0.72, y = 1.55 + Math.floor(i / 11) * 0.6; at.add(box(0.05 + (i % 3) * 0.04, 0.32 - (i % 4) * 0.05, 0.04, i % 5 ? M.steel : M.red, x, y, -10.86, { cast: false })); }
+  const rack = new THREE.Group(); rack.position.set(-9.2, 0, 8.6); at.add(rack);
+  for (const x of [-0.6, 0.6]) for (const z of [-1.4, 1.4]) rack.add(box(0.08, 2.6, 0.08, M.steel, x, 1.3, z));
+  for (const y of [0.4, 1.2, 2.0]) rack.add(box(1.3, 0.05, 2.9, M.grey, 0, y, 0, { cast: false }));
+  const partMat = paint(0xe5e5e2, { metal: 0.2, rough: 0.45 });
+  for (const [y, z, w] of [[0.55, -0.6, 1.1], [0.55, 0.7, 0.9], [1.35, 0, 1.6], [2.15, -0.5, 1.2]]) { const pc = box(0.9, 0.22, w, partMat, 0, y, z); pc.rotation.x = 0.08; rack.add(pc); }
+  const bench = new THREE.Group(); bench.position.set(-5.5, 0, 6.5); bench.rotation.y = Math.PI / 2 + 0.2; at.add(bench);
+  bench.add(box(5.2, 0.28, 1.5, M.steel, 0, 0.14, 0), box(0.25, 1.7, 0.25, M.red, 2.9, 0.85, 0.9), box(0.25, 1.7, 0.25, M.red, -2.9, 0.85, -0.9));
+  bench.add(box(1.4, 0.12, 0.12, M.steel, 2.25, 1.55, 0.9), box(1.4, 0.12, 0.12, M.steel, -2.25, 1.55, -0.9));
+  coupe.position.y = 0.3;
+  const tyreGeo = new THREE.TorusGeometry(0.31, 0.11, 10, 24), tyreMat = new THREE.MeshStandardMaterial({ color: 0x151617, roughness: 0.9 });
+  for (let i = 0; i < 4; i++) { const t = new THREE.Mesh(tyreGeo, tyreMat); t.rotation.x = Math.PI / 2; t.position.set(6.6, 0.11 + i * 0.22, -9.6); t.castShadow = true; at.add(t); }
+  for (const z of [-3.7, 3.7]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.14, 20), M.red); r.rotation.z = Math.PI / 2; r.position.set(-9.75, 2.6, z); at.add(r); }
   const f1 = figure(); f1.position.set(-4.2, 0, -5.4); at.add(f1);
   const f2 = figure(); f2.position.set(-3.8, 0, 5.2); at.add(f2);
   W.mechanic = figure(); W.mechanic.position.set(4.6, 0, 3.4); at.add(W.mechanic);
@@ -407,6 +425,9 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   const paper = new THREE.MeshStandardMaterial({ color: 0xe9dcc0, roughness: 0.95 });
   W.masking.add(box(1.1, 0.5, 1.9, paper, 1.5, 0.15, 0), box(0.9, 0.42, 1.9, paper, -1.8, 0.2, 0));
   W.rotisserie.add(W.masking);
+  // pièces déposées rangées contre le mur (indicatif)
+  for (const [x, w, h] of [[-18.6, 1.1, 1.2], [-17.3, 1.1, 1.2], [-15.6, 1.5, 0.9], [-13.6, 1.3, 0.55]]) { const pc = box(w, h, 0.06, W.shellMat, x, h / 2 + 0.05, -10.6); pc.rotation.x = -0.12; rs.add(pc); }
+  rs.add(span(-12.6, -10.8, 0, 0.9, -10.9, -10.1, M.grey), span(-12.6, -10.8, 0.9, 0.95, -10.95, -10.05, M.lightGrey));
   const f3 = figure(); f3.position.set(-15, 0, -1.6); rs.add(f3);
   anchors.restauration = new THREE.Vector3(-15, 2, -4.5);
   zones.push({ id: 'restauration', box: new THREE.Box3(new THREE.Vector3(-20, 0, -11), new THREE.Vector3(-10, 4, 2.8)) });
@@ -455,7 +476,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
     const b2 = new THREE.Box3().setFromObject(wrap), c2 = b2.getCenter(new THREE.Vector3());
     model.position.set(-c2.x, -b2.min.y, -c2.z);
     const paintIt = (obj, color) => obj.traverse((o) => { if (o.isMesh && /BodyRearPanels|BodyRoofPanel/.test(o.name)) { o.material = o.material.clone(); o.material.map = null; o.material.color.set(color); o.material.metalness = 0.6; o.material.roughness = 0.3; } });
-    [[p1, 0xb3121a], [p2, 0xe6e6e3], [W.liftCar, 0x223040]].forEach(([slot, color]) => {
+    [[p1, 0xb3121a], [p2, 0xe6e6e3], [W.liftCar, 0x223040], [tesla, 0xf0f0ee], [coupe, 0x6f7377]].forEach(([slot, color]) => {
       const c = wrap.clone(true); paintIt(c, color);
       c.position.copy(slot.position); c.rotation.copy(slot.rotation); c.scale.copy(slot.scale);
       slot.parent.add(c); slot.visible = false;
@@ -486,6 +507,14 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   const fb = new THREE.Mesh(W.washCar.userData.body.geometry, W.foamMat); fb.scale.setScalar(1.012);
   const fc = new THREE.Mesh(W.washCar.userData.cabin.geometry, W.foamMat); fc.scale.setScalar(1.012);
   W.foam.add(fb, fc); W.washCar.add(W.foam);
+  // potences pivotantes avec flexible, porte-lances sur la cloison, caniveau (équipement usuel, indicatif)
+  for (const x of [1.9, 5.7]) {
+    lv.add(box(0.12, 0.5, 0.12, M.steel, x, 3.85, 3.25));
+    const arm = box(2.2, 0.08, 0.08, M.steel, x + 0.9, 3.6, 3.25); arm.rotation.y = x < 3 ? 0.5 : -0.4; lv.add(arm);
+    const hose = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 2.2, 6), new THREE.MeshStandardMaterial({ color: 0x18191a, roughness: 0.7 })); hose.position.set(x + 1.6, 2.5, 3.25 + (x < 3 ? -0.8 : 0.7)); lv.add(hose);
+  }
+  for (const z of [1.6, 4.9]) lv.add(box(0.1, 0.5, 0.3, M.steel, 3.6, 1.6, z), box(0.1, 0.5, 0.3, M.steel, 4.0, 1.6, z));
+  lv.add(span(0.3, 7.3, 0.04, 0.05, 3.15, 3.35, new THREE.MeshStandardMaterial({ color: 0x2a2b2d, roughness: 0.5, metalness: 0.7 }), { cast: false }));
   W.washer = figure(); W.washer.position.set(3.2, 0.04, 3.25); lv.add(W.washer);
   W.lance = box(0.04, 0.04, 1.1, M.steel, 0, 1.2, 0); lv.add(W.lance);
   // lavage automatique : local fermé à bardage sombre, au bout du bâtiment voisin
@@ -532,7 +561,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   anchors.histoire = new THREE.Vector3(-24.4, 4, 0);
 
   // ------------------------------------------------------------ éclairages intérieurs (intensités pilotées par le récit)
-  const pl = (x, y, z, d = 26) => { const l = new THREE.PointLight(0xfff4e8, 0, d, 1.6); l.position.set(x, y, z); root.add(l); return l; };
+  const pl = (x, y, z, d = 26) => { const l = new THREE.PointLight(0xffffff, 0, d, 1.6); l.position.set(x, y, z); root.add(l); return l; };
   W.lights = { atelier: pl(0, 6.5, 0, 34), resto: pl(-15, 5.5, -4, 18), booth: pl(14, 3.6, -5.5, 14), base1: pl(-9, -1, 0, 24), base2: pl(7, -1, 0, 24) };
 
   root.traverse((o) => { if (o.isMesh && mobile && o.geometry.attributes.position.count < 30) o.castShadow = false; });
