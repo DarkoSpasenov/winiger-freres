@@ -190,7 +190,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   [[22, 23, 1.1], [26, 30, 0.9], [24, 46, 1.2], [21, 55, 1], [3.5, 50, 0.9], [27, 59, 1.05], [-31, 25, 1.1], [-31, 38, 0.95], [-31, 50, 1.15], [34, -6, 1.2], [36, 6, 1], [-34, -8, 1.1], [-30, -16, 1]].forEach(([x, z, k], i) => tree(x, z, k, i));
   const pole = new THREE.MeshStandardMaterial({ color: 0x3a3c3f, roughness: 0.5, metalness: 0.6 });
   const lampHead = new THREE.MeshStandardMaterial({ color: 0xf4f1e8, emissive: 0xfff3dc, emissiveIntensity: 0.4 });
-  for (const [x, z] of [[-6, 17.6], [24, 17.2], [0.8, 44], [0.8, 60]]) {
+  for (const [x, z] of [[-21, 17.6], [24, 17.2], [0.8, 44], [0.8, 60]]) {
     site.add(span(x - 0.07, x + 0.07, 0, 6, z - 0.07, z + 0.07, pole), span(x - 0.07, x + 0.07, 5.9, 6, z - 0.07, z + 0.9, pole), span(x - 0.12, x + 0.12, 5.85, 5.92, z + 0.5, z + 0.95, lampHead, { cast: false }));
   }
 
