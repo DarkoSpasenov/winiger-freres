@@ -100,7 +100,7 @@ export function setFade(group, f) {
   group.traverse((o) => { if (o.isMesh) o.castShadow = o.userData.cast && f > 0.6; });
 }
 
-export function buildWorld({ logoUrl, mobile }) {
+export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_car/covered_car.gltf' }) {
   // sols réalistes : gazon autour, enrobé sur la cour et les accès
   // textures photographiques Poly Haven (CC0), chargées en tâche de fond ; repli sur les textures générées
   const tl = new THREE.TextureLoader();
@@ -222,7 +222,7 @@ export function buildWorld({ logoUrl, mobile }) {
     c.rotation.y = -Math.PI / 2; c.position.set(x, -4.2, 7.6); bs.add(c); coverSlots.push(c);
   });
   // voiture sous housse photoréaliste (« Covered Car », Poly Haven, CC0) : remplace les volumes simples une fois chargée
-  new GLTFLoader().load('assets/models/covered_car/covered_car.gltf', (g) => {
+  new GLTFLoader().load(carUrl, (g) => {
     const model = g.scene;
     model.traverse((o) => {
       if (!o.isMesh) return;
