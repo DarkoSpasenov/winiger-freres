@@ -214,3 +214,24 @@ export function panelTexture() {
   for (let i = 0; i < 2500; i++) { x.fillStyle = `rgba(0,0,0,${Math.random() * 0.04})`; x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
   return tex(c);
 }
+
+// Panneau gris de la station haute pression avec dessin au trait blanc (voiture et laveur), d'après la photo.
+export function washPanelTexture() {
+  const [c, x] = canvas(1024, 320);
+  x.fillStyle = '#a7a9aa'; x.fillRect(0, 0, 1024, 320);
+  for (let i = 0; i < 1024; i += 64) { x.fillStyle = 'rgba(0,0,0,.08)'; x.fillRect(i, 0, 2, 320); x.fillStyle = 'rgba(255,255,255,.07)'; x.fillRect(i + 2, 0, 2, 320); }
+  x.strokeStyle = '#f4f4f2'; x.lineWidth = 5; x.lineJoin = x.lineCap = 'round';
+  x.beginPath(); // coupé sportif, vue de profil
+  x.moveTo(170, 268); x.lineTo(140, 266); x.quadraticCurveTo(128, 236, 150, 214); x.lineTo(230, 196);
+  x.quadraticCurveTo(300, 130, 400, 126); x.quadraticCurveTo(470, 126, 520, 170); x.quadraticCurveTo(575, 178, 600, 200);
+  x.quadraticCurveTo(612, 236, 600, 266); x.lineTo(568, 268); x.moveTo(472, 268); x.lineTo(268, 268);
+  x.moveTo(300, 196); x.quadraticCurveTo(350, 148, 410, 146); x.lineTo(470, 150); x.lineTo(490, 196); x.closePath();
+  x.stroke();
+  for (const cx of [220, 520]) { x.beginPath(); x.arc(cx, 262, 46, 0, Math.PI * 2); x.stroke(); x.beginPath(); x.arc(cx, 262, 24, 0, Math.PI * 2); x.stroke(); }
+  x.beginPath(); // laveur avec sa lance
+  x.arc(700, 66, 18, 0, Math.PI * 2);
+  x.moveTo(700, 86); x.lineTo(696, 186); x.moveTo(696, 186); x.lineTo(684, 296); x.moveTo(696, 186); x.lineTo(716, 296);
+  x.moveTo(699, 110); x.lineTo(660, 160); x.lineTo(612, 168); x.moveTo(699, 110); x.lineTo(676, 158);
+  x.stroke();
+  return tex(c, { repeat: [1, 1] });
+}
