@@ -206,3 +206,20 @@ html.ph-on .ch-real{background:var(--bg)}
   .ph-cap{left:16px;right:auto;top:10px;bottom:auto;text-align:left;max-width:calc(100% - 32px)}
   .ph-empty{align-items:flex-start;justify-content:center;padding:48px 16px 0}
 }
+
+/* blocs de texte : panneau noir mat, filet rouge (remplace le panneau beige translucide) */
+html.im .ch-box{--fg:#fff;--grey:rgba(255,255,255,.62);--rule:rgba(255,255,255,.18);background:#111214;color:#fff;border-top:0;box-shadow:inset 3px 0 0 var(--red);-webkit-backdrop-filter:none;backdrop-filter:none}
+html.im .ch-box a:not(.xbtn){color:#fff}
+html.im .ch-box .xbtn-dark{background:#fff;border-color:#fff;color:#111214}
+html.im .ch-box .xbtn-dark:hover{background:#e6e6e3}
+html.im .ch-box .xbtn-line:hover{background:#fff;color:#111214}
+html.im .ch-box .ch-n{color:#fff}
+html.im .ch-step:not(.ch-intro) .ch-box{opacity:.55}
+html.im .ch-step.on .ch-box{opacity:1}
+html.im .ch-more .xlink{background:#111214;color:#fff}
+@media (max-width:900px){
+  html.im .ch>.ch-step{padding:0 0 env(safe-area-inset-bottom,0px)}
+  html.im .ch-box{padding:20px 20px 22px 22px;background:#111214}
+  html.im .ch-step:not(.ch-intro) .ch-box{padding-left:22px}
+  html.im .ch-more{padding:0 0 18vh}
+}

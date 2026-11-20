@@ -322,7 +322,7 @@ function start() {
     // ---- 02 gardiennage : l'ascenseur descend au sous-sol
     const pg = stepPos('gardiennage');
     W.lift.position.y = -4.2 * smooth(range(pg, 1.6, 2.2));
-    const base = Math.max(cur.cut, exploring ? 1 : 0);
+    const base = Math.max(cur.cut, exploring ? 1 : 0, smooth(range(pg, 1.1, 1.7)) * (1 - smooth(range(pg, 3.6, 3.8))));
     W.lights.base1.intensity = W.lights.base2.intensity = base * 55;
 
     // ---- 03 restauration : la caisse pivote sur la rotissoire
@@ -427,7 +427,7 @@ function start() {
       if (!drag && performance.now() - lastInteract > 3500) { yaw *= 1 - Math.min(1, dt * 1.2); pitch *= 1 - Math.min(1, dt * 1.2); }
       const idle = activeCh === 'hero' && !reduce ? Math.sin(time * 0.12) * 0.12 : 0;
       off.copy(cur.pos).sub(cur.tgt);
-      off.multiplyScalar(camera.aspect < 0.8 ? 1.45 : camera.aspect < 1.2 ? 1.2 : 1); // écrans étroits : on recule
+      if (cur.pos.y > 0.5) off.multiplyScalar(camera.aspect < 0.8 ? 1.45 : camera.aspect < 1.2 ? 1.2 : 1); // écrans étroits : on recule (pas au sous-sol)
       sph.setFromVector3(off);
       sph.theta += yaw + idle; sph.phi = clamp(sph.phi - pitch, 0.25, 1.62);
       off.setFromSpherical(sph);
