@@ -200,3 +200,17 @@ export function osbTexture() {
   }
   return tex(c);
 }
+
+// Panneaux sandwich horizontaux (façades des bâtiments voisins), gris clair.
+export function panelTexture() {
+  const [c, x] = canvas(256, 256);
+  x.fillStyle = '#c4c5c1'; x.fillRect(0, 0, 256, 256);
+  for (let y = 0; y < 256; y += 32) {
+    const g = x.createLinearGradient(0, y, 0, y + 32);
+    g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(1, 'rgba(0,0,0,.06)');
+    x.fillStyle = g; x.fillRect(0, y, 256, 32);
+    x.fillStyle = 'rgba(60,62,60,.35)'; x.fillRect(0, y + 31, 256, 1);
+  }
+  for (let i = 0; i < 2500; i++) { x.fillStyle = `rgba(0,0,0,${Math.random() * 0.04})`; x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+  return tex(c);
+}

@@ -138,6 +138,45 @@ export function buildWorld({ logoUrl, mobile }) {
   site.add(span(-27, -9.4, 0, 7.2, 18.7, 56.6, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
   site.add(span(1.2, 29, 0.02, 0.06, 19, 62, M.ground, { cast: false })); // îlot de gazon
   site.add(span(5.9, 18.3, 0, 6, 25.4, 41.3, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
+  neigh.map = T.panelTexture(); neigh.map.repeat.set(6, 2.2);
+  // détails génériques des voisins : bandeaux vitrés, portes sectionnelles, acrotères (sans enseigne)
+  const dGlass = new THREE.MeshStandardMaterial({ color: 0x2c3640, roughness: 0.15, metalness: 0.6 });
+  const dDoor = new THREE.MeshStandardMaterial({ color: 0x9fa3a6, roughness: 0.6, metalness: 0.3 });
+  const dEdge = new THREE.MeshStandardMaterial({ color: 0x6d6f6d, roughness: 0.7, metalness: 0.3 });
+  const parapet = (x0, x1, z0, z1, h) => { site.add(span(x0 - 0.05, x1 + 0.05, h, h + 0.35, z0 - 0.05, z0 + 0.15, dEdge), span(x0 - 0.05, x1 + 0.05, h, h + 0.35, z1 - 0.15, z1 + 0.05, dEdge), span(x0 - 0.05, x0 + 0.15, h, h + 0.35, z0, z1, dEdge), span(x1 - 0.15, x1 + 0.05, h, h + 0.35, z0, z1, dEdge)); };
+  parapet(-27, -9.4, 18.7, 56.6, 7.2); parapet(5.9, 18.3, 25.4, 41.3, 6);
+  // voisin ouest : face est (côté cour)
+  site.add(span(-9.4, -9.32, 4.3, 5.6, 20, 47.5, dGlass, { cast: false }));
+  for (const z of [32, 37.5]) site.add(span(-9.4, -9.3, 0, 3.8, z, z + 4, dDoor, { cast: false }));
+  site.add(span(-9.4, -9.32, 0.4, 2.6, 43, 47.5, dGlass, { cast: false }));
+  site.add(span(-9.4, -9.3, 0, 2.2, 41.8, 42.8, dDoor, { cast: false }));
+  // voisin du milieu : faces ouest et sud
+  site.add(span(5.82, 5.9, 3.4, 4.8, 26.5, 40.2, dGlass, { cast: false }));
+  site.add(span(7, 17.2, 3.4, 4.8, 41.3, 41.38, dGlass, { cast: false }));
+  site.add(span(8.5, 12.5, 0, 3.6, 41.3, 41.4, dDoor, { cast: false }));
+  site.add(span(14, 15, 0, 2.2, 41.3, 41.4, dDoor, { cast: false }));
+  // bordures béton autour de l'îlot de gazon
+  const kerb = new THREE.MeshStandardMaterial({ color: 0xbdbcb6, roughness: 0.9 });
+  site.add(span(1.05, 1.3, 0, 0.14, 19, 62, kerb, { cast: false }), span(1.05, 29, 0, 0.14, 18.85, 19.1, kerb, { cast: false }));
+  // arbres (feuillus, formes simples) et lampadaires de cour
+  const trunkM = new THREE.MeshStandardMaterial({ color: 0x5a4a3c, roughness: 0.95 });
+  const leafMs = [0x55663f, 0x4c5e3a, 0x637247].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.95, flatShading: true }));
+  const trunkG = new THREE.CylinderGeometry(0.14, 0.2, 2.6, 7);
+  const tree = (x, z, k = 1, i = 0) => {
+    const t = new THREE.Group(); t.position.set(x, 0, z); t.scale.setScalar(k); t.rotation.y = i;
+    const tr = new THREE.Mesh(trunkG, trunkM); tr.position.y = 1.3; tr.castShadow = true; t.add(tr);
+    for (let j = 0; j < 3; j++) {
+      const c = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5 - j * 0.25, 1), leafMs[(i + j) % 3]);
+      c.position.set(Math.sin(j * 2.1) * 0.6, 3.3 + j * 0.8, Math.cos(j * 2.1) * 0.6); c.castShadow = true; t.add(c);
+    }
+    site.add(t);
+  };
+  [[22, 23, 1.1], [26, 30, 0.9], [24, 46, 1.2], [21, 55, 1], [3.5, 50, 0.9], [27, 59, 1.05], [-31, 25, 1.1], [-31, 38, 0.95], [-31, 50, 1.15], [34, -6, 1.2], [36, 6, 1], [-34, -8, 1.1], [-30, -16, 1]].forEach(([x, z, k], i) => tree(x, z, k, i));
+  const pole = new THREE.MeshStandardMaterial({ color: 0x3a3c3f, roughness: 0.5, metalness: 0.6 });
+  const lampHead = new THREE.MeshStandardMaterial({ color: 0xf4f1e8, emissive: 0xfff3dc, emissiveIntensity: 0.4 });
+  for (const [x, z] of [[-6, 17.6], [24, 17.2], [0.8, 44], [0.8, 60]]) {
+    site.add(span(x - 0.07, x + 0.07, 0, 6, z - 0.07, z + 0.07, pole), span(x - 0.07, x + 0.07, 5.9, 6, z - 0.07, z + 0.9, pole), span(x - 0.12, x + 0.12, 5.85, 5.92, z + 0.5, z + 0.95, lampHead, { cast: false }));
+  }
 
   // ------------------------------------------------------------ sous-sol (gardiennage)
   const bs = new THREE.Group(); root.add(bs);
