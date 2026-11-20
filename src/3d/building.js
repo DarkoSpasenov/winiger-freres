@@ -4,6 +4,14 @@
 import * as THREE from 'three';
 import * as T from './textures.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+
+// chargeur glTF ; accepte aussi une variante base64 (.b64.txt) pour les hébergements qui ne servent pas le binaire
+function loadModel(url, done) {
+  const l = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  if (!url.endsWith('.b64.txt')) { l.load(url, done); return; }
+  fetch(url).then((r) => r.text()).then((t) => { const b = Uint8Array.from(atob(t.trim()), (c) => c.charCodeAt(0)); l.parse(b.buffer, '', done); }).catch(() => {});
+}
 import { makeCar, paint, addRearWing, carMaterials } from './car.js';
 
 const RED = 0xc8101a;
@@ -100,7 +108,7 @@ export function setFade(group, f) {
   group.traverse((o) => { if (o.isMesh) o.castShadow = o.userData.cast && f > 0.6; });
 }
 
-export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_car/covered_car.gltf' }) {
+export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_car/covered_car.gltf', clientCarUrl = 'assets/models/car_concept/car.glb' }) {
   // sols réalistes : gazon autour, enrobé sur la cour et les accès
   // textures photographiques Poly Haven (CC0), chargées en tâche de fond ; repli sur les textures générées
   const tl = new THREE.TextureLoader();
@@ -222,7 +230,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
     c.rotation.y = -Math.PI / 2; c.position.set(x, -4.2, 7.6); bs.add(c); coverSlots.push(c);
   });
   // voiture sous housse photoréaliste (« Covered Car », Poly Haven, CC0) : remplace les volumes simples une fois chargée
-  new GLTFLoader().load(carUrl, (g) => {
+  loadModel(carUrl, (g) => {
     const model = g.scene;
     model.traverse((o) => {
       if (!o.isMesh) return;
@@ -430,6 +438,29 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   // voitures de clients devant la réception (comme sur les photos du bâtiment)
   const p1 = makeCar({ type: 'coupe', color: RED }); p1.rotation.y = -Math.PI / 2; p1.position.set(14.2, 0, 17.4); site.add(p1);
   const p2 = makeCar({ type: 'sedan', color: 0xeeeeec }); p2.rotation.y = -Math.PI / 2; p2.position.set(16.8, 0, 17.4); site.add(p2);
+  // voitures de clients photoréalistes (« Car Concept », Eric Chadwick / DGG, CC BY 4.0, via Khronos) : remplacent les volumes simples
+  loadModel(clientCarUrl, (g) => {
+    const model = g.scene;
+    model.traverse((o) => {
+      if (!o.isMesh) return;
+      o.castShadow = true; o.receiveShadow = true;
+      const m = o.material;
+      if (m && m.name === 'License') { o.material = m.clone(); o.material.map = null; o.material.color.set(0xf2f2f0); }
+      if (m && m.emissiveMap) { o.material = o.material.clone(); o.material.emissiveMap = null; o.material.emissive.set(0x000000); }
+    });
+    const bb = new THREE.Box3().setFromObject(model), size = bb.getSize(new THREE.Vector3());
+    const wrap = new THREE.Group(); wrap.add(model);
+    if (size.z > size.x) model.rotation.y = Math.PI / 2;
+    const k = 4.5 / Math.max(size.x, size.z); model.scale.setScalar(k);
+    const b2 = new THREE.Box3().setFromObject(wrap), c2 = b2.getCenter(new THREE.Vector3());
+    model.position.set(-c2.x, -b2.min.y, -c2.z);
+    const paintIt = (obj, color) => obj.traverse((o) => { if (o.isMesh && /BodyRearPanels|BodyRoofPanel/.test(o.name)) { o.material = o.material.clone(); o.material.map = null; o.material.color.set(color); o.material.metalness = 0.6; o.material.roughness = 0.3; } });
+    [[p1, 0xb3121a], [p2, 0xe6e6e3], [W.liftCar, 0x223040]].forEach(([slot, color]) => {
+      const c = wrap.clone(true); paintIt(c, color);
+      c.position.copy(slot.position); c.rotation.copy(slot.rotation); c.scale.copy(slot.scale);
+      slot.parent.add(c); slot.visible = false;
+    });
+  });
 
   // ------------------------------------------------------------ stations de lavage
   // Emplacements d'après la vue aérienne transmise par l'atelier (novembre 2026) :

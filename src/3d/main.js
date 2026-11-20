@@ -109,7 +109,7 @@ function start() {
   }
 
   const logoUrl = stage.dataset.logo || 'assets/img/logo-winiger-960.webp';
-  const { root, W, anchors, zones } = buildWorld({ logoUrl, mobile, carUrl: stage.dataset.car || undefined });
+  const { root, W, anchors, zones } = buildWorld({ logoUrl, mobile, carUrl: stage.dataset.car || undefined, clientCarUrl: stage.dataset.clientCar || undefined });
   scene.add(root);
 
   const water = new Spray({ count: mobile ? 350 : 900, color: 0xdcecff, size: 0.07, speed: 7.5, spread: 0.07, life: 0.55, opacity: 0.75 });

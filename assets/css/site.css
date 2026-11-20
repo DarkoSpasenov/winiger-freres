@@ -623,3 +623,4 @@ a.tile:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .checks li{position:relative;padding-left:30px;font-weight:500}
 .checks li::before{content:"";position:absolute;left:0;top:.55em;width:16px;height:4px;background:var(--red);transform:skewX(-20deg)}
+.ftr-credits{flex-basis:100%;font-size:12px;line-height:1.5}.ftr-credits a{color:inherit;text-decoration:underline}

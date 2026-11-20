@@ -163,7 +163,7 @@ def footer():
       <p style="margin-top:12px"><a href="{TEL_HREF}">{TEL}</a><br><a href="mailto:{MAIL}">{MAIL}</a></p>
     </div>
   </div>
-  <div class="ftr-bottom"><span>© 2026 Winiger Frères Sàrl</span><a href="mentions-legales.html">Mentions légales et confidentialité</a></div>
+  <div class="ftr-bottom"><span>© 2026 Winiger Frères Sàrl</span><a href="mentions-legales.html">Mentions légales et confidentialité</a><span class="ftr-credits">Maquette 3D : voiture « <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept">Car Concept</a> » d'Eric Chadwick, Darmstadt Graphics Group (<a href="https://creativecommons.org/licenses/by/4.0/deed.fr">CC BY 4.0</a>, allégée) ; textures, ciel et housses <a href="https://polyhaven.com">Poly Haven</a> (CC0).</span></div>
 </div></footer>'''
 
 
