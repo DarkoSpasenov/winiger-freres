@@ -9,6 +9,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { buildWorld, setFade } from './building.js';
+import { collectStatic, exportStatic, applyBake, guardShared } from './bake.js';
 import { SHOTS, PLACES } from './story.js';
 import { Spray } from './fx.js';
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
@@ -111,6 +112,25 @@ function start() {
   const logoUrl = stage.dataset.logo || 'assets/img/logo-winiger-960.webp';
   const { root, W, anchors, zones } = buildWorld({ logoUrl, mobile, carUrl: stage.dataset.car || undefined, clientCarUrl: stage.dataset.clientCar || undefined });
   scene.add(root);
+  // éclairage précalculé dans Blender (Cycles) pour les éléments fixes
+  const statics = collectStatic(root, W);
+  let bakedK = 1; // part des éclairages intérieurs encore calculée en temps réel
+  if (/[?&]bakeexport/.test(location.search)) {
+    window.__bakeExport = () => exportStatic(statics, {
+      sun: sunDir.toArray(),
+      lights: Object.fromEntries(Object.entries(W.lights).map(([k, l]) => [k, l.getWorldPosition(new THREE.Vector3()).toArray()])),
+    });
+  } else if (stage.dataset.bake !== 'off' && !/[?&]nobake/.test(location.search)) {
+    const hemiChunk = THREE.ShaderChunk.lights_fragment_begin.replace('irradiance += getHemisphereLightIrradiance', 'irradiance += 0.0 * getHemisphereLightIrradiance');
+    const mapsChunk = THREE.ShaderChunk.lights_fragment_maps.replace('iblIrradiance += getIBLIrradiance( geometryNormal );', '');
+    applyBake(statics, stage.dataset.bakeBase || 'assets/bake/', {
+      onMaterial: (m) => {
+        // la lightmap remplace le ciel diffus (déjà cuit, avec ses ombres) ; les reflets restent en temps réel
+        m.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace('#include <lights_fragment_begin>', hemiChunk).replace('#include <lights_fragment_maps>', mapsChunk); };
+        m.customProgramCacheKey = () => 'baked';
+      },
+    }).then((mats) => { if (mats) { guardShared(root, mats); bakedK = 0.2; doc.classList.add('xp-baked'); } }).catch((e) => console.warn('bake', e));
+  }
 
   const water = new Spray({ count: mobile ? 350 : 900, color: 0xdcecff, size: 0.07, speed: 7.5, spread: 0.07, life: 0.55, opacity: 0.75 });
   const mist = new Spray({ count: mobile ? 250 : 600, color: 0xd7202a, size: 0.16, speed: 2.4, spread: 0.35, life: 0.9, gravity: -0.4, opacity: 0.22 });
@@ -348,15 +368,15 @@ function start() {
     const pg = stepPos('gardiennage');
     W.lift.position.y = -4.2 * smooth(range(pg, 1.6, 2.2));
     const base = Math.max(cur.cut, exploring ? 1 : 0, smooth(range(pg, 1.1, 1.7)) * (1 - smooth(range(pg, 3.6, 3.8))));
-    W.lights.base1.intensity = W.lights.base2.intensity = base * 55;
+    W.lights.base1.intensity = W.lights.base2.intensity = base * 55 * bakedK;
 
     // ---- 03 restauration : la caisse pivote sur la rotissoire
     const pr = stepPos('restauration');
     W.rotisserie.rotation.x = -0.6 * smooth(range(pr, 0.4, 1.0)) + (-Math.PI + 0.6) * smooth(range(pr, 3.3, 3.95));
     setFade(W.masking, smooth(range(pr, 1.6, 2.0)) * (1 - smooth(range(pr, 2.6, 3.0))));
     W.shellMat.color.copy(metal).lerp(appret, smooth(range(pr, 2.6, 3.0)));
-    W.lights.resto.intensity = cur.open * 30;
-    W.lights.atelier.intensity = cur.open * 70;
+    W.lights.resto.intensity = cur.open * 30 * bakedK;
+    W.lights.atelier.intensity = cur.open * 70 * bakedK;
 
     // ---- 05 lavage : mousse, haute pression, rinçage
     const pl = stepPos('lavage');

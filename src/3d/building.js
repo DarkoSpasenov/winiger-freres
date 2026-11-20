@@ -72,6 +72,7 @@ export function figure(h = 1.78) {
   const head = new THREE.Mesh(new THREE.SphereGeometry(0.105, 16, 12), M.skin);
   head.position.y = h * 0.9; head.castShadow = true;
   g.add(body, head);
+  g.userData.fig = true;
   return g;
 }
 
@@ -141,14 +142,14 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
     const m = span(x0, x1, -5, 0, z0, z1, earthMats(top), { cast: false });
     root.add(m); return m;
   };
-  earth(-90, 90, -90, -11);
-  earth(-90, -20, -11, 15);
-  earth(20, 90, -11, 15);
+  earth(-90, 90, -90, -11.3);
+  earth(-90, -20.3, -11.3, 15);
+  earth(20.3, 90, -11.3, 15);
   earth(-90, 90, 15, 90);
   root.add(span(-20, 20, -6, -4.6, 11, 15, M.poche, { cast: false }));
   // Bouchon de terrain devant le sous-sol : il s'efface pour montrer la coupe
   W.plug = fadable(new THREE.Group());
-  W.plug.add(span(-20, 20, -4.6, 0, 11, 15, earthMats(M.paving), { cast: false }));
+  W.plug.add(span(-20.3, 20.3, -4.6, 0, 11.3, 15, earthMats(M.paving), { cast: false }));
   root.add(W.plug);
 
   // Cour : enrobé jusqu'à la route, places en épi devant le bâtiment (d'après la vue aérienne)
@@ -159,7 +160,8 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   // Voisinage (bâtiments d'autres entreprises, volumes neutres, sans enseigne)
   const neigh = new THREE.MeshStandardMaterial({ color: 0xb9bab6, roughness: 0.85 });
   const neighRoof = new THREE.MeshStandardMaterial({ color: 0x8e8f8c, roughness: 0.9 });
-  site.add(span(-27, -9.4, 0, 7.2, 18.7, 56.6, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
+  // le lavage automatique occupe le bout sud du bâtiment (z 49,2 à 56,6) : le volume voisin s'arrête devant, l'étage continue au-dessus
+  site.add(span(-27, -9.4, 0, 7.2, 18.7, 49.2, [neigh, neigh, neighRoof, neigh, neigh, neigh]), span(-27, -9.4, 5.6, 7.2, 49.2, 56.6, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
   site.add(span(1.2, 29, 0.02, 0.06, 19, 62, M.ground, { cast: false })); // îlot de gazon
   site.add(span(5.9, 18.3, 0, 6, 25.4, 41.3, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
   neigh.map = T.panelTexture(); neigh.map.repeat.set(6, 2.2);
@@ -274,7 +276,11 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   // ------------------------------------------------------------ enveloppe du rez
   const H = 8.5;
   const shell = new THREE.Group(); root.add(shell);
-  shell.add(span(-20.3, 20.3, 0, H, -11.3, -11, clad(40.6, H)));
+  shell.add(span(-20.3, 20.3, 0, 0.9, -11.3, -11, clad(40.6, 0.9)), span(-20.3, 20.3, 3.2, H, -11.3, -11, clad(40.6, H - 3.2)));
+  shell.add(span(-20.3, -19.8, 0.9, 3.2, -11.3, -11, clad(0.5, 2.3)), span(8, 20.3, 0.9, 3.2, -11.3, -11, clad(12.3, 2.3)));
+  shell.add(span(-19.8, 8, 0.9, 3.2, -11.2, -11.12, glassMat(), { cast: false }));
+  for (let x = -19.8; x <= 8.01; x += 27.8 / 12) shell.add(span(x - 0.04, x + 0.04, 0.9, 3.2, -11.25, -11.05, M.steel));
+  shell.add(span(-19.8, 8, 0.86, 0.94, -11.25, -10.98, M.steel), span(-19.8, 8, 3.16, 3.24, -11.25, -11.05, M.steel));
   shell.add(span(-20.3, -20, 0, H, -11, 11, clad(22, H)));
   shell.add(span(20, 20.3, 0, H, -11, 11, clad(22, H)));
   // façade avant : se soulève pour ouvrir le bâtiment
@@ -368,6 +374,30 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   const f1 = figure(); f1.position.set(-4.2, 0, -5.4); at.add(f1);
   const f2 = figure(); f2.position.set(-3.8, 0, 5.2); at.add(f2);
   W.mechanic = figure(); W.mechanic.position.set(4.6, 0, 3.4); at.add(W.mechanic);
+  // charpente d'après les photos : poteaux et contreventements rouges, sommiers rouges, chemins de câbles, néons tubulaires
+  const st = new THREE.Group(); root.add(st);
+  for (const x of [-15, -10, -5, 0, 5]) {
+    st.add(box(0.3, H, 0.3, M.red, x, H / 2, -10.8));
+    st.add(span(x - 0.15, x + 0.15, H - 0.75, H - 0.3, -11, 11, M.red));
+  }
+  st.add(span(-20, 20, H - 0.75, H - 0.3, -10.95, -10.65, M.red));
+  const brace = (x0, x1, z, y0, y1) => {
+    const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+    for (const sgn of [1, -1]) { const b = box(L, 0.12, 0.12, M.red, (x0 + x1) / 2, (y0 + y1) / 2, z); b.rotation.z = sgn * Math.atan2(dy, dx); st.add(b); }
+  };
+  brace(-15, -10, -10.75, 3.4, H - 0.8); brace(0, 5, -10.75, 3.4, H - 0.8);
+  const tray = new THREE.MeshStandardMaterial({ color: 0xb4b7ba, roughness: 0.5, metalness: 0.6 });
+  for (const z of [-7.5, 0.5, 7.5]) st.add(span(-19.5, 8, H - 1.25, H - 1.15, z - 0.2, z + 0.2, tray));
+  for (const z of [-5.5, -1.8, 1.8, 5.5]) for (let x = -18.6; x < 7; x += 3.1) st.add(span(x, x + 1.5, H - 1.05, H - 0.98, z - 0.06, z + 0.06, M.led, { cast: false }));
+  // servantes rouges à plateaux (photos de l'atelier)
+  const trolley = (x, z, r = 0) => {
+    const t = new THREE.Group(); t.position.set(x, 0, z); t.rotation.y = r; at.add(t);
+    for (const sx of [-0.38, 0.38]) for (const sz of [-0.25, 0.25]) t.add(box(0.04, 1.0, 0.04, M.red, sx, 0.6, sz));
+    for (const y of [0.25, 0.6, 0.98]) t.add(box(0.82, 0.04, 0.56, M.red, 0, y, 0));
+    for (const sx of [-0.34, 0.34]) for (const sz of [-0.22, 0.22]) t.add(box(0.06, 0.1, 0.06, M.steel, sx, 0.05, sz, { cast: false }));
+    t.add(box(0.3, 0.18, 0.22, M.lightGrey, -0.15, 1.09, 0.05), box(0.2, 0.12, 0.2, M.white, 0.22, 0.66, -0.05));
+  };
+  trolley(5.4, 0.4, 0.2); trolley(6.6, -0.2, -0.1); trolley(6.2, 1.5, 0.4);
   anchors.carrosserie = new THREE.Vector3(0, 3, 0);
   zones.push({ id: 'carrosserie', box: new THREE.Box3(new THREE.Vector3(-10, 0, -11), new THREE.Vector3(8, H, 11)) });
 
@@ -384,8 +414,32 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   bo.add(span(bx0, bx0 + 0.12, 0, bh, bz0, bz1, panel), span(bx1 - 0.12, bx1, 0, bh, bz0, bz1, panel), span(bx0, bx1, 0, bh, bz0, bz0 + 0.12, panel));
   W.boothCeil = new THREE.MeshStandardMaterial({ color: 0xf5f5f5, emissive: 0xffffff, emissiveIntensity: 0.15, transparent: true, opacity: 0.55, depthWrite: false });
   bo.add(span(bx0, bx1, bh, bh + 0.25, bz0, bz1, W.boothCeil, { cast: false }));
-  bo.add(span(bx0, bx1, 0, bh, bz1 - 0.06, bz1, glassMat(), { cast: false }));
-  for (const x of [bx0 + 0.1, (bx0 + bx1) / 2, bx1 - 0.1]) bo.add(span(x - 0.06, x + 0.06, 0, bh, bz1 - 0.1, bz1 + 0.02, M.steel));
+  // façade d'après les photos : bandeau blanc, portes repliables grises à vitrages sombres
+  const doorGrey = new THREE.MeshStandardMaterial({ color: 0xa9adb1, roughness: 0.5, metalness: 0.3 });
+  bo.add(span(bx0, bx1, 3.3, bh, bz1 - 0.1, bz1, M.white));
+  bo.add(span(bx0 + 2.2, bx0 + 5.4, 3.55, 4.05, bz1 + 0.005, bz1 + 0.03, M.steel, { cast: false }), span(bx1 - 5.4, bx1 - 2.2, 3.55, 4.05, bz1 + 0.005, bz1 + 0.03, M.steel, { cast: false }));
+  const leaf = (x0) => {
+    bo.add(span(x0, x0 + 0.98, 0, 0.75, bz1 - 0.08, bz1 - 0.02, doorGrey), span(x0, x0 + 0.98, 2.35, 3.3, bz1 - 0.08, bz1 - 0.02, doorGrey));
+    bo.add(span(x0, x0 + 0.2, 0.75, 2.35, bz1 - 0.08, bz1 - 0.02, doorGrey), span(x0 + 0.78, x0 + 0.98, 0.75, 2.35, bz1 - 0.08, bz1 - 0.02, doorGrey));
+    bo.add(span(x0 + 0.2, x0 + 0.78, 0.75, 2.35, bz1 - 0.06, bz1 - 0.04, glassMat(), { cast: false }));
+  };
+  for (let i = 0; i < 4; i++) leaf(bx0 + 0.6 + i * 1.0);
+  for (let i = 0; i < 4; i++) leaf(bx1 - 4.6 + i * 1.0);
+  bo.add(span(bx0 + 4.6, bx1 - 4.6, 0, 3.3, bz1 - 0.1, bz1, M.white));
+  bo.add(span(bx0, bx0 + 0.6, 0, 3.3, bz1 - 0.1, bz1, M.white), span(bx1 - 0.6, bx1, 0, 3.3, bz1 - 0.1, bz1, M.white));
+  // mezzanine sur les cabines : plancher, garde-corps à panneaux clairs et cadre gris, escalier métallique
+  const mz = new THREE.Group(); bo.add(mz); const my = bh + 1.45;
+  mz.add(span(bx0 - 0.2, bx1 + 0.2, my - 0.15, my, bz0, bz1 + 0.3, M.grey));
+  const rail = (x0, x1, z0, z1) => {
+    const n = Math.max(1, Math.round(Math.hypot(x1 - x0, z1 - z0) / 1.8));
+    for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * i / n, z = z0 + (z1 - z0) * i / n; mz.add(span(x - 0.035, x + 0.035, my, my + 1.05, z - 0.035, z + 0.035, M.grey)); }
+    mz.add(span(Math.min(x0, x1) - 0.03, Math.max(x0, x1) + 0.03, my + 1.02, my + 1.08, Math.min(z0, z1) - 0.03, Math.max(z0, z1) + 0.03, M.grey));
+    mz.add(span(Math.min(x0, x1), Math.max(x0, x1) + 0.001, my + 0.12, my + 0.95, Math.min(z0, z1), Math.max(z0, z1) + 0.001, new THREE.MeshStandardMaterial({ color: 0xe9ecee, roughness: 0.35, transparent: true, opacity: 0.75 }), { cast: false }));
+  };
+  rail(bx0 + 1.3, bx1 + 0.15, bz1 + 0.25, bz1 + 0.25); rail(bx0 - 0.15, bx0 - 0.15, bz0 + 0.2, bz1 + 0.25);
+  const steps = 18, sx0 = bx0 + 0.15, sx1 = bx0 + 1.25;
+  for (let i = 0; i < steps; i++) { const z = bz1 + 4.6 - (i + 1) * (4.3 / steps); mz.add(span(sx0, sx1, (i + 1) * my / steps - 0.05, (i + 1) * my / steps, z, z + 0.26, M.grey)); }
+  for (const x of [sx0 - 0.04, sx1 + 0.04]) { const L = Math.hypot(4.3, my), sg = box(0.06, 0.25, L, M.grey, x, my / 2, bz1 + 0.3 + 2.15); sg.rotation.x = Math.atan2(my, 4.3); mz.add(sg); }
   bo.add(span(bx0 - 0.2, bx1 + 0.2, bh + 0.25, bh + 1.4, bz0 + 1, bz0 + 3.5, panel));
   W.painter = figure(); W.painter.position.set(11.6, 0.06, -5.5); bo.add(W.painter);
   W.gun = new THREE.Vector3(12.2, 1.35, -5.5);
@@ -489,15 +543,22 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   // Aspect d'après la publication du 22.08.2026 ; nombre de pistes indicatif.
   const lv = new THREE.Group(); lv.position.set(-9.2, 0, 22.4); site.add(lv); W.lv = lv;
   lv.add(span(0, 7.6, 0, 0.04, 0, 6.5, M.wet, { cast: false }));
-  for (const x of [0.15, 3.8, 7.45]) for (const z of [0.15, 6.35]) lv.add(box(0.3, 4.1, 0.3, M.red, x, 2.05, z));
+  for (const x of [0.2, 3.8, 7.4]) for (const z of [0.2, 6.3]) lv.add(box(0.4, 4.1, 0.4, M.red, x, 2.05, z));
   lv.add(span(0, 7.6, 4.1, 4.4, 0, 6.5, M.steel));
   lv.add(span(-0.05, 7.65, 4.1, 4.8, -0.12, 0.1, M.red));
   lv.add(span(-0.05, 7.65, 4.1, 4.8, 6.4, 6.62, M.red));
   // cloison de piste avec la silhouette de voiture (comme sur la photo)
   const sep = new THREE.MeshStandardMaterial({ color: 0xc9c9c6, roughness: 0.7 });
   lv.add(span(3.65, 3.95, 0.3, 2.8, 0.7, 5.8, sep));
-  const lavSign = textPlane([{ text: 'LAVAGE HAUTE PRESSION', font: '700 64px Inter, Arial' }], 5.2, 0.38, { w: 1024, h: 72, color: '#ffffff' });
-  lavSign.rotation.y = Math.PI; lavSign.position.set(3.8, 4.45, -0.14); lv.add(lavSign);
+  // bandeaux d'après la photo : « WINIGER FRERES » et la mention de la station
+  const banner = (sub) => textPlane([{ text: 'WINIGER FRERES', font: 'italic 900 150px Inter, Arial' }, { text: sub, font: 'italic 600 74px Inter, Arial', color: '#e9e9e9' }], 7.2, 0.66, { w: 1400, h: 128 * 2, color: '#ffffff' });
+  const bn1 = banner('Carrosserie de Grolley'); bn1.rotation.y = Math.PI; bn1.position.set(3.8, 4.45, -0.14); lv.add(bn1);
+  const bn2 = banner('Lavage Haute Pression'); bn2.position.set(3.8, 4.45, 6.64); lv.add(bn2);
+  // parois latérales grises avec le dessin au trait (voiture et laveur), comme sur la station réelle
+  const wp = new THREE.MeshStandardMaterial({ map: T.washPanelTexture(), roughness: 0.6, metalness: 0.2 });
+  const plain = new THREE.MeshStandardMaterial({ color: 0xa7a9aa, roughness: 0.6, metalness: 0.2 });
+  lv.add(span(-0.06, 0.04, 0.3, 2.5, 0.5, 6.0, [wp, plain, plain, plain, plain, plain]));
+  lv.add(span(7.56, 7.66, 0.3, 2.5, 0.5, 6.0, [plain, wp, plain, plain, plain, plain]));
   // bornes de paiement (carte et Twint, d'après la publication)
   for (const x of [0.6, 7.0]) { lv.add(box(0.35, 1.3, 0.3, M.steel, x, 0.65, 0.55)); lv.add(box(0.28, 0.2, 0.02, M.led, x, 1.12, 0.39, { cast: false })); }
   W.washCar = makeCar({ type: 'sedan', color: 0x2f4d6b });
@@ -519,10 +580,28 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   W.lance = box(0.04, 0.04, 1.1, M.steel, 0, 1.2, 0); lv.add(W.lance);
   // lavage automatique : local fermé à bardage sombre, au bout du bâtiment voisin
   const la = new THREE.Group(); site.add(la);
-  la.add(span(-27.05, -9.3, 0, 5.6, 49.2, 56.7, clad(17.75, 5.6)));
+  la.add(span(-27.05, -9.3, 0, 5.6, 49.2, 49.45, clad(17.75, 5.6)), span(-27.05, -9.3, 0, 5.6, 56.45, 56.7, clad(17.75, 5.6)));
+  la.add(span(-27.05, -9.3, 5.35, 5.6, 49.2, 56.7, M.steel));
+  la.add(span(-27.05, -26.8, 0, 5.6, 49.45, 56.45, clad(7, 5.6)));
+  la.add(span(-9.55, -9.3, 3.6, 5.6, 49.45, 56.45, clad(7, 2)), span(-9.55, -9.3, 0, 3.6, 49.45, 50.6, clad(1.2, 3.6)), span(-9.55, -9.3, 0, 3.6, 55.2, 56.45, clad(1.2, 3.6)));
   // traversant : entrée sur la face est (côté cour), sortie tout droit sur la face ouest (indications de l'atelier, nov. 2026)
   const doorMat = PH.shutter(4.6, 3.6); doorMat.color.set(0x55585c);
-  la.add(span(-9.27, -9.2, 0, 3.6, 50.6, 55.2, doorMat, { cast: false }));
+  la.add(span(-9.6, -9.5, 3.45, 3.6, 50.6, 55.2, doorMat, { cast: false })); // porte enroulée, ouverte
+  // intérieur d'après la photo : parois blanches, cadres rouges, sol carrelé mouillé, rails de guidage, portique rouge
+  const tile = new THREE.MeshStandardMaterial({ color: 0x55585b, roughness: 0.22, metalness: 0.15 });
+  la.add(span(-26.8, -9.55, 0, 0.03, 49.45, 56.45, tile, { cast: false }));
+  la.add(span(-26.8, -9.55, 0.03, 4.9, 49.45, 49.55, M.white), span(-26.8, -9.55, 0.03, 4.9, 56.35, 56.45, M.white), span(-26.8, -26.7, 0.03, 4.9, 49.55, 56.35, M.white));
+  la.add(span(-26.8, -9.55, 4.9, 5.0, 49.45, 56.45, M.white));
+  for (let x = -24.5; x < -10; x += 3.6) { la.add(span(x - 0.12, x + 0.12, 0, 4.9, 49.55, 49.75, M.red), span(x - 0.12, x + 0.12, 0, 4.9, 56.15, 56.35, M.red), span(x - 0.08, x + 0.08, 4.7, 4.9, 49.55, 56.35, M.red)); }
+  for (const z of [51.9, 54.1]) la.add(span(-25, -10.5, 0.03, 0.1, z - 0.05, z + 0.05, M.lightGrey, { cast: false }));
+  for (let x = -24; x < -11; x += 3.6) for (const z of [49.9, 56.0]) la.add(span(x, x + 1.4, 4.4, 4.5, z - 0.05, z + 0.05, M.led, { cast: false }));
+  const gantry = new THREE.Group(); gantry.position.set(-19.5, 0, 52.95); la.add(gantry);
+  for (const z of [-2.4, 2.4]) { gantry.add(box(0.7, 3.4, 0.5, M.white, 0, 1.7, z)); gantry.add(box(0.22, 3.0, 0.6, M.red, 0.3, 1.6, z * 0.86)); gantry.add(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 2.6, 14), new THREE.MeshStandardMaterial({ color: 0x1d1d1f, roughness: 0.9 })).translateY(1.5).translateZ(z * 0.72)); }
+  gantry.add(box(0.8, 0.75, 5.4, M.red, 0, 3.7, 0));
+  const gs = textPlane([{ text: 'Chez les Frères Winiger', font: 'italic 800 84px Inter, Arial' }], 3.6, 0.4, { w: 1024, h: 116, color: '#ffffff' });
+  gs.rotation.y = Math.PI / 2; gs.position.set(0.42, 3.62, 0); gantry.add(gs);
+  const exitIn = textPlane([{ text: 'SORTIE', font: '800 110px Inter, Arial', color: '#1d2a44' }, { text: 'porte automatique', font: '600 54px Inter, Arial', color: '#1d2a44' }], 2.2, 0.75, { w: 768, h: 260, bg: '#f4f4f2' });
+  exitIn.rotation.y = Math.PI / 2; exitIn.position.set(-26.65, 2.3, 52.95); la.add(exitIn);
   la.add(span(-9.27, -9.12, 3.6, 3.75, 50.5, 55.3, M.red));
   la.add(span(-27.12, -27.05, 0, 3.6, 50.6, 55.2, doorMat, { cast: false }));
   la.add(span(-27.2, -27.05, 3.6, 3.75, 50.5, 55.3, M.red));

@@ -144,3 +144,19 @@
     });
   }
 })();
+
+/* ---------- Accueil : diaporama de la réalisation à la une ---------- */
+(function () {
+  var s = document.querySelector('[data-slider]');
+  if (!s) return;
+  var slides = s.querySelectorAll('.acc-slide'), thumbs = s.querySelectorAll('[data-go]'), n = s.querySelector('[data-n]'), i = 0;
+  var go = function (k) {
+    i = (k + slides.length) % slides.length;
+    slides.forEach(function (el, j) { el.classList.toggle('on', j === i); });
+    thumbs.forEach(function (b, j) { if (j === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    if (n) n.textContent = (i < 9 ? '0' : '') + (i + 1);
+  };
+  thumbs.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.go); }); });
+  s.querySelector('[data-prev]').addEventListener('click', function () { go(i - 1); });
+  s.querySelector('[data-next]').addEventListener('click', function () { go(i + 1); });
+})();

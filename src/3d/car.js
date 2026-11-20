@@ -141,6 +141,7 @@ export function makeCar({ type = 'coupe', color = 0xc8c9cb, material = null, mod
     const tl = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, W * 0.82), carMaterials.tail); tl.position.set(tx, ty, 0); group.add(tl);
   }
   group.userData = { body, cabin, wheels, bodyMat, width: W, type };
+  group.userData.car = true;
   return group;
 }
 

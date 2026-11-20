@@ -44,6 +44,15 @@ IMGINFO = {
     # station de lavage : publication Instagram de l'atelier du 22 août 2026 (photos recadrées, sans le texte de l'affiche)
     "lavage-pistes": (1440, 522, [1440, 800]),
     "lavage-entree": (604, 608, [604]),
+    # photos transmises par l'atelier (novembre 2026)
+    "atelier-haut": (2016, 1512, [1600, 800]),
+    "lavage-facade": (2048, 1536, [1600, 800]),
+    "lavage-auto": (1316, 640, [1316, 800]),
+    "atelier-ferrari": (1316, 640, [1316, 800]),
+    "atelier-cabines": (2048, 1536, [1600, 800]),
+    "lavage-hp": (2048, 1536, [1600, 800]),
+    "facade-vitrine": (1582, 673, [1582, 800]),
+    "visite-3d": (1600, 900, [1600, 800]),
 }
 
 TEL = "026 476 06 06"
@@ -212,7 +221,7 @@ JSONLD = {
 
 
 def document(file, title, desc, body, wrapped=True, jsonld=False):
-    home = file == "index.html"
+    home = file == "visite.html"
     ld = f'\n<script type="application/ld+json">{json.dumps(JSONLD, ensure_ascii=False)}</script>' if jsonld else ""
     head = f'''<title>{title}</title>
 <meta charset="utf-8">
@@ -241,7 +250,7 @@ def document(file, title, desc, body, wrapped=True, jsonld=False):
 <head>
 {head}
 </head>
-<body{' class="home"' if home else ''}>
+<body{' class="home"' if home else (' class="accueil"' if file == 'index.html' else '')}>
 {content}
 </body>
 </html>
@@ -312,7 +321,7 @@ def chapter(id_, num, title, intro, steps, more, photo="", intro_ph=""):
 
 
 
-def page_index():
+def page_visite():
     rail = "".join(f'<a href="#{i}"><span>{n}</span><em>{l}</em></a>' for i, n, l in CHAPTERS)
     spaces = "".join(f'<li><a href="#{i}"><span>{n}</span>{l}</a></li>' for i, n, l in CHAPTERS[1:6])
     hours = "".join(f"<li><span>{d}</span><span>{h}</span></li>" for d, h in HOURS)
@@ -472,6 +481,115 @@ def page_index():
   </div></div>
 </section>'''
 
+
+
+def page_accueil():
+    """Accueil sombre : photo de l'atelier en tête, prestations en cartes, entreprise, réalisation à la une."""
+    hours = "".join(f"<li><span>{d}</span><span>{h}</span></li>" for d, h in HOURS)
+    cards = [
+        ("prestations.html#carrosserie", "atelier-cabines", "Carrosserie et peinture", "Réparation toutes marques, débosselage, vitrage, peinture en cabine.", "brush", "55% 50%"),
+        ("prestations.html#tesla", "tesla-model3", "Tesla", "Tesla Approved Body Shop depuis mai 2021.", "bolt", "45% 60%"),
+        ("restauration.html", "911-rotissoire-hero", "Restauration", "Oldtimers et youngtimers, caisse sur rotissoire.", "wrench", "50% 50%"),
+        ("gardiennage.html", "gardiennage", "Gardiennage", "Sous-sol chauffé, accès par ascenseur, du mois à l'année.", "lift", "40% 60%"),
+        ("lavage.html", "lavage-hp", "Lavage", "Haute pression et automatique, paiement par carte ou Twint.", "drop", "55% 55%"),
+    ]
+    ic = {
+        "brush": '<path d="M14 4l6 6-7.5 7.5-6-6z"/><path d="M6.5 11.5 4 20l8.5-2.5"/>',
+        "bolt": '<path d="M13 3 5 14h6l-1 7 8-11h-6z"/>',
+        "wrench": '<path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5a4 4 0 0 0-2-2z"/>',
+        "lift": ICONS["lift"],
+        "drop": '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    }
+    svg = lambda i: f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{ic[i]}</svg>'
+    card_html = "".join(
+        f'<li><a class="acc-card" href="{h}">{img(k, "", "(max-width:760px) 80vw, 20vw", pos=pos)}'
+        f'<span class="acc-ic" aria-hidden="true">{svg(i)}</span><b>{t}</b><span class="acc-card-t">{d}</span>'
+        f'<span class="acc-go" aria-hidden="true">→</span></a></li>'
+        for h, k, t, d, i, pos in cards)
+    resto = [
+        ("911-rotissoire-hero", "La caisse fixée sur sa rotissoire."),
+        ("911-masquage", "Le masquage avant la peinture."),
+        ("911-interieur-appret", "L'habitacle en apprêt."),
+        ("911-giclage-soubassement", "Peinture du soubassement, caisse retournée."),
+        ("911-soubassement-fini", "Le soubassement entièrement repeint."),
+    ]
+    slides = "".join(
+        f'<figure class="acc-slide{" on" if i == 0 else ""}" data-i="{i}">{img(k, c, "(max-width:760px) 100vw, 55vw")}<figcaption>{c}</figcaption></figure>'
+        for i, (k, c) in enumerate(resto))
+    thumbs = "".join(
+        f'<li><button type="button" data-go="{i}" aria-label="Photo {i + 1} : {c}"' + (' aria-current="true"' if i == 0 else "") + f'>{img(k, "", "120px")}</button></li>'
+        for i, (k, c) in enumerate(resto))
+    works = [
+        ("huracan-bouclier", "Lamborghini Huracán", "Bloc avant, janvier 2026"),
+        ("mazda-giclage", "Mazda", "Peinture en cabine, juillet 2026"),
+        ("993-livraison", "Porsche 993", "Remise en état, livrée en février 2023"),
+        ("pieces-cabine", "Préparation", "Pièces prêtes pour la cabine"),
+        ("restauration-remorque", "Restauration", "Départ chez son propriétaire, décembre 2020"),
+    ]
+    work_html = "".join(f'<li><figure>{img(k, f"{t} : {d}", "(max-width:760px) 70vw, 22vw")}<figcaption><b>{t}</b>{d}</figcaption></figure></li>' for k, t, d in works)
+    play = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>'
+    arr = '<span aria-hidden="true">→</span>'
+    return f'''
+<section class="acc-hero" aria-labelledby="h-acc">
+  <div class="acc-hero-img">{img("atelier-haut", "L'atelier Winiger Frères vu de la mezzanine : voitures de sport alignées sur le sol clair, poteaux rouges", "100vw", eager=True, pos="58% 46%")}</div>
+  <div class="acc-hero-in wrap"><div class="inner">
+    <p class="acc-kick">Carrosserie · Peinture · Restauration · Gardiennage</p>
+    <h1 id="h-acc"><span>L'atelier des</span> frères Winiger</h1>
+    <span class="acc-rule" aria-hidden="true"></span>
+    <p class="acc-lead">Depuis 2004 à Grolley, Richard et Fabrice Winiger réparent, peignent et restaurent les voitures de tous les jours comme les véhicules de prestige et de collection.</p>
+    <div class="acc-btns"><a class="acc-b acc-b-red" href="contact.html#demande">Demander un devis {arr}</a><a class="acc-b" href="visite.html">{play}Découvrir l'atelier</a></div>
+  </div></div>
+  <div class="acc-tour wrap"><div class="inner">
+    <div class="acc-tour-t"><p class="acc-eyebrow">Explorez nos installations</p><p>L'atelier, la cabine de peinture, le sous-sol de gardiennage et les stations de lavage, en maquette 3D.</p></div>
+    <a class="acc-pill" href="visite.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>Visite 3D de l'atelier {arr}</a>
+    <a class="acc-thumb" href="visite.html" aria-label="Ouvrir la visite 3D">{img("visite-3d", "", "220px")}<span>{play}</span></a>
+  </div></div>
+</section>
+
+<section class="acc-svc wrap" aria-labelledby="h-svc"><div class="inner">
+  <div class="acc-svc-h"><p class="acc-eyebrow">Nos prestations</p><h2 id="h-svc">Tout pour votre véhicule, sous un même toit.</h2><span class="acc-rule" aria-hidden="true"></span></div>
+  <ul class="acc-cards">{card_html}</ul>
+</div></section>
+
+<section class="acc-co" aria-labelledby="h-co">
+  <div class="acc-co-img">{img("atelier-equipe", "L'équipe de Winiger Frères réunie dans l'atelier", "(max-width:760px) 100vw, 45vw", pos="50% 45%")}</div>
+  <div class="acc-co-in wrap"><div class="inner">
+    <div><p class="acc-eyebrow">L'entreprise</p><h2 id="h-co"><span>Un savoir-faire</span> familial</h2><span class="acc-rule" aria-hidden="true"></span></div>
+    <div class="acc-co-t"><p>Fondée en 2004 à Grolley par Richard et Fabrice Winiger. Membre de carrosserie suisse et entreprise formatrice. En 2026, le bâtiment s'agrandit avec une nouvelle réception et un showroom.</p>
+      <a class="acc-b" href="entreprise.html">Découvrir notre histoire {arr}</a></div>
+    <p class="acc-since" aria-hidden="true">Depuis<b>2004</b></p>
+  </div></div>
+</section>
+
+<section class="acc-feat wrap" aria-labelledby="h-feat"><div class="inner">
+  <div class="acc-feat-t">
+    <p class="acc-eyebrow">Réalisation à la une</p>
+    <h2 id="h-feat">Restauration d'une Porsche 911</h2>
+    <span class="acc-rule" aria-hidden="true"></span>
+    <p>Dossier en cours depuis août 2026 : la caisse pivote sur une rotissoire pour que chaque recoin, dessous compris, soit traité et peint en cabine.</p>
+    <a class="acc-b acc-b-red" href="restauration.html">Suivre le dossier {arr}</a>
+  </div>
+  <div class="acc-slider" data-slider>
+    <div class="acc-slides">{slides}</div>
+    <div class="acc-side">
+      <ul class="acc-thumbs">{thumbs}</ul>
+      <div class="acc-ctl"><button type="button" data-prev aria-label="Photo précédente">←</button><p><b data-n>01</b> / {len(resto):02d}</p><button type="button" data-next aria-label="Photo suivante">→</button></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="acc-works wrap" aria-labelledby="h-works"><div class="inner">
+  <div class="acc-works-h"><div><p class="acc-eyebrow">Réalisations</p><h2 id="h-works">Sorties d'atelier</h2></div><a class="acc-more" href="{INSTA}" rel="noopener">Toutes les nouvelles sur Instagram {arr}</a></div>
+  <ul class="acc-works-l">{work_html}</ul>
+</div></section>
+
+<section class="acc-contact wrap" aria-labelledby="h-ct"><div class="inner">
+  <h2 id="h-ct" class="visually-hidden">Contact</h2>
+  <div><p class="acc-eyebrow">Téléphone</p><p><a class="acc-big" href="{TEL_HREF}">{TEL}</a></p><p class="acc-small">Urgence sinistre (WhatsApp) : <a href="{WA_HREF}" rel="noopener">{WA}</a></p></div>
+  <div><p class="acc-eyebrow">Adresse</p><p>Winiger Frères Sàrl<br>{ADDR1}<br>{ADDR2}</p><p class="acc-small"><a href="{MAPS}" rel="noopener">Itinéraire {arr}</a></p></div>
+  <div><p class="acc-eyebrow">Horaires</p><ul class="acc-hours">{hours}</ul></div>
+  <div class="acc-ct-b"><a class="acc-b acc-b-red" href="contact.html#demande">Demander un devis {arr}</a><a class="acc-small" href="mailto:{MAIL}">{MAIL}</a></div>
+</div></section>'''
 
 
 def page_prestations():
@@ -783,7 +901,9 @@ def page_lavage():
 
 PAGES = [
     ("index.html", "Winiger Frères | Carrosserie, restauration et gardiennage à Grolley",
-     "Carrosserie toutes marques, peinture en cabine, restauration, gardiennage en sous-sol chauffé et station de lavage à Grolley (FR). Explorez l\'atelier en 3D.", page_index, True),
+     "Carrosserie toutes marques, peinture en cabine, restauration, gardiennage en sous-sol chauffé et station de lavage à Grolley (FR).", page_accueil, True),
+    ("visite.html", "Visite 3D de l'atelier | Winiger Frères, Grolley",
+     "Visite en maquette 3D de la carrosserie Winiger Frères à Grolley : atelier, cabine de peinture, sous-sol de gardiennage, restauration et stations de lavage.", page_visite, False),
     ("prestations.html", "Prestations de carrosserie et peinture | Winiger Frères, Grolley",
      "Réparation toutes marques, débosselage, peinture en cabine et finition mate, réparation Tesla, sinistres et vitrage à Grolley. Devis gratuit.", page_prestations, False),
     ("restauration.html", "Restauration de véhicules anciens | Winiger Frères",
@@ -810,6 +930,8 @@ def build(artifact_dir=None):
         if artifact_dir and file == "index.html":
             Path(artifact_dir, "index.html").write_text(
                 document(file, "Winiger Frères, Carrosserie de Grolley", desc, body, wrapped=False, jsonld=ld), encoding="utf-8")
+        elif artifact_dir:
+            Path(artifact_dir, file).write_text(document(file, title, desc, body, jsonld=ld), encoding="utf-8")
     print(f"{len(PAGES)} pages générées dans {ROOT}")
 
 
