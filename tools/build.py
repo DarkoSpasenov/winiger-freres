@@ -240,11 +240,17 @@ def document(file, title, desc, body, wrapped=True, jsonld=False):
 
 
 XP_HEAD = '''<link rel="stylesheet" href="assets/css/experience.css">
-<link rel="modulepreload" href="assets/js/experience.js">
-<script>(function(){var d=document.documentElement;try{if(localStorage.getItem('wf3d')==='off'){d.classList.add('xp-off');return}}catch(e){}
-try{var c=document.createElement('canvas');if(!(c.getContext('webgl2')||c.getContext('webgl')))return}catch(e){return}
-d.classList.add('xp-pending');setTimeout(function(){if(!d.classList.contains('xp-on')){d.classList.remove('xp-pending');d.classList.add('xp-failed')}},15000)})();</script>'''
-XP_BODY = '<script type="module" src="assets/js/experience.js"></script>'
+<script>(function(){var d=document.documentElement,m='photo';
+try{m=localStorage.getItem('wfmode')||(localStorage.getItem('wf3d')==='off'?'off':'photo')}catch(e){}
+var gl=false;try{var c=document.createElement('canvas');gl=!!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){}
+if(gl)d.classList.add('gl');d.setAttribute('data-mode',m);
+if(m==='off'){d.classList.add('im-off');return}
+if(m==='3d'&&gl){d.classList.add('im','xp-pending','mode-3d');var l=document.createElement('link');l.rel='modulepreload';l.href='assets/js/experience.js';document.head.appendChild(l);
+setTimeout(function(){if(!d.classList.contains('xp-on')){d.classList.remove('im','xp-pending');d.classList.add('xp-failed')}},15000);return}
+d.setAttribute('data-mode','photo');d.classList.add('im','ph-on');
+setTimeout(function(){if(!d.classList.contains('ph-ready')){d.classList.remove('im','ph-on')}},10000)})();</script>'''
+XP_BODY = '''<script src="assets/js/photo-story.js" defer></script>
+<script type="module">if(document.documentElement.classList.contains('mode-3d'))import('./assets/js/experience.js');</script>'''
 
 CHAPTERS = [
     ("accueil", "00", "Accueil"), ("carrosserie", "01", "Carrosserie"), ("gardiennage", "02", "Gardiennage"),
@@ -257,11 +263,23 @@ def ch_photo(name, alt, caption, sizes="(max-width:760px) 100vw, 420px"):
     return f'<figure class="ch-photo">{img(name, alt, sizes)}<figcaption>{caption}</figcaption></figure>'
 
 
+def ph(name, cap, focus="50% 50%"):
+    """Attributs d'une photo réelle affichée en plein écran derrière un bloc de texte (mode photo de l'accueil)."""
+    if not name:
+        return ' data-ph=""'
+    w, h, avail = IMGINFO[name]
+    largest = max(avail)
+    srcs = ",".join(f"assets/img/{name}-{a}.webp {a}" for a in sorted(avail))
+    return f' data-ph="{name}" data-srcs="{srcs}" data-wh="{largest}x{round(h * largest / w)}" data-focus="{focus}" data-cap="{cap}"'
+
+
 def xsteps(steps):
     n = len(steps)
     out = ""
-    for i, (title, text, extra) in enumerate(steps):
-        out += f'''<div class="ch-step" data-step="{i}"><div class="ch-box">
+    for i, st in enumerate(steps):
+        title, text, extra = st[:3]
+        attrs = st[3] if len(st) > 3 else ""
+        out += f'''<div class="ch-step" data-step="{i}"{attrs}><div class="ch-box">
       <p class="step-n"><b>{i+1:02d}</b> / {n:02d}</p>
       <h3>{title}</h3>
       <p>{text}</p>{extra}
@@ -269,10 +287,10 @@ def xsteps(steps):
     return out
 
 
-def chapter(id_, num, title, intro, steps, more, photo=""):
+def chapter(id_, num, title, intro, steps, more, photo="", intro_ph=""):
     return f'''
 <section class="ch" data-ch="{id_}" id="{id_}" aria-labelledby="h-{id_}">
-  <div class="ch-step ch-intro"><div class="ch-box">
+  <div class="ch-step ch-intro"{intro_ph}><div class="ch-box">
     <p class="ch-n"><span>{num}</span>{dict((c[0], c[2]) for c in CHAPTERS)[id_]}</p>
     <h2 id="h-{id_}">{title}</h2>
     <p class="lead">{intro}</p>
@@ -301,57 +319,57 @@ def page_index():
     carrosserie = chapter("carrosserie", "01", "Carrosserie et peinture, toutes marques.",
         "Du petit choc au sinistre important, jusqu'aux véhicules de prestige. Membre du réseau Tesla Approved Body Shop depuis mai 2021.",
         [
-            ("Prise en charge et devis", "Le devis est gratuit. L'atelier peut prendre en charge votre véhicule sur le lieu de votre choix et vous raccompagner à domicile ou au travail.", ""),
-            ("Sinistre et assurance", "L'atelier vous accompagne dans l'annonce et la gestion du sinistre avec votre assurance. Une voiture de remplacement récente peut vous être prêtée.", f'<p class="small">Urgence : WhatsApp <a href="{WA_HREF}" rel="noopener">{WA}</a></p>'),
-            ("Carrosserie", "Tous travaux de carrosserie, débosselage, remplacement de pare-brise, de lunette arrière et de vitres latérales, remplissage de climatisation.", ""),
-            ("Peinture en cabine", "De la retouche à la teinte complète, y compris la peinture mate et la peinture des véhicules anciens.", ch_photo("mazda-giclage", "Peinture au pistolet d'une Mazda dans la cabine de l'atelier", "Photo de l'atelier : peinture d'une Mazda en cabine.")),
-            ("Restitution", "Le véhicule vous est rendu prêt à reprendre la route. Qualité garantie FCR.", ""),
+            ("Prise en charge et devis", "Le devis est gratuit. L'atelier peut prendre en charge votre véhicule sur le lieu de votre choix et vous raccompagner à domicile ou au travail.", "", ph("reception", "La réception de l'atelier, à Grolley.", "70% 50%")),
+            ("Sinistre et assurance", "L'atelier vous accompagne dans l'annonce et la gestion du sinistre avec votre assurance. Une voiture de remplacement récente peut vous être prêtée.", f'<p class="small">Urgence : WhatsApp <a href="{WA_HREF}" rel="noopener">{WA}</a></p>', ph("tesla-model3", "Tesla Model 3 en réparation : l'atelier est agréé Tesla depuis 2021.", "45% 60%")),
+            ("Carrosserie", "Tous travaux de carrosserie, débosselage, remplacement de pare-brise, de lunette arrière et de vitres latérales, remplissage de climatisation.", "", ph("huracan-bouclier", "Lamborghini Huracán : bouclier avant en préparation, janvier 2026.", "50% 40%")),
+            ("Peinture en cabine", "De la retouche à la teinte complète, y compris la peinture mate et la peinture des véhicules anciens.", ch_photo("mazda-giclage", "Peinture au pistolet d'une Mazda dans la cabine de l'atelier", "Photo de l'atelier : peinture d'une Mazda en cabine."), ph("mazda-giclage", "Peinture d'une Mazda en cabine, juillet 2026.", "45% 50%")),
+            ("Restitution", "Le véhicule vous est rendu prêt à reprendre la route. Qualité garantie FCR.", "", ph("993-livraison", "Porsche 993 livrée après remise en état, février 2023.", "55% 60%")),
         ],
-        f'<a class="xlink" href="prestations.html">Toutes les prestations {ARR}</a><a class="xlink" href="contact.html#demande-carrosserie">Demander un devis {ARR}</a>')
+        f'<a class="xlink" href="prestations.html">Toutes les prestations {ARR}</a><a class="xlink" href="contact.html#demande-carrosserie">Demander un devis {ARR}</a>', intro_ph=ph("huracan-avant", "Lamborghini Huracán, bloc avant démonté à l'atelier.", "45% 55%"))
 
     gardiennage = chapter("gardiennage", "02", "Gardiennage au sous-sol.",
         "Pour les véhicules de collection, de prestige, de sport ou de compétition, quand la place manque ou pour un hivernage.",
         [
-            ("Un sous-sol chauffé", "Un espace moderne et sécurisé, réservé au gardiennage des véhicules.", ch_photo("gardiennage", "Voitures sous housse rouge alignées dans le sous-sol de l'atelier", "Photo du sous-sol de gardiennage.")),
-            ("Accès par ascenseur", "Le véhicule descend au sous-sol par ascenseur, sans rampe à négocier.", ""),
-            ("Du mois à l'année", "Votre véhicule vous est restitué en parfait état, nettoyé à l'intérieur comme à l'extérieur. Le tarif vous est communiqué sur demande.", ""),
+            ("Un sous-sol chauffé", "Un espace moderne et sécurisé, réservé au gardiennage des véhicules.", ch_photo("gardiennage", "Voitures sous housse rouge alignées dans le sous-sol de l'atelier", "Photo du sous-sol de gardiennage."), ph("gardiennage", "Le sous-sol de gardiennage : véhicules sous housse.", "40% 60%")),
+            ("Accès par ascenseur", "Le véhicule descend au sous-sol par ascenseur, sans rampe à négocier.", "", ph("gardiennage", "Le sous-sol de gardiennage : véhicules sous housse.", "40% 60%")),
+            ("Du mois à l'année", "Votre véhicule vous est restitué en parfait état, nettoyé à l'intérieur comme à l'extérieur. Le tarif vous est communiqué sur demande.", "", ph("gardiennage", "Le sous-sol de gardiennage : véhicules sous housse.", "40% 60%")),
         ],
-        f'<a class="xlink" href="gardiennage.html">Le gardiennage en détail {ARR}</a><a class="xlink" href="contact.html#demande-gardiennage">Demander une place {ARR}</a>')
+        f'<a class="xlink" href="gardiennage.html">Le gardiennage en détail {ARR}</a><a class="xlink" href="contact.html#demande-gardiennage">Demander une place {ARR}</a>', intro_ph=ph("gardiennage", "Le sous-sol de gardiennage : véhicules sous housse.", "40% 60%"))
 
     restauration = chapter("restauration", "03", "Restauration, jusqu'aux parties que l'on ne voit pas.",
         "Oldtimers et youngtimers. Dossier en cours depuis août 2026 : une Porsche 911.",
         [
-            ("La caisse sur rotissoire", "La caisse est fixée sur une rotissoire : elle pivote pour rendre chaque recoin accessible, dessous compris.", ch_photo("911-rotissoire-cote", "Caisse de Porsche 911 fixée sur une rotissoire à l'atelier", "Photo de l'atelier : la 911 sur sa rotissoire.")),
-            ("Le masquage", "Avant la peinture, les zones à protéger sont masquées avec soin.", ""),
-            ("Les intérieurs en apprêt", "L'habitacle et les parties intérieures reçoivent leur apprêt en cabine.", ""),
-            ("Le soubassement", "Grâce à la rotissoire, le soubassement est peint comme le reste de la caisse.", ""),
+            ("La caisse sur rotissoire", "La caisse est fixée sur une rotissoire : elle pivote pour rendre chaque recoin accessible, dessous compris.", ch_photo("911-rotissoire-cote", "Caisse de Porsche 911 fixée sur une rotissoire à l'atelier", "Photo de l'atelier : la 911 sur sa rotissoire."), ph("911-rotissoire-cote", "Porsche 911 sur sa rotissoire, en cabine.", "50% 55%")),
+            ("Le masquage", "Avant la peinture, les zones à protéger sont masquées avec soin.", "", ph("911-masquage", "Masquage de la caisse avant peinture.", "50% 55%")),
+            ("Les intérieurs en apprêt", "L'habitacle et les parties intérieures reçoivent leur apprêt en cabine.", "", ph("911-interieur-appret", "L'habitacle de la 911 en apprêt.", "50% 55%")),
+            ("Le soubassement", "Grâce à la rotissoire, le soubassement est peint comme le reste de la caisse.", "", ph("911-giclage-soubassement", "Peinture du soubassement, caisse retournée.", "40% 50%")),
         ],
-        f'<a class="xlink" href="restauration.html">Suivre le dossier de la 911 {ARR}</a>')
+        f'<a class="xlink" href="restauration.html">Suivre le dossier de la 911 {ARR}</a>', intro_ph=ph("911-rotissoire-hero", "Porsche 911 en restauration, dossier en cours depuis août 2026.", "50% 50%"))
 
     competition = chapter("competition", "04", "Le n° 438 en piste.",
         "Une Porsche 911 court aux couleurs de Winiger Frères, Carrosserie de Grolley. Même exigence de finition qu'à l'atelier.",
         [
-            ("La voiture", "Porsche 911, numéro 438, livrée Winiger Frères. Le modèle 3D est une représentation simplifiée, d'après les photos de course.", ch_photo("course-438-profil", "Porsche 911 numéro 438 aux couleurs Winiger Frères en piste", "Photo : Sébastien Montagny / Sport-Auto.ch")),
+            ("La voiture", "Porsche 911, numéro 438, livrée Winiger Frères. Le modèle 3D est une représentation simplifiée, d'après les photos de course.", ch_photo("course-438-profil", "Porsche 911 numéro 438 aux couleurs Winiger Frères en piste", "Photo : Sébastien Montagny / Sport-Auto.ch"), ph("course-438-profil", "Photo : Sébastien Montagny / Sport-Auto.ch", "72% 64%")),
         ],
-        f'<a class="xlink" href="competition.html">La page compétition {ARR}</a>')
+        f'<a class="xlink" href="competition.html">La page compétition {ARR}</a>', intro_ph=ph("course-438-face", "Photo : Sébastien Montagny / Sport-Auto.ch", "55% 55%"))
 
     lavage = chapter("lavage", "05", "Station de lavage, chez les Frères Winiger.",
         "Sur le site de la carrosserie, à Grolley : la station de lavage des Frères Winiger.",
         [
-            ("Lavage haute pression", "Des pistes de lavage haute pression, sous un auvent, à côté de la carrosserie.", ""),
-            ("Paiement par carte ou Twint", "Les installations sont équipées d'un système de paiement électronique, pour un passage rapide.", ""),
-            ("Horaires et tarifs", f"Ils ne sont pas encore publiés en ligne : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Source : publication de l\'atelier du 22 août 2026.</p>'),
+            ("Lavage haute pression", "Des pistes de lavage haute pression, sous un auvent, à côté de la carrosserie.", "", ph("", "")),
+            ("Paiement par carte ou Twint", "Les installations sont équipées d'un système de paiement électronique, pour un passage rapide.", "", ph("", "")),
+            ("Horaires et tarifs", f"Ils ne sont pas encore publiés en ligne : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Source : publication de l\'atelier du 22 août 2026.</p>', ph("", "")),
         ],
-        f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>')
+        f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>', intro_ph=ph("", ""))
 
     histoire = chapter("histoire", "06", "Deux frères, un atelier qui grandit.",
         "Une carrosserie familiale, fondée et dirigée par Richard et Fabrice Winiger, membre de carrosserie suisse et entreprise formatrice.",
         [
-            ("2004", "Richard et Fabrice Winiger fondent la carrosserie à Grolley.", ch_photo("atelier-equipe", "L'équipe de Winiger Frères réunie dans l'atelier", "Photo de l'équipe à l'atelier.")),
-            ("2021", "En mai, l'atelier rejoint le réseau Tesla Approved Body Shop.", ""),
-            ("2026", "Agrandissement du bâtiment, avec une nouvelle réception et un showroom. La charpente est en cours de montage ; sa position dans la maquette est indicative.", ""),
+            ("2004", "Richard et Fabrice Winiger fondent la carrosserie à Grolley.", ch_photo("atelier-equipe", "L'équipe de Winiger Frères réunie dans l'atelier", "Photo de l'équipe à l'atelier."), ph("atelier-equipe", "L'équipe à l'atelier.", "50% 50%")),
+            ("2021", "En mai, l'atelier rejoint le réseau Tesla Approved Body Shop.", "", ph("tesla-model3", "Tesla Model 3 en réparation à l'atelier.", "45% 60%")),
+            ("2026", "Agrandissement du bâtiment, avec une nouvelle réception et un showroom. La charpente est en cours de montage ; sa position dans la maquette est indicative.", "", ph("atelier-peintre", "L'atelier aujourd'hui.", "62% 40%")),
         ],
-        f'<a class="xlink" href="entreprise.html">L\'entreprise {ARR}</a>')
+        f'<a class="xlink" href="entreprise.html">L\'entreprise {ARR}</a>', intro_ph=ph("atelier-equipe", "L'équipe à l'atelier.", "50% 50%"))
 
     works = [
         ("huracan-bouclier", "Lamborghini Huracán", "Bloc avant, janvier 2026", "Bouclier avant de la Lamborghini Huracán en préparation sur chevalet"),
@@ -366,6 +384,11 @@ def page_index():
     track = "".join(f'<li><figure>{img(k, a, "(max-width:760px) 78vw, 30vw")}<figcaption><span>{i+1:02d}</span><b>{t}</b>{d}</figcaption></figure></li>' for i, (k, t, d, a) in enumerate(works))
 
     return f'''
+<div class="ph-stage" id="ph-stage" aria-hidden="true">
+  <div class="ph-layers"></div>
+  <div class="ph-empty"><p><b>Station de lavage</b>Photo à venir. Les pistes haute pression, sous auvent à cadres rouges, figurent sur la publication de l'atelier du 22 août 2026.</p></div>
+  <p class="ph-cap"><span></span></p>
+</div>
 <div class="xp-stage" id="xp-stage" data-logo="assets/img/logo-winiger-960.webp">
   <canvas id="xp-canvas" role="img" aria-label="Maquette 3D interactive du bâtiment de la carrosserie Winiger Frères : atelier, cabine de peinture, sous-sol de gardiennage, restauration, voiture de course n° 438 et station de lavage."></canvas>
   <div class="xp-veil" aria-hidden="true"></div>
@@ -382,7 +405,7 @@ def page_index():
 <nav class="xp-rail" id="xp-rail" aria-label="Chapitres de la page">{rail}</nav>
 
 <section class="ch ch-hero" data-ch="hero" id="accueil" aria-labelledby="h-hero">
-  <div class="ch-step ch-intro"><div class="ch-box">
+  <div class="ch-step ch-intro"{ph("atelier-peintre", "Dans l'atelier Winiger Frères, à Grolley.", "62% 38%")}><div class="ch-box">
     <p class="kicker">Winiger Frères · Carrosserie de Grolley · depuis 2004</p>
     <h1 id="h-hero">Carrosserie, peinture, restauration et gardiennage.</h1>
     <p class="lead">Un atelier familial à Grolley, pour les voitures de tous les jours comme pour les véhicules de prestige et de collection.</p>
@@ -392,9 +415,13 @@ def page_index():
       <a class="xbtn xbtn-line" href="{TEL_HREF}">{TEL}</a>
     </div>
     <ul class="spaces" aria-label="Les espaces de l'atelier">{spaces}</ul>
-    <p class="hint xp-only">Faites défiler : le bâtiment s'ouvre espace par espace. Faites glisser pour tourner, cliquez sur un espace pour y aller.</p>
-    <p class="note">Le bâtiment en 3D est une représentation conceptuelle : volumes d'après les photos publiques du bâtiment, aménagement intérieur indicatif. Les photos de la page sont réelles.
-      <button class="tlink" type="button" id="xp-toggle" data-on="Version sans 3D" data-off="Activer la 3D">Version sans 3D</button></p>
+    <p class="hint m3d-only">Faites défiler : le bâtiment s'ouvre espace par espace. Faites glisser pour tourner, cliquez sur un espace pour y aller.</p>
+    <p class="hint ph-only">Faites défiler : l'atelier, espace par espace, en photos réelles.</p>
+    <p class="note">Toutes les photos sont réelles, prises à l'atelier ou en course. La maquette 3D du bâtiment est une représentation conceptuelle : volumes d'après les photos publiques, aménagement intérieur indicatif.</p>
+    <p class="modes" role="group" aria-label="Affichage de la page d'accueil">Affichage :
+      <button class="tlink" type="button" data-setmode="photo">Photos</button>
+      <button class="tlink gl-only" type="button" data-setmode="3d">Maquette 3D</button>
+      <button class="tlink" type="button" data-setmode="off">Sans animation</button></p>
     {ch_photo("atelier-peintre", "Carrossier au travail dans l'atelier Winiger Frères", "Photo de l'atelier.", "(max-width:760px) 100vw, 60vw")}
   </div></div>
 </section>
@@ -417,7 +444,7 @@ def page_index():
 </section>
 
 <section class="ch ch-contact" data-ch="contact" id="contact" aria-labelledby="h-contact">
-  <div class="ch-step ch-intro"><div class="ch-box ch-box-wide">
+  <div class="ch-step ch-intro"{ph("reception", "La réception de l'atelier.", "72% 50%")}><div class="ch-box ch-box-wide">
     <p class="ch-n"><span>08</span>Contact</p>
     <h2 id="h-contact">Passez à l'atelier.</h2>
     <div class="contact-cols">

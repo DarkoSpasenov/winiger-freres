@@ -16,10 +16,12 @@ const smooth = (t) => { t = clamp(t); return t * t * (3 - 2 * t); };
 const lerp = (a, b, t) => a + (b - a) * t;
 const range = (p, a, b) => clamp((p - a) / (b - a));
 const INSTANT = /[?&]instant/.test(location.search); // tests automatisés : pas de lissage de caméra
+// Mode photo : l'accueil défile dans les vraies photos ; la maquette n'est chargée qu'à la demande, pour l'exploration libre.
+const PHOTO = doc.classList.contains('ph-on');
 
 function fail(err) {
   console.warn('[3D] désactivée :', err);
-  doc.classList.remove('xp-pending', 'xp-on');
+  doc.classList.remove('xp-pending', 'xp-on', 'xp-exploring');
   doc.classList.add('xp-failed');
 }
 
@@ -218,6 +220,7 @@ function start() {
   const info = $('#xp-info');
   function setExplore(on) {
     exploring = on;
+    if (on && paused) { paused = false; clock.getDelta(); requestAnimationFrame(tick); }
     doc.classList.toggle('xp-exploring', on);
     controls.enabled = on;
     if (on) {
@@ -379,11 +382,12 @@ function start() {
   const clock = new THREE.Clock();
   const off = new THREE.Vector3(), sph = new THREE.Spherical();
   let frames = 0, slow = 0, acc = 0;
-  let running = true;
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) { clock.getDelta(); requestAnimationFrame(tick); } });
+  let running = true, paused = false;
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !paused) { clock.getDelta(); requestAnimationFrame(tick); } });
 
   function tick() {
     if (!running) return;
+    if (PHOTO && !exploring) { paused = true; return; } // maquette masquée : on ne dessine rien
     const dt = Math.min(clock.getDelta(), 0.05);
     const time = clock.elapsedTime;
 
@@ -446,12 +450,18 @@ function start() {
   sample(scrollY + vh * 0.5);
   cur.pos.copy(want.pos); cur.tgt.copy(want.tgt);
   ['open', 'cut', 'ext', 'dim'].forEach((k) => (cur[k] = want[k]));
-  addEventListener('scroll', markActive, { passive: true });
-  markActive();
+  if (!PHOTO) { addEventListener('scroll', markActive, { passive: true }); markActive(); }
   renderer.compile(scene, camera);
   requestAnimationFrame(() => {
+    if (PHOTO) {
+      // vue d'ensemble du bâtiment, ouvert, comme point de départ de l'exploration
+      cur.pos.set(...SHOTS.hero[1].pos); cur.tgt.set(...SHOTS.hero[1].tgt);
+      cur.open = cur.cut = cur.ext = 1; cur.dim = 0;
+      camera.position.copy(cur.pos); camera.lookAt(cur.tgt);
+      doc.classList.add('xp-ready'); setExplore(true);
+    }
+    else doc.classList.add('xp-on');
     tick();
-    doc.classList.add('xp-on');
     doc.classList.remove('xp-pending');
     window.__xp = { renderer, scene, camera, W }; // pour le débogage
   });

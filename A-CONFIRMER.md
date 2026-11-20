@@ -58,6 +58,13 @@ La maquette est une représentation conceptuelle, signalée comme telle sur la p
 - [ ] Position et forme de l'agrandissement 2026 (la charpente est placée à titre indicatif).
 - [ ] Modèles 3D des véhicules (911 n° 438 en particulier) : les voitures actuelles sont des volumes simplifiés.
 
+## 6 bis. Photos de l'accueil
+
+- [ ] Photos en haute définition : la plupart des photos du site font 744 px de large. Sur ordinateur, elles s'affichent en tirage au lieu du plein écran. Des originaux d'au moins 2000 px les passeraient en plein écran.
+- [ ] Photo de la station de lavage (aujourd'hui un encadré « photo à venir »).
+- [ ] Photo extérieure du bâtiment pour l'ouverture de l'accueil.
+- [ ] Photo de l'agrandissement 2026 (l'étape « 2026 » de l'histoire montre l'atelier actuel).
+
 ## 7. Intégrations à brancher
 
 - [ ] Envoi du formulaire (voir README, section Formulaire).
