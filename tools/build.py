@@ -321,7 +321,7 @@ def page_index():
         "gardiennage": ("Sous-sol : gardiennage", "Sous-sol chauffé, accès par ascenseur, du mois à l'année."),
         "restauration": ("Restauration", "Caisse sur rotissoire, intérieurs et soubassement repeints en cabine."),
         "competition": ("Compétition", "La Porsche 911 n° 438 court aux couleurs de l'atelier."),
-        "lavage": ("Station de lavage", "Pistes de lavage haute pression, paiement par carte ou Twint."),
+        "lavage": ("Stations de lavage", "Un lavage manuel haute pression et un lavage automatique, paiement par carte ou Twint."),
         "contact": ("Réception", f"{ADDR1}, {ADDR2}. Téléphone {TEL}."),
     }
     place_html = "".join(f'<div data-place="{k}"><h3>{t}</h3><p>{d}</p><a href="#{k}" data-goto>Voir ce chapitre {ARR}</a></div>' for k, (t, d) in places.items())
@@ -364,11 +364,11 @@ def page_index():
         f'<a class="xlink" href="competition.html">La page compétition {ARR}</a>', intro_ph=ph("course-438-face", "Photo : Sébastien Montagny / Sport-Auto.ch", "55% 55%"))
 
     lavage = chapter("lavage", "05", "Station de lavage, chez les Frères Winiger.",
-        "Sur le site de la carrosserie, à Grolley : la station de lavage des Frères Winiger.",
+        "À deux pas de la carrosserie, à Grolley : un lavage manuel haute pression et un lavage automatique.",
         [
-            ("Lavage haute pression", "Des pistes de lavage haute pression, sous un auvent, à côté de la carrosserie.", "", ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
-            ("Paiement par carte ou Twint", "Les installations sont équipées d'un système de paiement électronique, pour un passage rapide.", "", ph("lavage-entree", "Station lavage, chez les Frères Winiger. Photo publiée par l'atelier le 22 août 2026.", "50% 50%")),
-            ("Horaires et tarifs", f"Ils ne sont pas encore publiés en ligne : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Source : publication de l\'atelier du 22 août 2026.</p>', ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
+            ("Lavage manuel haute pression", "Une station de lavage manuel haute pression, sous auvent, en face de la carrosserie.", "", ph("lavage-pistes", "Le lavage manuel haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
+            ("Lavage automatique", "Une station de lavage automatique, dans un local fermé au bout du bâtiment voisin.", "", ph("lavage-entree", "Le lavage automatique. Photo publiée par l'atelier le 22 août 2026.", "50% 50%")),
+            ("Carte ou Twint", f"Les deux stations acceptent le paiement électronique. Horaires et tarifs : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Sources : publication de l\'atelier du 22 août 2026 et indications de l\'atelier (novembre 2026).</p>', ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
         ],
         f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>', intro_ph=ph("lavage-pistes", "La station de lavage, à côté de la carrosserie. Photo publiée par l'atelier le 22 août 2026.", "62% 50%"))
 
@@ -758,15 +758,16 @@ def page_mentions():
 
 def page_lavage():
     return page_head("Station de lavage", "Station de lavage", "Station lavage, <span class=\"accent\">chez les Frères Winiger.</span>",
-        "À côté de la carrosserie, à Grolley : des pistes de lavage haute pression, avec paiement par carte ou Twint.",
+        "À deux pas de la carrosserie, à Grolley : un lavage manuel haute pression et un lavage automatique, avec paiement par carte ou Twint.",
         f'<div class="btns"><a class="btn btn-ghost" href="{TEL_HREF}"><span>{TEL}</span></a><a class="btn btn-ghost" href="{MAPS}" rel="noopener"><span>Itinéraire {ARR}</span></a></div>', image="lavage-entree", pos="50% 45%", alt="Entrée de la station de lavage, enseigne « Station Lavage, chez les Frères Winiger »") + f'''
 <section class="section wrap" aria-labelledby="h-lav">
   <div class="inner split" style="align-items:start">
     <div class="stack">
       <p class="eyebrow">Ce que vous trouvez</p>
-      <h2 class="display h2" id="h-lav">Haute pression, <span class="accent">sous auvent.</span></h2>
+      <h2 class="display h2" id="h-lav">Manuel ou <span class="accent">automatique.</span></h2>
       <ul class="checks">
-        <li>Pistes de lavage haute pression, sous auvent</li>
+        <li>Lavage manuel haute pression, sous auvent</li>
+        <li>Lavage automatique, en local fermé</li>
         <li>Paiement électronique : carte ou Twint</li>
         <li>Sur le site de la carrosserie, {ADDR1}, {ADDR2}</li>
       </ul>
@@ -774,7 +775,7 @@ def page_lavage():
     <div class="stack">
       <p class="eyebrow">À savoir</p>
       <p class="lead">Les horaires, les tarifs et les programmes de lavage ne sont pas encore publiés en ligne. Pour toute question, appelez l'atelier au <a href="{TEL_HREF}">{TEL}</a>.</p>
-      <p class="muted small">Source : publication de l'atelier du 22 août 2026 annonçant le paiement électronique.</p>
+      <p class="muted small">Sources : publication de l'atelier du 22 août 2026 annonçant le paiement électronique, et indications de l'atelier (novembre 2026).</p>
     </div>
   </div>
 </section>''' + cta_band("Une carrosserie à refaire ?", "Après le lavage, l'atelier est juste à côté.", "contact.html#demande", "Demander un devis")
@@ -790,7 +791,7 @@ PAGES = [
     ("gardiennage.html", "Gardiennage de voitures de sport et de collection | Winiger Frères",
      "Gardiennage de voitures de sport et de collection en sous-sol chauffé, accès par ascenseur, du mois à l'année, à Grolley.", page_gardiennage, False),
     ("lavage.html", "Station de lavage haute pression | Winiger Frères, Grolley",
-     "Station de lavage haute pression chez les Frères Winiger à Grolley, paiement par carte ou Twint.", page_lavage, False),
+     "Lavage manuel haute pression et lavage automatique chez les Frères Winiger à Grolley, paiement par carte ou Twint.", page_lavage, False),
     ("entreprise.html", "L'entreprise | Winiger Frères, Carrosserie de Grolley",
      "Carrosserie familiale fondée en 2004 par Richard et Fabrice Winiger, membre de carrosserie suisse et entreprise formatrice.", page_entreprise, False),
     ("competition.html", "Compétition | Winiger Frères",

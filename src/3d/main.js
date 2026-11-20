@@ -284,7 +284,7 @@ function start() {
   // Les étapes sont exprimées en blocs de texte (voir stepPos) : 1 = prise en charge, 2 = sinistre, etc.
   const lc = new THREE.Vector3();
   const carPath = makePath([
-    { pts: [[11, 26], [11, 18], [11, 10]], from: 0.2, to: 1.0 },
+    { pts: [[11, 19.5], [11, 15], [11, 10]], from: 0.2, to: 1.0 },
     { pts: [[11, 10], [9, 6.5], [5, 4.5], [2, 3.2], [2, 1.1]], from: 1.15, to: 1.85 },
     { pts: [[2, 1.1], [2, 5.4]], rev: true, from: 3.25, to: 3.45 },
     { pts: [[2, 5.4], [7, 4.6], [12, 3.4], [14, 0.6], [14, -5.6]], from: 3.45, to: 3.85 },
@@ -316,7 +316,7 @@ function start() {
     W.lights.booth.intensity = booth * 60;
     mist.rate = pc > 3.9 && pc < 4.3 && !reduce ? 220 : 0;
     W.painter.position.z = -5.5 + Math.sin(time * 1.4) * 1.6 * booth;
-    mist.origin.set(12.1, 1.3, W.painter.position.z); mist.dir.set(1, 0.05, 0);
+    mist.origin.set(-12.1, 1.3, W.painter.position.z); mist.dir.set(-1, 0.05, 0); // bâtiment en miroir
     W.door.position.y = (pc > 0.6 && pc < 5.5 ? 1 : 0) * 3.9;
 
     // ---- 02 gardiennage : l'ascenseur descend au sous-sol
@@ -339,10 +339,10 @@ function start() {
     const foam = smooth(range(wash, 0.0, 0.3)) * (1 - smooth(range(wash, 0.55, 0.9)));
     W.foamMat.opacity = foam * 0.85;
     const sweep = Math.sin(time * 0.9);
-    W.washer.position.set(27.2, 0.04, 5.2 + sweep * 1.8);
-    const nozzle = lc.set(26.55, 0.9 + 0.3 * Math.sin(time * 2.3), 5.2 + sweep * 1.8);
+    W.washer.position.set(3.2, 0.04, 3.25 + sweep * 1.5);
+    const nozzle = lc.set(2.75, 0.9 + 0.3 * Math.sin(time * 2.3), 3.25 + sweep * 1.5); // repère local de la station
     W.lance.position.copy(nozzle).add(ta.set(0.35, 0.2, 0)); W.lance.rotation.y = Math.PI / 2;
-    water.origin.copy(nozzle); water.dir.set(-1, -0.25, sweep * 0.1).normalize();
+    water.origin.copy(nozzle).add(W.lv.position); water.dir.set(-1, -0.25, sweep * 0.1).normalize();
     water.rate = wash > 0.02 && wash < 0.98 && !reduce ? (mobile ? 400 : 1100) : 0;
     W.washCar.userData.bodyMat.roughness = lerp(0.32, 0.12, smooth(range(pl, 2.0, 2.4)));
 

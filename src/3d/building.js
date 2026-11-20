@@ -66,6 +66,7 @@ export function figure(h = 1.78) {
 function textPlane(lines, w, h, opts) {
   const t = T.textTexture(lines, opts);
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }));
+  m.userData.text = true;
   return m;
 }
 
@@ -100,7 +101,12 @@ export function buildWorld({ logoUrl, mobile }) {
   M.ground.map = T.grassTexture(); M.ground.map.repeat.set(36, 36);
   M.paving.map = T.asphaltTexture(); M.paving.map.repeat.set(10, 3);
   M.paving.roughnessMap = T.asphaltRough(); M.paving.roughnessMap.repeat.set(10, 3);
-  const root = new THREE.Group();
+  // Le bâtiment est construit dans « root », retourné en miroir (scale.x = -1) pour respecter l'orientation réelle :
+  // réception à l'extrémité est (droite) de la façade, porte d'atelier à l'ouest. Les textes sont remis à l'endroit.
+  // Les abords (cour, voisins, lavage, voiture n° 438) sont dans « site », en coordonnées réelles, sans miroir.
+  const world = new THREE.Group();
+  const root = new THREE.Group(); root.scale.x = -1; world.add(root);
+  const site = new THREE.Group(); world.add(site);
   const W = {}; // éléments animés
   const anchors = {};
   const zones = [];
@@ -121,11 +127,17 @@ export function buildWorld({ logoUrl, mobile }) {
   W.plug.add(span(-20, 20, -4.6, 0, 11, 15, earthMats(M.paving), { cast: false }));
   root.add(W.plug);
 
-  // Cour : dallage, marquage des places
-  const court = span(-34, 40, 0, 0.02, 15, 34, M.paving, { cast: false }); root.add(court);
-  root.add(span(-20.5, 20.5, 0, 0.02, 13.2, 15, M.paving, { cast: false }));
-  for (let i = 0; i < 9; i++) root.add(span(-30 + i * 3, -29.9 + i * 3, 0.02, 0.03, 24, 29, M.line, { cast: false }));
-  root.add(span(-30, -6, 0.02, 0.03, 28.9, 29, M.line, { cast: false }));
+  // Cour : enrobé jusqu'à la route, places en épi devant le bâtiment (d'après la vue aérienne)
+  const court = span(-34, 40, 0, 0.02, 15, 70, M.paving, { cast: false }); site.add(court);
+  site.add(span(-20.5, 20.5, 0, 0.02, 13.2, 15, M.paving, { cast: false }));
+  for (let i = 0; i < 10; i++) site.add(span(-22 + i * 2.6, -21.9 + i * 2.6, 0.02, 0.03, 15.3, 19.6, M.line, { cast: false }));
+  site.add(span(-22, 1.5, 0.02, 0.03, 19.5, 19.6, M.line, { cast: false }));
+  // Voisinage (bâtiments d'autres entreprises, volumes neutres, sans enseigne)
+  const neigh = new THREE.MeshStandardMaterial({ color: 0xb9bab6, roughness: 0.85 });
+  const neighRoof = new THREE.MeshStandardMaterial({ color: 0x8e8f8c, roughness: 0.9 });
+  site.add(span(-27, -9.4, 0, 7.2, 18.7, 56.6, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
+  site.add(span(1.2, 29, 0.02, 0.06, 19, 62, M.ground, { cast: false })); // îlot de gazon
+  site.add(span(5.9, 18.3, 0, 6, 25.4, 41.3, [neigh, neigh, neighRoof, neigh, neigh, neigh]));
 
   // ------------------------------------------------------------ sous-sol (gardiennage)
   const bs = new THREE.Group(); root.add(bs);
@@ -203,11 +215,14 @@ export function buildWorld({ logoUrl, mobile }) {
   tie(7.8); tie(14.2);
   // enseigne et lettrages
   const logo = new THREE.Mesh(new THREE.PlaneGeometry(8.2, 8.2 * 516 / 960), new THREE.MeshStandardMaterial({ map: T.loadLogo(logoUrl), transparent: true, roughness: 0.4, emissive: 0xffffff, emissiveIntensity: 0.0 }));
-  logo.position.set(-4.5, 6.05, fz + 0.17); F.add(logo);
+  logo.position.set(-4.5, 6.05, fz + 0.17); logo.userData.text = true; F.add(logo);
   const recep = textPlane('RÉCEPTION', 3.2, 0.5, { w: 1024, h: 160, font: '600 96px Inter, Arial', color: '#ffffff' });
   recep.position.set(-16.5, 3.08, fz + 0.18); F.add(recep);
   const atel = textPlane('ATELIER', 2.6, 0.5, { w: 1024, h: 160, font: '600 104px Inter, Arial', color: '#ffffff' });
   atel.position.set(11, 5.6, fz + 0.18); F.add(atel);
+  // panneau de l'association « carrosserie suisse », comme sur la façade
+  const cs = textPlane([{ text: 'carrosserie suisse', font: '600 92px Inter, Arial', color: '#2b2b2b' }], 3.6, 0.95, { w: 1024, h: 270, bg: '#f4f4f2' });
+  cs.position.set(-11, 6.6, fz + 0.2); F.add(cs);
   root.add(F);
   // toit (s'efface aussi)
   W.roof = fadable(new THREE.Group());
@@ -303,7 +318,7 @@ export function buildWorld({ logoUrl, mobile }) {
   W.damage.position.set(1.95, 0.6, 0); W.storyCar.add(W.damage);
 
   // ------------------------------------------------------------ cour : voiture de course n° 438 (représentation)
-  const race = new THREE.Group(); root.add(race);
+  const race = new THREE.Group(); site.add(race);
   const raceMat = paint(0x34373c, { metal: 0.45, rough: 0.3 });
   W.race = makeCar({ type: 'coupe', material: raceMat, wide: 1.05 });
   addRearWing(W.race, raceMat);
@@ -315,61 +330,75 @@ export function buildWorld({ logoUrl, mobile }) {
     W.race.add(d);
   }
   const lip = box(0.35, 0.06, 1.8, M.red, 2.18, 0.3, 0); W.race.add(lip);
-  W.race.position.set(-3, 0, 21.5); W.race.rotation.y = -0.45;
+  W.race.position.set(4.2, 0, 16.6); W.race.rotation.y = -0.35;
   race.add(W.race);
-  anchors.competition = new THREE.Vector3(-3, 1, 21.5);
-  zones.push({ id: 'competition', box: new THREE.Box3(new THREE.Vector3(-6, 0, 19), new THREE.Vector3(0, 1.6, 24)) });
+  anchors.competition = new THREE.Vector3(4.2, 1, 16.6);
+  zones.push({ id: 'competition', box: new THREE.Box3(new THREE.Vector3(1.5, 0, 14.5), new THREE.Vector3(7, 1.6, 18.8)) });
   // voitures de clients devant la réception (comme sur les photos du bâtiment)
-  const p1 = makeCar({ type: 'coupe', color: RED }); p1.rotation.y = -Math.PI / 2; p1.position.set(-18, 0, 18.5); root.add(p1);
-  const p2 = makeCar({ type: 'sedan', color: 0xeeeeec }); p2.rotation.y = -Math.PI / 2; p2.position.set(-15, 0, 18.5); root.add(p2);
+  const p1 = makeCar({ type: 'coupe', color: RED }); p1.rotation.y = -Math.PI / 2; p1.position.set(14.2, 0, 17.4); site.add(p1);
+  const p2 = makeCar({ type: 'sedan', color: 0xeeeeec }); p2.rotation.y = -Math.PI / 2; p2.position.set(16.8, 0, 17.4); site.add(p2);
 
-  // ------------------------------------------------------------ station de lavage (d'après la photo publiée le 22.08.2026)
-  const lv = new THREE.Group(); root.add(lv);
-  lv.add(span(22, 34.6, 0, 0.04, -6.5, 12, M.wet, { cast: false }));
-  for (const x of [22.4, 28.3, 34.2]) for (const z of [0, 10.6]) lv.add(box(0.3, 4.3, 0.3, M.red, x, 2.15, z));
-  lv.add(span(22, 34.6, 4.3, 4.65, -0.3, 11, M.steel));
-  lv.add(span(22, 34.6, 4.3, 4.95, 10.75, 11.05, M.red));
-  // cloisons de piste avec la silhouette de voiture (comme sur la photo)
-  const sep = new THREE.MeshStandardMaterial({ map: T.textTexture('', { w: 8, h: 8, bg: '#c9c9c6' }), color: 0xc9c9c6, roughness: 0.7 });
-  lv.add(span(28.15, 28.45, 0.3, 3.0, 1, 9.8, sep));
-  lv.add(span(22, 34.6, 0, 4.3, -0.3, 0, clad(12.6, 4.3)));
-  // local fermé « Station lavage »
-  lv.add(span(22, 34.6, 0, 5.4, -6.5, -0.3, clad(12.6, 5.4)));
-  const lavSign = textPlane([{ text: 'LAVAGE HAUTE PRESSION', font: '700 64px Inter, Arial' }], 6, 0.42, { w: 1024, h: 72, color: '#ffffff' });
-  lavSign.position.set(28.3, 4.62, 11.07); lv.add(lavSign);
-  const lavSign2 = textPlane([{ text: 'STATION LAVAGE', font: '800 92px Inter, Arial' }, { text: 'Chez les Frères Winiger', font: 'italic 600 60px Inter, Arial', color: '#ff4d55' }], 6.4, 1.6, { w: 1024, h: 256 });
-  lavSign2.rotation.y = Math.PI / 2; lavSign2.position.set(34.62, 4.2, -3.4); lv.add(lavSign2);
+  // ------------------------------------------------------------ stations de lavage
+  // Emplacements d'après la vue aérienne transmise par l'atelier (novembre 2026) :
+  // lavage manuel haute pression devant le bâtiment voisin ; lavage automatique au bout de ce bâtiment.
+  // Aspect d'après la publication du 22.08.2026 ; nombre de pistes indicatif.
+  const lv = new THREE.Group(); lv.position.set(-9.2, 0, 22.4); site.add(lv); W.lv = lv;
+  lv.add(span(0, 7.6, 0, 0.04, 0, 6.5, M.wet, { cast: false }));
+  for (const x of [0.15, 3.8, 7.45]) for (const z of [0.15, 6.35]) lv.add(box(0.3, 4.1, 0.3, M.red, x, 2.05, z));
+  lv.add(span(0, 7.6, 4.1, 4.4, 0, 6.5, M.steel));
+  lv.add(span(-0.05, 7.65, 4.1, 4.8, -0.12, 0.1, M.red));
+  lv.add(span(-0.05, 7.65, 4.1, 4.8, 6.4, 6.62, M.red));
+  // cloison de piste avec la silhouette de voiture (comme sur la photo)
+  const sep = new THREE.MeshStandardMaterial({ color: 0xc9c9c6, roughness: 0.7 });
+  lv.add(span(3.65, 3.95, 0.3, 2.8, 0.7, 5.8, sep));
+  const lavSign = textPlane([{ text: 'LAVAGE HAUTE PRESSION', font: '700 64px Inter, Arial' }], 5.2, 0.38, { w: 1024, h: 72, color: '#ffffff' });
+  lavSign.rotation.y = Math.PI; lavSign.position.set(3.8, 4.45, -0.14); lv.add(lavSign);
   // bornes de paiement (carte et Twint, d'après la publication)
-  for (const x of [23.0, 33.6]) { lv.add(box(0.35, 1.3, 0.3, M.steel, x, 0.65, 9.9)); lv.add(box(0.28, 0.2, 0.02, M.led, x, 1.12, 10.06, { cast: false })); }
+  for (const x of [0.6, 7.0]) { lv.add(box(0.35, 1.3, 0.3, M.steel, x, 0.65, 0.55)); lv.add(box(0.28, 0.2, 0.02, M.led, x, 1.12, 0.39, { cast: false })); }
   W.washCar = makeCar({ type: 'sedan', color: 0x2f4d6b });
-  W.washCar.rotation.y = Math.PI / 2; W.washCar.position.set(25.35, 0.04, 5.2); lv.add(W.washCar);
+  W.washCar.rotation.y = Math.PI / 2; W.washCar.position.set(1.65, 0.04, 3.25); lv.add(W.washCar);
   W.foamMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, transparent: true, opacity: 0, depthWrite: false });
   W.foam = new THREE.Group();
   const fb = new THREE.Mesh(W.washCar.userData.body.geometry, W.foamMat); fb.scale.setScalar(1.012);
   const fc = new THREE.Mesh(W.washCar.userData.cabin.geometry, W.foamMat); fc.scale.setScalar(1.012);
   W.foam.add(fb, fc); W.washCar.add(W.foam);
-  W.washer = figure(); W.washer.position.set(27.3, 0.04, 6.5); lv.add(W.washer);
+  W.washer = figure(); W.washer.position.set(3.2, 0.04, 3.25); lv.add(W.washer);
   W.lance = box(0.04, 0.04, 1.1, M.steel, 0, 1.2, 0); lv.add(W.lance);
-  anchors.lavage = new THREE.Vector3(28.3, 2.2, 5);
-  zones.push({ id: 'lavage', box: new THREE.Box3(new THREE.Vector3(22, 0, -6.5), new THREE.Vector3(34.6, 5.4, 11)) });
+  // lavage automatique : local fermé à bardage sombre, au bout du bâtiment voisin
+  const la = new THREE.Group(); site.add(la);
+  la.add(span(-16.4, -9.3, 0, 5.6, 49.2, 56.7, clad(7.1, 5.6)));
+  la.add(span(-15, -10.7, 0, 3.6, 56.68, 56.75, new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.9 }), { cast: false }));
+  la.add(span(-15.1, -10.6, 3.6, 3.75, 56.68, 56.8, M.red));
+  const lavSign2 = textPlane([{ text: 'STATION LAVAGE', font: '800 92px Inter, Arial' }, { text: 'Chez les Frères Winiger', font: 'italic 600 60px Inter, Arial', color: '#ff4d55' }], 5.2, 1.3, { w: 1024, h: 256 });
+  lavSign2.position.set(-12.85, 4.6, 56.8); la.add(lavSign2);
+  anchors.lavage = new THREE.Vector3(-5.4, 2.2, 25.6);
+  zones.push({ id: 'lavage', box: new THREE.Box3(new THREE.Vector3(-9.2, 0, 22.4), new THREE.Vector3(-1.6, 4.8, 28.9)) });
+  zones.push({ id: 'lavage', box: new THREE.Box3(new THREE.Vector3(-16.4, 0, 49.2), new THREE.Vector3(-9.3, 5.6, 56.7)) });
 
-  // ------------------------------------------------------------ agrandissement 2026 : charpente en cours (position indicative)
+  // ------------------------------------------------------------ agrandissement 2026 : charpente en cours, à droite (est), contre le bâtiment
   W.extension = new THREE.Group();
   const cols = [];
-  for (const x of [-35, -30, -25]) for (const z of [-10.5, -3.5, 3.5, 10.5]) {
+  for (const x of [-24.3, -28.3]) for (const z of [-10.5, -3.5, 3.5, 10.5]) {
     const c = box(0.35, H, 0.35, M.steel, x, H / 2, z); cols.push(c); W.extension.add(c);
   }
   const beams = [];
-  for (const z of [-10.5, -3.5, 3.5, 10.5]) { const b = span(-35.2, -20.3, H - 0.5, H - 0.1, z - 0.15, z + 0.15, M.steel); beams.push(b); W.extension.add(b); }
-  for (let i = 0; i < 5; i++) W.extension.add(span(-31 + i * 0.6, -30.6 + i * 0.6, 0, 0.35, 16, 22, M.steel));
+  for (const z of [-10.5, -3.5, 3.5, 10.5]) { const b = span(-28.5, -20.3, H - 0.5, H - 0.1, z - 0.15, z + 0.15, M.steel); beams.push(b); W.extension.add(b); }
+  W.extension.add(span(-28.5, -20.3, 0, 0.05, -11, 11, M.paving, { cast: false }));
+  for (let i = 0; i < 5; i++) W.extension.add(span(-30.4 - i * 0.6, -30 - i * 0.6, 0, 0.35, 15.5, 21, M.steel));
   W.extension.userData = { cols, beams };
   root.add(W.extension);
-  anchors.histoire = new THREE.Vector3(-28, 4, 0);
+  anchors.histoire = new THREE.Vector3(-24.4, 4, 0);
 
   // ------------------------------------------------------------ éclairages intérieurs (intensités pilotées par le récit)
   const pl = (x, y, z, d = 26) => { const l = new THREE.PointLight(0xfff4e8, 0, d, 1.6); l.position.set(x, y, z); root.add(l); return l; };
   W.lights = { atelier: pl(0, 6.5, 0, 34), resto: pl(-15, 5.5, -4, 18), booth: pl(14, 3.6, -5.5, 14), base1: pl(-9, -1, 0, 24), base2: pl(7, -1, 0, 24) };
 
   root.traverse((o) => { if (o.isMesh && mobile && o.geometry.attributes.position.count < 30) o.castShadow = false; });
-  return { root, W, anchors, zones };
+  // textes et logo du bâtiment remis à l'endroit
+  root.traverse((o) => { if (o.userData.text) o.scale.x *= -1; });
+  // repères et zones du bâtiment : passage en coordonnées du monde
+  const siteIds = new Set(['competition', 'lavage']);
+  for (const [k, v] of Object.entries(anchors)) if (!siteIds.has(k)) v.x = -v.x;
+  for (const z of zones) if (!siteIds.has(z.id)) { const a = -z.box.min.x, b = -z.box.max.x; z.box.min.x = Math.min(a, b); z.box.max.x = Math.max(a, b); }
+  return { root: world, W, anchors, zones };
 }

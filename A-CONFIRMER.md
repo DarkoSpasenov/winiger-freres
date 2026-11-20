@@ -32,7 +32,8 @@ Source des informations vérifiées : ancien site winiger-artcar.ch, compte Inst
 ## 4 bis. Station de lavage (ajoutée en novembre 2026)
 
 Source unique : publication Instagram de l'atelier du 22 août 2026 (enseigne « Station Lavage – Chez les Frères Winiger », pistes « Lavage Haute Pression » sous auvent, paiement par carte et Twint). Rien sur winiger-artcar.ch.
-- [ ] Nombre de pistes, présence éventuelle d'un portique ou d'un local fermé équipé, aspirateurs, produits.
+- [x] Deux stations (indications de l'atelier, novembre 2026) : un lavage manuel haute pression devant le bâtiment voisin, et un lavage automatique au bout de ce bâtiment.
+- [ ] Type d'installation automatique (portique, tunnel), aspirateurs, produits.
 - [ ] Libre-service ou non, accès 24 h/24 ou horaires.
 - [ ] Tarifs et programmes de lavage.
 - [ ] Adresse exacte de la station (même parcelle que l'atelier ?).
