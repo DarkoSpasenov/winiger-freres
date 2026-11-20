@@ -77,7 +77,7 @@
     var cover = Math.max(W / p.w, H / p.h);
     var g = {};
     // le sujet resterait-il visible (dans la zone libre) en plein écran ?
-    var subjOk = (clamp(R.y + R.h / 2 - p.fy * p.h * cover, H - p.h * cover, 0) + p.fy * p.h * cover) < R.y + R.h * 0.92;
+    var subjOk = (clamp(R.y + R.h / 2 - p.fy * p.h * cover, H - p.h * cover, 0) + p.fy * p.h * cover) < R.y + R.h * 0.8;
     var rc = Math.max(R.w / p.w, R.h / p.h);
     if (!desktop && !subjOk && rc <= MAX_UP) {
       // téléphone : la photo remplit le haut de l'écran, au-dessus du texte, sujet centré

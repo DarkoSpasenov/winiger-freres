@@ -32,6 +32,18 @@ IMGINFO = {
     "reception": (744, 496, [744]),
     "course-438-profil": (1200, 800, [1200, 800]),
     "course-438-face": (1200, 800, [1200, 800]),
+    # photos du site officiel, page « Nos locaux » (publiées en juin 2021)
+    "batiment-facade": (2400, 1600, [2400, 1600, 800]),
+    "batiment-entree": (2400, 1600, [2400, 1600, 800]),
+    "batiment-cote": (2400, 1599, [2400, 1600, 800]),
+    "batiment-enseigne": (2400, 1600, [2400, 1600, 800]),
+    "atelier-vue": (2048, 1152, [2048, 800]),
+    "atelier-redressage": (1024, 768, [1024, 800]),
+    "reception-hd": (2400, 1600, [2400, 1600, 800]),
+    "finition-roue": (2400, 1600, [2400, 1600, 800]),
+    # station de lavage : publication Instagram de l'atelier du 22 août 2026 (photos recadrées, sans le texte de l'affiche)
+    "lavage-pistes": (1440, 522, [1440, 800]),
+    "lavage-entree": (604, 608, [604]),
 }
 
 TEL = "026 476 06 06"
@@ -319,13 +331,13 @@ def page_index():
     carrosserie = chapter("carrosserie", "01", "Carrosserie et peinture, toutes marques.",
         "Du petit choc au sinistre important, jusqu'aux véhicules de prestige. Membre du réseau Tesla Approved Body Shop depuis mai 2021.",
         [
-            ("Prise en charge et devis", "Le devis est gratuit. L'atelier peut prendre en charge votre véhicule sur le lieu de votre choix et vous raccompagner à domicile ou au travail.", "", ph("reception", "La réception de l'atelier, à Grolley.", "70% 50%")),
+            ("Prise en charge et devis", "Le devis est gratuit. L'atelier peut prendre en charge votre véhicule sur le lieu de votre choix et vous raccompagner à domicile ou au travail.", "", ph("reception-hd", "La réception de l'atelier.", "62% 52%")),
             ("Sinistre et assurance", "L'atelier vous accompagne dans l'annonce et la gestion du sinistre avec votre assurance. Une voiture de remplacement récente peut vous être prêtée.", f'<p class="small">Urgence : WhatsApp <a href="{WA_HREF}" rel="noopener">{WA}</a></p>', ph("tesla-model3", "Tesla Model 3 en réparation : l'atelier est agréé Tesla depuis 2021.", "45% 60%")),
-            ("Carrosserie", "Tous travaux de carrosserie, débosselage, remplacement de pare-brise, de lunette arrière et de vitres latérales, remplissage de climatisation.", "", ph("huracan-bouclier", "Lamborghini Huracán : bouclier avant en préparation, janvier 2026.", "50% 40%")),
+            ("Carrosserie", "Tous travaux de carrosserie, débosselage, remplacement de pare-brise, de lunette arrière et de vitres latérales, remplissage de climatisation.", "", ph("atelier-redressage", "Travail de carrosserie à l'atelier.", "60% 55%")),
             ("Peinture en cabine", "De la retouche à la teinte complète, y compris la peinture mate et la peinture des véhicules anciens.", ch_photo("mazda-giclage", "Peinture au pistolet d'une Mazda dans la cabine de l'atelier", "Photo de l'atelier : peinture d'une Mazda en cabine."), ph("mazda-giclage", "Peinture d'une Mazda en cabine, juillet 2026.", "45% 50%")),
-            ("Restitution", "Le véhicule vous est rendu prêt à reprendre la route. Qualité garantie FCR.", "", ph("993-livraison", "Porsche 993 livrée après remise en état, février 2023.", "55% 60%")),
+            ("Restitution", "Le véhicule vous est rendu prêt à reprendre la route. Qualité garantie FCR.", "", ph("finition-roue", "Finition, photo de l'atelier.", "60% 55%")),
         ],
-        f'<a class="xlink" href="prestations.html">Toutes les prestations {ARR}</a><a class="xlink" href="contact.html#demande-carrosserie">Demander un devis {ARR}</a>', intro_ph=ph("huracan-avant", "Lamborghini Huracán, bloc avant démonté à l'atelier.", "45% 55%"))
+        f'<a class="xlink" href="prestations.html">Toutes les prestations {ARR}</a><a class="xlink" href="contact.html#demande-carrosserie">Demander un devis {ARR}</a>', intro_ph=ph("atelier-vue", "L'atelier vu de la mezzanine.", "50% 45%"))
 
     gardiennage = chapter("gardiennage", "02", "Gardiennage au sous-sol.",
         "Pour les véhicules de collection, de prestige, de sport ou de compétition, quand la place manque ou pour un hivernage.",
@@ -356,18 +368,18 @@ def page_index():
     lavage = chapter("lavage", "05", "Station de lavage, chez les Frères Winiger.",
         "Sur le site de la carrosserie, à Grolley : la station de lavage des Frères Winiger.",
         [
-            ("Lavage haute pression", "Des pistes de lavage haute pression, sous un auvent, à côté de la carrosserie.", "", ph("", "")),
-            ("Paiement par carte ou Twint", "Les installations sont équipées d'un système de paiement électronique, pour un passage rapide.", "", ph("", "")),
-            ("Horaires et tarifs", f"Ils ne sont pas encore publiés en ligne : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Source : publication de l\'atelier du 22 août 2026.</p>', ph("", "")),
+            ("Lavage haute pression", "Des pistes de lavage haute pression, sous un auvent, à côté de la carrosserie.", "", ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
+            ("Paiement par carte ou Twint", "Les installations sont équipées d'un système de paiement électronique, pour un passage rapide.", "", ph("lavage-entree", "Station lavage, chez les Frères Winiger. Photo publiée par l'atelier le 22 août 2026.", "50% 50%")),
+            ("Horaires et tarifs", f"Ils ne sont pas encore publiés en ligne : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Source : publication de l\'atelier du 22 août 2026.</p>', ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
         ],
-        f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>', intro_ph=ph("", ""))
+        f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>', intro_ph=ph("lavage-pistes", "La station de lavage, à côté de la carrosserie. Photo publiée par l'atelier le 22 août 2026.", "62% 50%"))
 
     histoire = chapter("histoire", "06", "Deux frères, un atelier qui grandit.",
         "Une carrosserie familiale, fondée et dirigée par Richard et Fabrice Winiger, membre de carrosserie suisse et entreprise formatrice.",
         [
-            ("2004", "Richard et Fabrice Winiger fondent la carrosserie à Grolley.", ch_photo("atelier-equipe", "L'équipe de Winiger Frères réunie dans l'atelier", "Photo de l'équipe à l'atelier."), ph("atelier-equipe", "L'équipe à l'atelier.", "50% 50%")),
+            ("2004", "Richard et Fabrice Winiger fondent la carrosserie à Grolley.", ch_photo("atelier-equipe", "L'équipe de Winiger Frères réunie dans l'atelier", "Photo de l'équipe à l'atelier."), ph("batiment-enseigne", "L'enseigne de la carrosserie.", "42% 40%")),
             ("2021", "En mai, l'atelier rejoint le réseau Tesla Approved Body Shop.", "", ph("tesla-model3", "Tesla Model 3 en réparation à l'atelier.", "45% 60%")),
-            ("2026", "Agrandissement du bâtiment, avec une nouvelle réception et un showroom. La charpente est en cours de montage ; sa position dans la maquette est indicative.", "", ph("atelier-peintre", "L'atelier aujourd'hui.", "62% 40%")),
+            ("2026", "Agrandissement du bâtiment, avec une nouvelle réception et un showroom. La charpente est en cours de montage ; sa position dans la maquette est indicative.", "", ph("batiment-cote", "Le bâtiment avant l'agrandissement (photo publiée en 2021).", "55% 55%")),
         ],
         f'<a class="xlink" href="entreprise.html">L\'entreprise {ARR}</a>', intro_ph=ph("atelier-equipe", "L'équipe à l'atelier.", "50% 50%"))
 
@@ -405,7 +417,7 @@ def page_index():
 <nav class="xp-rail" id="xp-rail" aria-label="Chapitres de la page">{rail}</nav>
 
 <section class="ch ch-hero" data-ch="hero" id="accueil" aria-labelledby="h-hero">
-  <div class="ch-step ch-intro"{ph("atelier-peintre", "Dans l'atelier Winiger Frères, à Grolley.", "62% 38%")}><div class="ch-box">
+  <div class="ch-step ch-intro"{ph("batiment-facade", "Le bâtiment de l'atelier à Grolley (photo publiée en 2021, avant l'agrandissement).", "62% 52%")}><div class="ch-box">
     <p class="kicker">Winiger Frères · Carrosserie de Grolley · depuis 2004</p>
     <h1 id="h-hero">Carrosserie, peinture, restauration et gardiennage.</h1>
     <p class="lead">Un atelier familial à Grolley, pour les voitures de tous les jours comme pour les véhicules de prestige et de collection.</p>
@@ -444,7 +456,7 @@ def page_index():
 </section>
 
 <section class="ch ch-contact" data-ch="contact" id="contact" aria-labelledby="h-contact">
-  <div class="ch-step ch-intro"{ph("reception", "La réception de l'atelier.", "72% 50%")}><div class="ch-box ch-box-wide">
+  <div class="ch-step ch-intro"{ph("batiment-entree", "L'entrée de l'atelier, à Grolley.", "45% 60%")}><div class="ch-box ch-box-wide">
     <p class="ch-n"><span>08</span>Contact</p>
     <h2 id="h-contact">Passez à l'atelier.</h2>
     <div class="contact-cols">
@@ -750,7 +762,7 @@ def page_mentions():
 def page_lavage():
     return page_head("Station de lavage", "Station de lavage", "Station lavage, <span class=\"accent\">chez les Frères Winiger.</span>",
         "À côté de la carrosserie, à Grolley : des pistes de lavage haute pression, avec paiement par carte ou Twint.",
-        f'<div class="btns"><a class="btn btn-ghost" href="{TEL_HREF}"><span>{TEL}</span></a><a class="btn btn-ghost" href="{MAPS}" rel="noopener"><span>Itinéraire {ARR}</span></a></div>') + f'''
+        f'<div class="btns"><a class="btn btn-ghost" href="{TEL_HREF}"><span>{TEL}</span></a><a class="btn btn-ghost" href="{MAPS}" rel="noopener"><span>Itinéraire {ARR}</span></a></div>', image="lavage-entree", pos="50% 45%", alt="Entrée de la station de lavage, enseigne « Station Lavage, chez les Frères Winiger »") + f'''
 <section class="section wrap" aria-labelledby="h-lav">
   <div class="inner split" style="align-items:start">
     <div class="stack">

@@ -61,8 +61,8 @@ La maquette est une représentation conceptuelle, signalée comme telle sur la p
 ## 6 bis. Photos de l'accueil
 
 - [ ] Photos en haute définition : la plupart des photos du site font 744 px de large. Sur ordinateur, elles s'affichent en tirage au lieu du plein écran. Des originaux d'au moins 2000 px les passeraient en plein écran.
-- [ ] Photo de la station de lavage (aujourd'hui un encadré « photo à venir »).
-- [ ] Photo extérieure du bâtiment pour l'ouverture de l'accueil.
+- [ ] Photo de la station de lavage en meilleure définition : l'accueil utilise les photos recadrées de la publication Instagram du 22 août 2026 (1440 px et 604 px).
+- [ ] Photo extérieure récente du bâtiment, agrandissement compris : l'accueil s'ouvre sur la façade publiée en 2021 sur winiger-artcar.ch (page « Nos locaux »).
 - [ ] Photo de l'agrandissement 2026 (l'étape « 2026 » de l'histoire montre l'atelier actuel).
 
 ## 7. Intégrations à brancher
