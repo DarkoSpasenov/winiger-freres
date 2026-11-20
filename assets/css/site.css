@@ -405,7 +405,6 @@ body.menu-open{overflow:hidden}
 .hx-text{display:flex;flex-direction:column;gap:24px;max-width:600px;padding-block:clamp(48px,7vw,96px)}
 .hx .h1{font-size:clamp(40px,4.6vw,70px)}
 .hx .lead{color:#CFCAC2;max-width:40ch}
-.hx-head,.hx-cta{display:flex;flex-direction:column;gap:24px}
 .hero-tel{font-size:15px;color:var(--mute)}
 .hero-tel a{font-weight:600;color:var(--paper);text-decoration:none;border-bottom:1px solid var(--line)}
 .rail{position:relative;z-index:3;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.12);background:rgba(11,11,12,.8)}
@@ -421,16 +420,14 @@ body.menu-open{overflow:hidden}
 @media (max-width:860px){
   .hx{min-height:0}
   .hx-bg{inset:0;width:auto;clip-path:none}
-  .hx-bg img{position:absolute;left:0;top:auto;bottom:-2%;height:110%;width:100%;object-fit:cover;object-position:52% 50%}
-  .hx-bg::after{background:linear-gradient(180deg,rgba(11,11,12,.94) 0%,rgba(11,11,12,.82) 34%,rgba(11,11,12,.12) 50%,rgba(11,11,12,.05) 62%,rgba(11,11,12,.82) 76%,#0B0B0C 100%)}
+  .hx-bg img{object-position:56% 50%}
+  .hx-bg::after{background:linear-gradient(180deg,rgba(11,11,12,.92) 0%,rgba(11,11,12,.7) 45%,rgba(11,11,12,.45) 75%,#0B0B0C 100%)}
   .hx-credit{top:auto;right:16px;bottom:10px;font-size:10px}
-  .hx-in,.hx-in>.inner{display:flex;flex-direction:column}
-  .hx-text{min-height:calc(100svh - var(--hdr) - 76px);max-height:860px;justify-content:space-between;padding-block:26px 40px;gap:0;max-width:none}
-  .hx-head{gap:16px}.hx-cta{gap:14px}
+  .hx-text{padding-block:28px 44px;gap:18px}
   .hx .eyebrow{font-size:11px;letter-spacing:.12em;white-space:nowrap;gap:10px}
   .hx .eyebrow::before{width:22px;height:4px}
   .hx .lead{font-size:16px;line-height:1.5}
-  .hx .btns{gap:10px}.hx .btns .btn{min-height:50px}
+  .hx .btns{gap:10px;margin-top:6px}.hx .btns .btn{min-height:50px}
   .hx .btns{flex-direction:column;align-items:stretch}.hx .btns .btn{width:100%}
 }
 @media (max-width:520px){.rail-i{flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px}.rail-th{width:100%;height:64px}.rail-i small{display:none}}
@@ -471,7 +468,7 @@ a.tile:hover .tile-go{transform:translateX(4px)}
 
 /* Fiche gardiennage */
 .gfiche{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#0B0B0C}
-.gfiche-ph{position:relative;margin:0;align-self:center;aspect-ratio:3/2}
+.gfiche-ph{position:relative;margin:0;min-height:620px}
 .gfiche-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .gfiche-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,#0B0B0C)}
 .gfiche-ph .fig{left:clamp(16px,3vw,40px);bottom:28px}
@@ -622,39 +619,7 @@ a.tile:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .rail-i:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
 @media (max-width:520px){.rail-i{padding-right:16px}.rail-go{top:auto;bottom:14px;right:12px;margin-top:0;width:28px;height:28px;font-size:14px}.rail-i b{padding-right:30px}}
 
-/* Barre d'action mobile */
-.mbar{display:none}
-@media (max-width:700px){
-  .mbar{transition:transform .3s var(--ease);position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:1fr 1.6fr;background:#0B0B0C;border-top:1px solid rgba(255,255,255,.12);padding-bottom:env(safe-area-inset-bottom)}
-  .mbar a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;font-family:var(--f-display);font-style:italic;font-weight:800;font-size:15px;color:#fff;text-decoration:none}
-  .mbar-dv{background:var(--red);clip-path:polygon(14px 0,100% 0,100% 100%,0 100%)}
-  body{padding-bottom:calc(56px + env(safe-area-inset-bottom))}
-  .mbar.off{transform:translateY(110%)}
-}
-
-/* Tampon gardiennage retiré (trop décoratif) */
-.gfiche-stamp{display:none!important}
-
-/* ---------- Accueil : nos locaux (photos réelles en haute définition) ---------- */
-.locaux{padding-bottom:clamp(56px,7vw,104px)}
-.lx-main{margin:0;position:relative;height:min(78vh,820px);overflow:hidden}
-.lx-main img{width:100%;height:100%;object-fit:cover;object-position:60% 55%}
-.lx-head{position:relative;margin-top:clamp(-140px,-10vw,-72px)}
-.lx-head .stack{max-width:620px;padding:clamp(24px,3vw,40px);background:#0B0B0C;border-top:4px solid var(--red)}
-.lx-row{list-style:none;margin:clamp(28px,4vw,48px) 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,24px)}
-.lx-row figure{margin:0}
-.lx-row img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
-.lx-row figcaption{margin-top:10px;font-size:14px;font-weight:600;color:var(--paper)}
-.lx-src{margin:16px 0 0;font-size:13px;color:var(--mute)}
-.lavage{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:center;background:#0B0B0C}
-.lav-ph{margin:0;height:100%;min-height:420px;position:relative}
-.lav-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
-.lav-tx{display:flex;flex-direction:column;gap:16px;padding:clamp(40px,5vw,80px) var(--gut-r) clamp(40px,5vw,80px) clamp(28px,4vw,64px)}
-@media (max-width:860px){
-  .lx-main{height:56vh}
-  .lx-head{margin-top:-48px}
-  .lx-row{grid-template-columns:1fr}
-  .lavage{grid-template-columns:1fr}
-  .lav-ph{min-height:0;aspect-ratio:16/9}
-  .lav-tx{padding:28px var(--gut-r) 48px var(--gut-l)}
-}
+/* Listes à coches (page Station de lavage) */
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.checks li{position:relative;padding-left:30px;font-weight:500}
+.checks li::before{content:"";position:absolute;left:0;top:.55em;width:16px;height:4px;background:var(--red);transform:skewX(-20deg)}

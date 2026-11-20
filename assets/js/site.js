@@ -129,9 +129,18 @@
       status.hidden = false;
     });
   }
-})();
 
-// Barre d'action mobile : masquée tant que le hero de l'accueil est visible
-(function(){var hx=document.querySelector('.hx'),mb=document.querySelector('.mbar');
-if(!hx||!mb||!('IntersectionObserver' in window))return;mb.classList.add('off');
-new IntersectionObserver(function(es){mb.classList.toggle('off',es[0].isIntersecting)}).observe(hx)})();
+  /* ---------- Accueil : choix de l'affichage (photos, maquette 3D, sans animation) ---------- */
+  var modeBtns = document.querySelectorAll('[data-setmode]');
+  if (modeBtns.length) {
+    var cur = root.getAttribute('data-mode') || 'photo';
+    if (cur === '3d' && !root.classList.contains('gl')) cur = 'photo';
+    Array.prototype.forEach.call(modeBtns, function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.setmode === cur));
+      b.addEventListener('click', function () {
+        try { localStorage.setItem('wfmode', b.dataset.setmode); localStorage.removeItem('wf3d'); } catch (e) {}
+        location.reload();
+      });
+    });
+  }
+})();
