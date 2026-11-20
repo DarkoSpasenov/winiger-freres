@@ -367,7 +367,7 @@ def page_index():
         "À deux pas de la carrosserie, à Grolley : un lavage manuel haute pression et un lavage automatique.",
         [
             ("Lavage manuel haute pression", "Une station de lavage manuel haute pression, sous auvent, en face de la carrosserie.", "", ph("lavage-pistes", "Le lavage manuel haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
-            ("Lavage automatique", "Une station de lavage automatique, dans un local fermé au bout du bâtiment voisin.", "", ph("lavage-entree", "Le lavage automatique. Photo publiée par l'atelier le 22 août 2026.", "50% 50%")),
+            ("Lavage automatique", "Une station de lavage automatique, dans un local fermé au bout du bâtiment voisin : on entre côté cour et on ressort tout droit de l'autre côté.", "", ph("lavage-entree", "Le lavage automatique. Photo publiée par l'atelier le 22 août 2026.", "50% 50%")),
             ("Carte ou Twint", f"Les deux stations acceptent le paiement électronique. Horaires et tarifs : renseignez-vous auprès de l'atelier au <a href=\"{TEL_HREF}\">{TEL}</a>.", '<p class="small muted">Sources : publication de l\'atelier du 22 août 2026 et indications de l\'atelier (novembre 2026).</p>', ph("lavage-pistes", "Les pistes de lavage haute pression. Photo publiée par l'atelier le 22 août 2026.", "62% 50%")),
         ],
         f'<a class="xlink" href="lavage.html">La station de lavage {ARR}</a>', intro_ph=ph("lavage-pistes", "La station de lavage, à côté de la carrosserie. Photo publiée par l'atelier le 22 août 2026.", "62% 50%"))
