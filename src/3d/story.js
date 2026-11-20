@@ -20,10 +20,10 @@ export const SHOTS = {
     // descente par la trémie de l'ascenseur : la caméra suit la voiture, sans traverser le terrain
     { s: 0, pos: [2, 15, 30], tgt: [-15, 0, 6], open: 1, cut: 0 },
     { s: 1, pos: [-15, 6.8, 10.2], tgt: [-17.4, -0.6, 4.6] },
-    { s: 2, pos: [-15.4, -1.9, 9.6], tgt: [-6, -3, -7] },
-    { s: 3, pos: [-6, -1.7, 3.5], tgt: [6, -3.4, -8] },
-    { s: 3.35, pos: [-15.4, -1.8, 9.6], tgt: [-15.4, 3, 5] },
-    { s: 3.7, pos: [-15.4, 4.2, 9.6], tgt: [-6, 0.5, 0] },
+    { s: 2, pos: [-15, -1.9, 7.6], tgt: [-6, -3, -7] },
+    { s: 3, pos: [-4, -1.7, 0], tgt: [8, -3.4, -8] },
+    { s: 3.35, pos: [-15, -1.8, 7.6], tgt: [-15.4, 3, 5] },
+    { s: 3.7, pos: [-15, 4.2, 7.6], tgt: [-6, 0.5, 0] },
   ],
   restauration: [
     { s: 0, pos: [2, 9, 22], tgt: [15, 1.2, -4], open: 1, cut: 0 },
@@ -38,7 +38,7 @@ export const SHOTS = {
   ],
   lavage: [
     { s: 0, pos: [14, 14, 16], tgt: [-6, 1.5, 30], open: 0 },
-    { s: 1, pos: [-4.5, 4.5, 14], tgt: [-7.4, 1, 25.6] },
+    { s: 1, pos: [-6, 4.5, 17], tgt: [-7.5, 1, 25.6] },
     { s: 2, pos: [4, 11, 70], tgt: [-15, 2, 52.5] },
     { s: 3, pos: [22, 42, 80], tgt: [-6, 0, 38] },
   ],
@@ -63,6 +63,6 @@ export const PLACES = {
   gardiennage: { label: 'Sous-sol · gardiennage', shot: { pos: [-4, -0.8, 25], tgt: [1, -2.6, 0] } },
   restauration: { label: 'Restauration', shot: { pos: [7, 7, 10], tgt: [15, 1.6, -4.5] } },
   competition: { label: 'Compétition · n° 438', shot: { pos: [12, 3, 22], tgt: [4.2, 0.8, 16.6] } },
-  lavage: { label: 'Stations de lavage', shot: { pos: [-3, 6, 14], tgt: [-6, 1.2, 26] } },
+  lavage: { label: 'Stations de lavage', shot: { pos: [-6, 4.8, 17], tgt: [-7.5, 1, 25.6] } },
   contact: { label: 'Réception', shot: { pos: [0, 6, 22], tgt: [15, 2, 8] } },
 };

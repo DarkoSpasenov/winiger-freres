@@ -46,8 +46,8 @@ function start() {
   let dpr = dprMax;
   renderer.setPixelRatio(dpr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 0.95;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -254,7 +254,7 @@ function start() {
 
   // ---------------------------------------------------------------- mode exploration libre
   let exploring = false, fly = null, trip = null;
-  const SHAFT_TOP = new THREE.Vector3(-15.4, 4.2, 9.6), SHAFT_BOTTOM = new THREE.Vector3(-15.4, -1.8, 9.6);
+  const SHAFT_TOP = new THREE.Vector3(-15, 4.2, 7.6), SHAFT_BOTTOM = new THREE.Vector3(-15, -1.8, 7.6);
   function makeTrip(from, fromT, to) {
     const pts = [from.clone()], under = (v) => v.y < 0.3;
     if (under(from)) pts.push(SHAFT_BOTTOM.clone(), SHAFT_TOP.clone());

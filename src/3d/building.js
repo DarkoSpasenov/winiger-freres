@@ -253,7 +253,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   for (const x of [-19.8, 0, 13.5]) { const e = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.55, 12), M.red); e.position.set(x, -3.2, -10.85); bs.add(e); }
   // éclairage du sous-sol
   for (const x of [-16, -10, -3, 4, 11]) for (const z of [-7, 0, 7]) bs.add(box(1.6, 0.05, 0.16, M.led, x, -0.42, z, { cast: false }));
-  anchors.gardiennage = new THREE.Vector3(-3, -2.2, 0);
+  anchors.gardiennage = new THREE.Vector3(-10, -2.2, 6);
 
   // ------------------------------------------------------------ dalle du rez (trémie de l'ascenseur à véhicules)
   const epoxy = new THREE.MeshStandardMaterial({ map: T.epoxyTexture(), roughness: 0.35, metalness: 0.05 }); epoxy.map.repeat.set(10, 6);
@@ -561,7 +561,7 @@ export function buildWorld({ logoUrl, mobile, carUrl = 'assets/models/covered_ca
   anchors.histoire = new THREE.Vector3(-24.4, 4, 0);
 
   // ------------------------------------------------------------ éclairages intérieurs (intensités pilotées par le récit)
-  const pl = (x, y, z, d = 26) => { const l = new THREE.PointLight(0xfff4e8, 0, d, 1.6); l.position.set(x, y, z); root.add(l); return l; };
+  const pl = (x, y, z, d = 26) => { const l = new THREE.PointLight(0xffffff, 0, d, 1.6); l.position.set(x, y, z); root.add(l); return l; };
   W.lights = { atelier: pl(0, 6.5, 0, 34), resto: pl(-15, 5.5, -4, 18), booth: pl(14, 3.6, -5.5, 14), base1: pl(-9, -1, 0, 24), base2: pl(7, -1, 0, 24) };
 
   root.traverse((o) => { if (o.isMesh && mobile && o.geometry.attributes.position.count < 30) o.castShadow = false; });
