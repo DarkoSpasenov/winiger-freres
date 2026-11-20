@@ -385,10 +385,18 @@ export function buildWorld({ logoUrl, mobile }) {
   // lavage automatique : local fermé à bardage sombre, au bout du bâtiment voisin
   const la = new THREE.Group(); site.add(la);
   la.add(span(-16.4, -9.3, 0, 5.6, 49.2, 56.7, clad(7.1, 5.6)));
-  la.add(span(-15, -10.7, 0, 3.6, 56.68, 56.75, new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.9 }), { cast: false }));
+  // entrée sur la face est (côté cour), sortie sur la face sud (indications de l'atelier, nov. 2026)
+  const doorMat = new THREE.MeshStandardMaterial({ color: 0x1b1c1e, roughness: 0.9 });
+  la.add(span(-9.27, -9.2, 0, 3.6, 50.6, 55.2, doorMat, { cast: false }));
+  la.add(span(-9.27, -9.12, 3.6, 3.75, 50.5, 55.3, M.red));
+  la.add(span(-15, -10.7, 0, 3.6, 56.68, 56.75, doorMat, { cast: false }));
   la.add(span(-15.1, -10.6, 3.6, 3.75, 56.68, 56.8, M.red));
-  const lavSign2 = textPlane([{ text: 'STATION LAVAGE', font: '800 92px Inter, Arial' }, { text: 'Chez les Frères Winiger', font: 'italic 600 60px Inter, Arial', color: '#ff4d55' }], 5.2, 1.3, { w: 1024, h: 256 });
-  lavSign2.position.set(-12.85, 4.6, 56.8); la.add(lavSign2);
+  const lavSign2 = textPlane([{ text: 'STATION LAVAGE', font: '800 92px Inter, Arial' }, { text: 'Chez les Frères Winiger', font: 'italic 600 60px Inter, Arial', color: '#ff4d55' }], 4.4, 1.1, { w: 1024, h: 256 });
+  lavSign2.rotation.y = Math.PI / 2; lavSign2.position.set(-9.16, 4.6, 52.9); la.add(lavSign2);
+  const inSign = textPlane([{ text: 'ENTRÉE', font: '700 80px Inter, Arial' }], 1.4, 0.32, { w: 512, h: 116, color: '#ffffff' });
+  inSign.rotation.y = Math.PI / 2; inSign.position.set(-9.15, 3.95, 52.9); la.add(inSign);
+  const outSign = textPlane([{ text: 'SORTIE', font: '700 80px Inter, Arial' }], 1.4, 0.32, { w: 512, h: 116, color: '#ffffff' });
+  outSign.position.set(-12.85, 3.95, 56.8); la.add(outSign);
   anchors.lavage = new THREE.Vector3(-5.4, 2.2, 25.6);
   zones.push({ id: 'lavage', box: new THREE.Box3(new THREE.Vector3(-9.2, 0, 22.4), new THREE.Vector3(-1.6, 4.8, 28.9)) });
   zones.push({ id: 'lavage', box: new THREE.Box3(new THREE.Vector3(-16.4, 0, 49.2), new THREE.Vector3(-9.3, 5.6, 56.7)) });
