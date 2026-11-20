@@ -64,7 +64,10 @@ function start() {
   scene.environment = pmrem.fromScene(envScene, 0).texture;
   scene.environmentIntensity = 0.9;
   // éclairage d'ambiance photographique : HDRI « Pedestrian Overpass » de Poly Haven (CC0), reflets réels sur carrosseries et vitrages
-  new HDRLoader().load(stage.dataset.hdr || 'assets/hdr/pedestrian_overpass_1k.hdr', (hdr) => {
+  const hdrUrl = stage.dataset.hdr || 'assets/hdr/pedestrian_overpass_1k.hdr';
+  // variante base64 (.b64.txt) pour les hébergements qui ne servent pas les fichiers binaires .hdr
+  const hdrSrc = hdrUrl.endsWith('.b64.txt') ? fetch(hdrUrl).then((r) => r.text()).then((t) => 'data:application/octet-stream;base64,' + t.trim()) : Promise.resolve(hdrUrl);
+  hdrSrc.then((u) => new HDRLoader().load(u, (hdr) => {
     hdr.mapping = THREE.EquirectangularReflectionMapping;
     const px = hdr.image.data; // désature l'HDRI (lumière neutre, sans dominante chaude)
     const h = THREE.DataUtils.fromHalfFloat, t = THREE.DataUtils.toHalfFloat;
@@ -72,7 +75,7 @@ function start() {
     hdr.needsUpdate = true;
     const env = pmrem.fromEquirectangular(hdr).texture; hdr.dispose();
     scene.environment = env; scene.environmentIntensity = 0.6;
-  });
+  })).catch(() => {});
   envScene.remove(sky);
   scene.add(sky); // le même ciel sert de fond
   const BG = new THREE.Color(0xc9d3dc);
