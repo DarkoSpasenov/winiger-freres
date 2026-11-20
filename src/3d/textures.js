@@ -178,3 +178,25 @@ export function grassTexture() {
   }
   return tex(c, { aniso: 8 });
 }
+
+// Caillebotis de cabine de peinture (grille noire sur fosse sombre).
+export function grateTexture() {
+  const [c, x] = canvas(256, 256);
+  x.fillStyle = '#121314'; x.fillRect(0, 0, 256, 256);
+  x.fillStyle = '#3d4044';
+  for (let i = 0; i < 256; i += 16) { x.fillRect(i, 0, 4, 256); x.fillRect(0, i, 256, 3); }
+  return tex(c, { aniso: 8 });
+}
+
+// Panneaux OSB (agrandissement en chantier).
+export function osbTexture() {
+  const [c, x] = canvas(256, 256);
+  x.fillStyle = '#c9a26b'; x.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 900; i++) {
+    const t = 150 + Math.random() * 70;
+    x.fillStyle = `rgba(${t},${t * 0.72},${t * 0.42},.55)`;
+    x.save(); x.translate(Math.random() * 256, Math.random() * 256); x.rotate(Math.random() * Math.PI);
+    x.fillRect(-8, -2, 10 + Math.random() * 14, 3 + Math.random() * 3); x.restore();
+  }
+  return tex(c);
+}

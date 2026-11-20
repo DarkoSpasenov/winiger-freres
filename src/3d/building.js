@@ -274,7 +274,12 @@ export function buildWorld({ logoUrl, mobile }) {
   const bo = new THREE.Group(); root.add(bo);
   const bx0 = 8.6, bx1 = 19.6, bz0 = -10.8, bz1 = -0.6, bh = 4.4;
   const panel = new THREE.MeshStandardMaterial({ color: 0xdedfdd, roughness: 0.5, metalness: 0.2 });
-  bo.add(span(bx0, bx1, 0.01, 0.06, bz0, bz1, new THREE.MeshStandardMaterial({ color: 0x3a3d41, roughness: 0.6, metalness: 0.6 }), { cast: false }));
+  const grate = T.grateTexture(); grate.repeat.set(6, 5);
+  bo.add(span(bx0, bx1, 0.01, 0.06, bz0, bz1, new THREE.MeshStandardMaterial({ color: 0x9a9da0, map: grate, roughness: 0.55, metalness: 0.7 }), { cast: false }));
+  // caillebotis + rampes lumineuses verticales sur les parois (photos de la cabine, août 2026)
+  const tube = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.9 });
+  for (const x of [bx0 + 2.2, bx0 + 5.5, bx0 + 8.8]) bo.add(span(x - 0.2, x + 0.2, 1.0, 3.6, bz0 + 0.13, bz0 + 0.17, tube, { cast: false }));
+  for (const z of [bz0 + 2.5, bz0 + 6.5]) for (const x of [bx0 + 0.13, bx1 - 0.17]) bo.add(span(x, x + 0.04, 1.0, 3.6, z - 0.2, z + 0.2, tube, { cast: false }));
   bo.add(span(bx0, bx0 + 0.12, 0, bh, bz0, bz1, panel), span(bx1 - 0.12, bx1, 0, bh, bz0, bz1, panel), span(bx0, bx1, 0, bh, bz0, bz0 + 0.12, panel));
   W.boothCeil = new THREE.MeshStandardMaterial({ color: 0xf5f5f5, emissive: 0xffffff, emissiveIntensity: 0.15, transparent: true, opacity: 0.55, depthWrite: false });
   bo.add(span(bx0, bx1, bh, bh + 0.25, bz0, bz1, W.boothCeil, { cast: false }));
@@ -288,19 +293,32 @@ export function buildWorld({ logoUrl, mobile }) {
 
   // ------------------------------------------------------------ restauration : caisse sur rotissoire
   const rs = new THREE.Group(); root.add(rs);
-  const stand = (x) => {
-    const s = new THREE.Group();
-    const a = box(0.18, 1.9, 0.18, M.red, 0, 0.95, 0.55); a.rotation.x = 0.28;
-    const b = box(0.18, 1.9, 0.18, M.red, 0, 0.95, -0.55); b.rotation.x = -0.28;
-    s.add(a, b, box(0.3, 0.12, 1.9, M.red, 0, 0.06, 0), box(0.4, 0.4, 0.3, M.steel, 0, 1.8, 0));
-    s.position.set(x, 0, -4.5); return s;
-  };
-  rs.add(stand(-18.3), stand(-11.7));
-  W.rotisserie = new THREE.Group(); W.rotisserie.position.set(-15, 1.8, -4.5); rs.add(W.rotisserie);
-  W.shellMat = paint(0x9fa2a3, { metal: 0.05, rough: 0.6, clear: 0.2 });
+  // rotissoire à deux grands anneaux perforés sur chariot à roulettes (photos Instagram, août 2026)
+  const RR = 1.55, ringMat = new THREE.MeshStandardMaterial({ color: 0x4a4d50, roughness: 0.45, metalness: 0.75, side: THREE.DoubleSide });
+  const ringShape = new THREE.Shape(); ringShape.absarc(0, 0, RR, 0, Math.PI * 2, false);
+  const hole = new THREE.Path(); hole.absarc(0, 0, RR - 0.13, 0, Math.PI * 2, true); ringShape.holes.push(hole);
+  for (let i = 0; i < 36; i++) { const a = (i / 36) * Math.PI * 2, h = new THREE.Path(); h.absarc(Math.cos(a) * (RR - 0.065), Math.sin(a) * (RR - 0.065), 0.025, 0, Math.PI * 2, true); ringShape.holes.push(h); }
+  const ringGeo = new THREE.ExtrudeGeometry(ringShape, { depth: 0.025, bevelEnabled: false, curveSegments: 48 });
+  const cart = new THREE.Group(); cart.position.set(-15, 0, -4.5); rs.add(cart);
+  cart.add(box(5.6, 0.1, 0.14, M.steel, 0, 0.22, 0.75), box(5.6, 0.1, 0.14, M.steel, 0, 0.22, -0.75));
+  for (const x of [-2.6, 2.6]) {
+    cart.add(box(0.14, 0.1, 1.9, M.steel, x, 0.22, 0));
+    for (const z of [-0.85, 0.85]) {
+      const w = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.06, 16), new THREE.MeshStandardMaterial({ color: 0xe8e8e4, roughness: 0.5 }));
+      w.rotation.x = Math.PI / 2; w.position.set(x, 0.1, z); cart.add(w);
+      cart.add(box(0.1, 0.12, 0.1, M.steel, x, 0.06 + 0.2, z));
+    }
+    for (const z of [-0.45, 0.45]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.12, 12), M.steel); r.rotation.z = Math.PI / 2; r.position.set(x, 0.33, z); cart.add(r); }
+  }
+  W.rotisserie = new THREE.Group(); W.rotisserie.position.set(-15, 0.33 + RR, -4.5); rs.add(W.rotisserie);
+  for (const x of [-2.6, 2.6]) {
+    const ring = new THREE.Mesh(ringGeo, ringMat); ring.rotation.y = Math.PI / 2; ring.position.x = x - 0.012; ring.castShadow = true; W.rotisserie.add(ring);
+    for (const a of [0.6, 2.55, 4.5]) { const sp = box(0.06, RR - 0.15, 0.06, M.steel, x, 0, 0); sp.geometry.translate(0, (RR - 0.15) / 2, 0); sp.position.set(x, 0, 0); sp.rotation.x = a; W.rotisserie.add(sp); }
+  }
+  W.shellMat = paint(0xd9d8d2, { metal: 0.02, rough: 0.7, clear: 0.1 });
   W.shell = makeCar({ type: 'coupe', mode: 'shell', material: W.shellMat });
   W.shell.position.set(0, -0.7, 0); W.rotisserie.add(W.shell);
-  W.rotisserie.add(box(6.4, 0.12, 0.12, M.steel, 0, 0, 0));
+  W.rotisserie.add(box(5.4, 0.1, 0.1, M.steel, 0, 0, 0));
   // papier de masquage (étape 2)
   W.masking = fadable(new THREE.Group());
   const paper = new THREE.MeshStandardMaterial({ color: 0xe9dcc0, roughness: 0.95 });
@@ -377,13 +395,23 @@ export function buildWorld({ logoUrl, mobile }) {
 
   // ------------------------------------------------------------ agrandissement 2026 : charpente en cours, à droite (est), contre le bâtiment
   W.extension = new THREE.Group();
+  // d'après les photos du chantier (oct. 2026) : prolonge le volume existant, deux niveaux,
+  // poteaux noirs, sommiers rouges, rez en béton et vitrages, étage en panneaux OSB.
+  const redSteel = new THREE.MeshStandardMaterial({ color: 0xc8202a, roughness: 0.5, metalness: 0.4 });
+  const osb = new THREE.MeshStandardMaterial({ map: T.osbTexture(), roughness: 0.9 }); osb.map.repeat.set(3, 1);
   const cols = [];
-  for (const x of [-24.3, -28.3]) for (const z of [-10.5, -3.5, 3.5, 10.5]) {
-    const c = box(0.35, H, 0.35, M.steel, x, H / 2, z); cols.push(c); W.extension.add(c);
+  for (const x of [-20.6, -24.6, -28.4]) for (const z of [-10.8, -3.6, 3.6, 10.8]) {
+    const c = box(0.3, H, 0.3, M.steel, x, H / 2, z); cols.push(c); W.extension.add(c);
   }
+  const eg = () => { const o = new THREE.Group(); W.extension.add(o); return o; };
   const beams = [];
-  for (const z of [-10.5, -3.5, 3.5, 10.5]) { const b = span(-28.5, -20.3, H - 0.5, H - 0.1, z - 0.15, z + 0.15, M.steel); beams.push(b); W.extension.add(b); }
-  W.extension.add(span(-28.5, -20.3, 0, 0.05, -11, 11, M.paving, { cast: false }));
+  const lvl = H * 0.48;
+  const b1 = eg(); b1.add(span(-28.6, -20.3, lvl - 0.25, lvl + 0.1, -11, 11, conc)); for (const z of [-10.8, 10.8]) b1.add(span(-28.6, -20.3, lvl - 0.45, lvl - 0.1, z - 0.15, z + 0.15, redSteel)); beams.push(b1);
+  const b2 = eg(); for (const z of [-10.8, -3.6, 3.6, 10.8]) b2.add(span(-28.6, -20.3, H - 0.55, H - 0.15, z - 0.15, z + 0.15, redSteel)); b2.add(span(-28.6, -28.3, H - 0.55, H - 0.15, -11, 11, redSteel)); beams.push(b2);
+  const b3 = eg(); b3.add(span(-28.5, -20.5, 0, lvl - 0.3, -10.9, -10.7, conc)); b3.add(span(-28.6, -28.45, 0, lvl - 0.3, -11, 11, conc)); beams.push(b3);
+  const b4 = eg(); b4.add(span(-28.5, -20.5, lvl + 0.1, H - 0.6, -10.9, -10.75, osb)); b4.add(span(-28.55, -28.45, lvl + 0.1, H - 0.6, -10.8, 2, osb)); beams.push(b4);
+  const b5 = eg(); b5.add(span(-28.3, -20.6, 0.05, lvl - 0.5, 10.95, 11, glassMat(), { cast: false })); beams.push(b5);
+  W.extension.add(span(-28.6, -20.3, 0, 0.05, -11, 11, M.paving, { cast: false }));
   for (let i = 0; i < 5; i++) W.extension.add(span(-30.4 - i * 0.6, -30 - i * 0.6, 0, 0.35, 15.5, 21, M.steel));
   W.extension.userData = { cols, beams };
   root.add(W.extension);
