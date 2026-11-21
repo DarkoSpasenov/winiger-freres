@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/archivo/wdth-italic.css';
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/500.css';
 
@@ -41,7 +42,7 @@
   --ease: cubic-bezier(0.22, 0.7, 0.16, 1);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
 
-  --kerb: repeating-linear-gradient(90deg, var(--red) 0 14px, var(--white) 14px 28px);
+  --kerb: repeating-linear-gradient(90deg, var(--red) 0 20px, var(--white) 20px 40px);
   --checker: conic-gradient(var(--ink) 0 25%, var(--white) 0 50%, var(--ink) 0 75%, var(--white) 0) 0 0 / 16px 16px;
   color-scheme: light;
 }
@@ -91,6 +92,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .display {
   font-stretch: 125%;
   font-weight: 800;
+  font-style: italic; /* l'italique du lettrage du logo */
   text-transform: uppercase;
   letter-spacing: -0.035em;
   line-height: 0.86;
@@ -134,7 +136,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .bg-ink .prose p { color: rgba(255,255,255,0.74); }
 
 /* Séparateur — bordure de piste (vibreur) */
-.kerb { height: 6px; background: var(--kerb); width: 100%; }
+.kerb { height: 10px; background: var(--kerb); width: 100%; }
 .kerb--short { width: 84px; }
 .rule { height: 1px; background: var(--line); border: 0; margin: 0; }
 .bg-ink .rule { background: rgba(255,255,255,0.16); }
@@ -145,8 +147,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --bg: transparent; --fg: var(--ink); --bd: var(--ink);
   position: relative; display: inline-flex; align-items: center; gap: 0.9em;
   min-height: 52px; padding: 0.95rem 1.35rem 1rem;
-  background: var(--bg); color: var(--fg); border: 1.5px solid var(--bd); border-radius: 2px;
-  font-family: var(--f-sans); font-weight: 650; font-stretch: 110%; font-size: 0.82rem;
+  background: var(--bg); color: var(--fg); border: 2px solid var(--bd); border-radius: 0;
+  font-family: var(--f-sans); font-weight: 700; font-stretch: 112%; font-size: 0.84rem;
   letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; line-height: 1;
   cursor: pointer; overflow: hidden; isolation: isolate;
   transition: background-color .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
@@ -156,10 +158,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); z-index: -1;
 }
 .btn:hover::after, .btn:focus-visible::after { transform: scaleX(1); }
+.btn > .sr-only { position: absolute !important; }
 .btn .arr { display: inline-block; width: 18px; height: 10px; position: relative; transition: transform .35s var(--ease); }
 .btn .arr::before { content: ''; position: absolute; left: 0; right: 2px; top: 50%; height: 1.5px; background: currentColor; transform: translateY(-50%); }
 .btn .arr::after { content: ''; position: absolute; right: 1px; top: 50%; width: 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: translateY(-50%) rotate(45deg); }
-.btn:hover .arr { transform: translateX(4px); }
+.btn:hover > .arr { transform: translateX(4px); }
 .btn--solid { --bg: var(--ink); --fg: var(--white); --bd: var(--ink); }
 .btn--solid:hover { --bg: var(--red); --bd: var(--red); }
 .btn--red { --bg: var(--red); --fg: var(--white); --bd: var(--red); }
@@ -284,11 +287,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* ---------- Circuit (signature graphique) ---------- */
 .circuit { position: absolute; inset: 0 0 auto 0; pointer-events: none; z-index: 3; overflow: visible; }
 .circuit svg { position: absolute; top: 0; left: 0; overflow: visible; }
-.circuit__base { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 2 6; }
-.circuit__run { fill: none; stroke: var(--red); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.circuit__base { fill: none; stroke: var(--line-strong); stroke-width: 1.5; stroke-dasharray: 6 8; }
+.circuit__run { fill: none; stroke: var(--red); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
 .circuit__car { fill: var(--red); stroke: var(--white); stroke-width: 3; paint-order: stroke; }
-.circuit__halo { fill: none; stroke: var(--red); stroke-width: 1; opacity: .35; }
+.circuit__halo { fill: none; stroke: var(--red); stroke-width: 2; opacity: .35; }
 .on-dark .circuit__base { stroke: rgba(255,255,255,.2); }
+@media (max-width: 900px) { .circuit__run { stroke-width: 3; } }
 
 /* Points de passage / secteurs */
 .sector { position: absolute; z-index: 4; display: flex; align-items: center; gap: 10px; pointer-events: none; font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--steel); white-space: nowrap; }
