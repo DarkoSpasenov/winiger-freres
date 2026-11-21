@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "preview:local": "node scripts/make-preview.mjs"
+    "preview:local": "node scripts/make-preview.mjs",
+    "publish:pages": "astro build && node scripts/make-preview.mjs && node scripts/publish-root.mjs"
   },
   "dependencies": {
     "astro": "5.18.2",
