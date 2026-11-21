@@ -1,0 +1,159 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Btn from '../../components/Btn.astro';
+import Sector from '../../components/Sector.astro';
+import Todo from '../../components/Todo.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { wash, company, mapsLink, appleMapsLink } from '../../data/site';
+---
+<Base title="Station de lavage à Grolley — tunnel de lavage dernière génération" description="Tunnel de lavage dernière génération de Winiger Frères, Route de l'Industrie-Ouest 7 à Grolley (FR). Pour un lavage soigneux et efficace. Adresse, itinéraire et informations pratiques.">
+  <section class="w-hero page-top" id="entree" aria-labelledby="w-title">
+    <span class="wp" data-wp="r" style="top:calc(var(--header) + 20px)"></span>
+    <Sector n="1" name="Entrée de voie" id="entree" side="r" />
+    <div class="w-lanes" aria-hidden="true"></div>
+    <div class="wrap grid w-hero__grid">
+      <div class="w-hero__t">
+        <p class="eyebrow" data-reveal>Station de lavage <b>·</b> Grolley</p>
+        <h1 id="w-title" class="display h1" data-reveal>Le soin<br />jusqu'au<br />dernier<br />détail<span class="red">.</span></h1>
+        <p class="lead" style="margin-top:28px" data-reveal>{wash.type}. {wash.promise}</p>
+        <div class="btns" style="margin-top:32px">
+          <Btn href="#infos" variant="solid">Informations pratiques</Btn>
+          <Btn href={mapsLink(wash.mapsQuery)} external>Nous trouver</Btn>
+        </div>
+      </div>
+      <div class="w-hero__media">
+        <Placeholder text="Photographie du tunnel de lavage : entrée de la voie, lumière du jour, véhicule propre en sortie de tunnel." ratio="4/5" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="installation" aria-labelledby="w-inst">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="2" name="L'installation" id="installation" />
+    <div class="wrap grid" style="row-gap:48px;align-items:start">
+      <div style="grid-column: 1 / span 6">
+        <p class="eyebrow">S2 <b>/</b> L'installation</p>
+        <h2 id="w-inst" class="display h2">Un tunnel<br />de lavage.</h2>
+        <div class="prose" style="margin-top:28px">
+          <p class="lead">La station de Winiger Frères est un tunnel de lavage dernière génération, conçu pour un lavage soigneux et efficace.</p>
+          <p>Elle se trouve dans la zone industrielle de Grolley, au {wash.street}, tout près de la carrosserie.</p>
+        </div>
+        <dl class="spec" style="margin-top:32px">
+          <div><dt>Type</dt><dd>Tunnel de lavage <span class="w-ok">Confirmé</span></dd></div>
+          <div><dt>Équipements</dt><dd><Todo /></dd></div>
+          <div><dt>Programmes</dt><dd><Todo /></dd></div>
+          <div><dt>Gabarit max.</dt><dd><Todo /></dd></div>
+        </dl>
+      </div>
+      <figure class="w-flyer" style="grid-column: 8 / span 4">
+        <Pic name="flyer-tunnel-lavage" sizes="(min-width: 901px) 30vw, 90vw" mask={false} />
+        <figcaption class="cap">Document officiel — affiche de lancement du tunnel de lavage. Les illustrations de l'affiche ne montrent pas l'installation de Grolley.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="fonctionnement" aria-labelledby="w-how">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="3" name="Fonctionnement" id="fonctionnement" />
+    <div class="wrap grid" style="row-gap:40px">
+      <div style="grid-column: 1 / span 5">
+        <p class="eyebrow">S3 <b>/</b> Fonctionnement</p>
+        <h2 id="w-how" class="display h2">Comment<br />ça marche.</h2>
+        <p class="muted" style="margin-top:24px;max-width:40ch">Le déroulement exact d'un lavage n'est pas encore documenté publiquement. Ces informations seront ajoutées après confirmation par l'entreprise.</p>
+      </div>
+      <ol class="w-steps" style="grid-column: 7 / span 6">
+        <li><span class="mono">V1</span><div><h3 class="h3">Accès & accueil</h3><p>Libre-service ou avec personnel, réservation ou non.</p><Todo /></div></li>
+        <li><span class="mono">V2</span><div><h3 class="h3">Choix du programme</h3><p>Programmes proposés et options.</p><Todo /></div></li>
+        <li><span class="mono">V3</span><div><h3 class="h3">Paiement</h3><p>Moyens de paiement acceptés sur place.</p><Todo /></div></li>
+        <li><span class="mono">V4</span><div><h3 class="h3">Lavage</h3><p>Passage dans le tunnel, durée indicative.</p><Todo /></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-ink on-dark" id="infos" aria-labelledby="w-info">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="4" name="Infos pratiques" id="infos" side="r" />
+    <div class="wrap">
+      <p class="eyebrow">S4 <b>/</b> Informations pratiques</p>
+      <h2 id="w-info" class="display h2" style="margin-bottom:clamp(40px,5vw,64px)">Avant de venir.</h2>
+      <div class="w-board">
+        <div><span class="mono">Adresse</span><strong>{wash.street}<br />1772 Grolley</strong></div>
+        <div><span class="mono">Tarif</span><strong>{wash.priceFrom}</strong><Todo text="à confirmer" /></div>
+        <div><span class="mono">Horaires d'accès</span><strong class="muted">—</strong><Todo /></div>
+        <div><span class="mono">Paiement</span><strong class="muted">—</strong><Todo /></div>
+      </div>
+      <p class="mono muted" style="margin-top:24px">{wash.priceSource}.</p>
+    </div>
+  </section>
+
+  <section class="section" id="localisation" aria-labelledby="w-loc">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="5" name="Localisation" id="localisation" />
+    <div class="wrap grid w-loc" style="row-gap:40px;align-items:center">
+      <div style="grid-column: 1 / span 5">
+        <p class="eyebrow">S5 <b>/</b> Localisation</p>
+        <h2 id="w-loc" class="display h2">Zone<br />industrielle<br />de Grolley.</h2>
+        <p class="lead" style="margin-top:24px">{wash.street}, 1772 Grolley — à proximité de la carrosserie ({company.street}).</p>
+        <div class="btns" style="margin-top:32px">
+          <Btn href={mapsLink(wash.mapsQuery)} variant="solid" external>Itinéraire Google Maps</Btn>
+          <Btn href={appleMapsLink(wash.mapsQuery)} external>Plans (Apple)</Btn>
+        </div>
+      </div>
+      <div style="grid-column: 7 / span 6"><Pic name="ext-5161" ratio="4/3" sizes="(min-width: 901px) 48vw, 100vw" caption="Le site de Winiger Frères, zone industrielle de Grolley" /></div>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="faq" aria-labelledby="w-faq">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="6" name="FAQ" id="faq" />
+    <div class="wrap grid" style="row-gap:40px">
+      <div style="grid-column: 1 / span 4"><p class="eyebrow">S6 <b>/</b> Questions</p><h2 id="w-faq" class="display h2">FAQ.</h2></div>
+      <div class="faq" style="grid-column: 6 / span 7">
+        <details><summary>Où se trouve la station de lavage ?</summary><div>{wash.street}, 1772 Grolley, dans la zone industrielle, à proximité de la carrosserie Winiger Frères.</div></details>
+        <details><summary>De quel type d'installation s'agit-il ?</summary><div>D'un tunnel de lavage dernière génération.</div></details>
+        <details><summary>Combien coûte un lavage ?</summary><div>L'affiche de lancement indique un tarif {wash.priceFrom}. Tarifs actuels : <Todo text="à confirmer" /></div></details>
+        <details><summary>Quand la station est-elle ouverte ?</summary><div><Todo /> En attendant, renseignez-vous au <a href={`tel:${company.phoneHref}`}>{company.phone}</a>.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" id="itineraire" aria-label="Itinéraire">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <div class="wrap w-end">
+      <h2 class="display h2">En route<span class="red">.</span></h2>
+      <div class="btns"><Btn href={mapsLink(wash.mapsQuery)} variant="red" external>Accéder à l'itinéraire</Btn><Btn href="/contact/">Contacter l'entreprise</Btn></div>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+  .w-hero { padding-bottom: clamp(72px, 9vw, 140px); overflow: hidden; }
+  .w-lanes { position: absolute; top: var(--header); bottom: 0; right: 0; width: 42%; background:
+      repeating-linear-gradient(180deg, var(--steel-2) 0 34px, transparent 34px 60px) 18% 0 / 2px 100% no-repeat,
+      repeating-linear-gradient(180deg, var(--steel-2) 0 34px, transparent 34px 60px) 82% 0 / 2px 100% no-repeat,
+      var(--paper); }
+  .w-hero__grid { position: relative; align-items: center; row-gap: 48px; }
+  .w-hero__t { grid-column: 1 / span 6; }
+  .w-hero__media { grid-column: 8 / span 5; position: relative; }
+  .w-hero__media .ph { background-color: var(--white); border: 1.5px solid var(--ink); }
+  .w-ok { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: #11713a; border: 1px solid #11713a; padding: .2em .5em; margin-left: 8px; vertical-align: middle; }
+  .w-flyer { margin: 0; }
+  .w-flyer .pic { box-shadow: 0 1px 0 var(--line); border: 1px solid var(--line); }
+  .w-steps { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
+  .w-steps li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 22px 0; border-bottom: 1px dashed var(--line-strong); }
+  .w-steps .mono { color: var(--red); padding-top: 6px; }
+  .w-steps p { color: var(--ink-2); margin: 8px 0 10px; }
+  .w-board { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1.5px solid var(--white); }
+  .w-board > div { display: grid; gap: 12px; align-content: start; justify-items: start; padding: 24px 20px 24px 0; border-right: 1px solid rgba(255,255,255,.16); margin-right: 20px; }
+  .w-board > div:last-child { border-right: 0; }
+  .w-board .mono { color: var(--steel); }
+  .w-board strong { font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-stretch: 112%; line-height: 1.2; }
+  @media (max-width: 900px) {
+    .w-lanes { display: none; }
+    .w-board { grid-template-columns: 1fr 1fr; row-gap: 8px; }
+    .w-board > div:nth-child(2) { border-right: 0; }
+  }
+  @media (max-width: 520px) { .w-board { grid-template-columns: 1fr; } .w-board > div { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.16); margin-right: 0; } }
+  .w-end { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
+</style>

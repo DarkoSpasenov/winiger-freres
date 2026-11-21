@@ -1,0 +1,29 @@
+---
+import { company } from '../data/site';
+// Pour activer l'envoi direct, renseigner PUBLIC_FORM_ENDPOINT (ex. Formspree, Web3Forms, script PHP Infomaniak).
+// Sans endpoint, le formulaire prépare l'e-mail dans la messagerie du visiteur (comportement annoncé à l'écran).
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+interface Props { compact?: boolean; subject?: string; idPrefix?: string; }
+const { compact = false, subject = '', idPrefix = 'f' } = Astro.props;
+const subjects = ['Réparation / sinistre', 'Devis carrosserie', 'Peinture', 'Vitrage', 'Véhicule de prestige / collection', 'Tesla', 'Gardiennage', 'Station de lavage', 'Autre demande'];
+const id = (n: string) => `${idPrefix}-${n}`;
+---
+<form class="form" data-contact data-endpoint={endpoint} data-mailto={company.email} novalidate={false}>
+  <div class="field"><label for={id('nom')}>Nom et prénom *</label><input id={id('nom')} name="nom" autocomplete="name" required /></div>
+  <div class="field"><label for={id('tel')}>Téléphone</label><input id={id('tel')} name="tel" type="tel" autocomplete="tel" inputmode="tel" /></div>
+  <div class="field"><label for={id('email')}>E-mail *</label><input id={id('email')} name="email" type="email" autocomplete="email" required /></div>
+  <div class="field"><label for={id('sujet')}>Sujet *</label>
+    <select id={id('sujet')} name="sujet" required>
+      {subjects.map((s) => <option selected={s === subject}>{s}</option>)}
+    </select>
+  </div>
+  {!compact && <div class="field field--full"><label for={id('vehicule')}>Véhicule (marque, modèle)</label><input id={id('vehicule')} name="vehicule" /></div>}
+  <div class="field field--full"><label for={id('message')}>Message *</label><textarea id={id('message')} name="message" required rows={compact ? 4 : 6}></textarea></div>
+  <div class="sr-only" aria-hidden="true"><label for={id('website')}>Ne pas remplir</label><input id={id('website')} name="website" tabindex="-1" autocomplete="off" /></div>
+  <label class="check"><input type="checkbox" name="consent" required /> <span>J'accepte que mes données soient utilisées pour répondre à ma demande (<a href="/confidentialite/">protection des données</a>).</span></label>
+  {!endpoint && (
+    <p class="form-note"><strong>Formulaire en mode e-mail.</strong> Aucun service d'envoi n'est encore configuré : en validant, votre messagerie s'ouvre avec le message prérempli à l'adresse {company.email}.</p>
+  )}
+  <div class="field--full btns"><button class="btn btn--solid" type="submit"><span>Envoyer la demande</span><span class="arr" aria-hidden="true"></span></button></div>
+  <p class="form-status" role="status" aria-live="polite"></p>
+</form>

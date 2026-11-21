@@ -1,0 +1,49 @@
+// Inventaire des photographies officielles récupérées sur winiger-artcar.ch (nov. 2026).
+// w/h = dimensions de la source optimisée (_src/winiger/*.webp).
+// Les variantes responsives sont générées par `npm run images` (scripts/optimize-images.mjs).
+export const WIDTHS = [480, 960, 1440, 1920];
+
+export const images = {
+  'facade-nuit-a': { w: 1677, h: 621, alt: "Vue panoramique du bâtiment Winiger Frères et des voitures stationnées devant l'atelier" },
+  'facade-nuit-b': { w: 1582, h: 673, alt: "Façade du bâtiment Winiger Frères, enseigne Carrosserie de Grolley" },
+  'facade-enseigne': { w: 1678, h: 852, alt: "Enseigne Winiger Frères — Carrosserie de Grolley sur la façade" },
+  'ext-008': { w: 1920, h: 1280, alt: "Le bâtiment Winiger Frères et des voitures de sport sur le parking" },
+  'ext-009': { w: 1632, h: 2560, alt: "Ferrari rouge devant la façade de la carrosserie Winiger Frères" },
+  'ext-013': { w: 1920, h: 1280, alt: "Entrée de l'atelier et façade de la carrosserie" },
+  'ext-016': { w: 1920, h: 1280, alt: "L'espace d'accueil, capot rouge exposé au mur" },
+  'ext-020': { w: 1920, h: 1280, alt: "Le bâtiment de la carrosserie vu depuis le parking" },
+  'ext-025': { w: 1920, h: 1280, alt: "Enseigne Winiger Frères — Carrosserie de Grolley" },
+  'ext-027': { w: 1920, h: 1280, alt: "Enseigne de la façade Winiger Frères" },
+  'ext-5161': { w: 1024, h: 768, alt: "Voitures de sport devant la réception de la carrosserie" },
+  'ext-6177': { w: 900, h: 600, alt: "Voiture aux couleurs Winiger Frères devant l'atelier" },
+  'ext-6185': { w: 900, h: 600, alt: "Entrée vitrée de la réception" },
+  'gard-1': { w: 900, h: 675, alt: "Voiture sous housse dans le sous-sol de gardiennage" },
+  'gard-2': { w: 900, h: 675, alt: "Véhicules sous housses rouges dans le sous-sol de gardiennage" },
+  'gard-3': { w: 900, h: 675, alt: "Rangée de véhicules protégés dans l'espace de gardiennage" },
+  'gard-6295': { w: 1920, h: 1280, alt: "Rangée de boxes fermés" },
+  'atelier-2441': { w: 1024, h: 768, alt: "Coque de voiture de compétition rouge avec arceau, en préparation à l'atelier" },
+  'atelier-9880': { w: 1024, h: 768, alt: "Réparation d'une face avant sur le banc de redressage" },
+  'reception-9997': { w: 1024, h: 768, alt: "Comptoir de réception de la carrosserie" },
+  'atelier-fb1': { w: 960, h: 540, alt: "Voitures de sport rouges dans l'atelier" },
+  'atelier-fb2': { w: 1920, h: 1080, alt: "Vue d'ensemble de l'atelier Winiger Frères" },
+  'atelier-6191': { w: 1920, h: 1280, alt: "Coupes et trophées de compétition à l'atelier" },
+  'ferrari-6215': { w: 1920, h: 1280, alt: "Roue et jante d'une Ferrari rouge à l'atelier" },
+  'enseigne-6221': { w: 900, h: 468, alt: "Logo Winiger Frères au drapeau à damier, sur le mur de l'atelier" },
+  'atelier-6223': { w: 599, h: 900, alt: "Vue de l'atelier, véhicules en réparation" },
+  'atelier-6288': { w: 600, h: 900, alt: "Façade du bâtiment, vue verticale" },
+  'peinture-6309': { w: 900, h: 600, alt: "Peintre en combinaison appliquant l'apprêt sur un capot" },
+  'atelier-6314': { w: 1920, h: 1280, alt: "Peintre en combinaison de protection au travail sur un élément de carrosserie" },
+  'atelier-9877': { w: 1024, h: 768, alt: "Ferrari rouge en réparation, face avant déposée" },
+  'resto-3463': { w: 1024, h: 768, alt: "Restauration d'une carrosserie de roadster ancien" },
+  'atelier-4916': { w: 1024, h: 768, alt: "Carrossier au travail sur une voiture de sport blanche" },
+  'course-9851': { w: 1024, h: 768, alt: "Carrossiers au travail sur une carrosserie rouge" },
+  'course-fb3': { w: 960, h: 540, alt: "Voiture de compétition n°413 devant le bâtiment" },
+  'atelier-fb4': { w: 960, h: 540, alt: "Voiture rouge démontée sur le banc de redressage" },
+  'atelier-fb5': { w: 960, h: 540, alt: "Compartiment moteur, face avant déposée" },
+  'atelier-fb6': { w: 960, h: 540, alt: "Coque blanche équipée d'un arceau, sur le banc de l'atelier" },
+  'atelier-fb7': { w: 540, h: 960, alt: "Carrosserie rouge mise à nu, vue verticale" },
+  'atelier-6194': { w: 1920, h: 1280, alt: "L'atelier : carrossiers au travail et véhicules en réparation" },
+  'flyer-tunnel-lavage': { w: 822, h: 1231, alt: "Affiche Winiger Frères annonçant le nouveau tunnel de lavage dernière génération" },
+} as const;
+
+export type ImageName = keyof typeof images;

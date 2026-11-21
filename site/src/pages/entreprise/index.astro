@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Btn from '../../components/Btn.astro';
+import Sector from '../../components/Sector.astro';
+import Todo from '../../components/Todo.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { company, certifications, insurers } from '../../data/site';
+---
+<Base title="Notre entreprise — deux frères, une passion depuis 2004" description="Winiger Frères Sàrl, Carrosserie de Grolley : une entreprise familiale fribourgeoise née en 2004 de la passion de deux frères pour l'automobile. Réparation toutes marques, restauration et compétition.">
+  <section class="e-hero page-top" id="origine" aria-labelledby="e-title">
+    <Sector n="1" name="Origine" id="origine" />
+    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Notre entreprise <b>·</b> Grolley, canton de Fribourg</p>
+      <h1 id="e-title" class="display e-hero__title" data-reveal>
+        <span>Winiger</span><span class="e-hero__amp">Frères<span class="red">.</span></span>
+      </h1>
+      <div class="grid e-hero__intro">
+        <p class="lead" style="grid-column: 7 / span 5" data-reveal>L'entreprise est née en 2004 de la passion de deux frères pour l'automobile. Une passion qui les a menés de la réparation toutes marques à la restauration et à la compétition.</p>
+      </div>
+    </div>
+    <div class="e-hero__img"><Pic name="facade-nuit-b" ratio="21/9" sizes="100vw" priority /></div>
+  </section>
+
+  <section class="section" id="chronologie" aria-labelledby="e-chrono">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="2" name="Chronologie" id="chronologie" />
+    <div class="wrap grid">
+      <div style="grid-column: 1 / span 5">
+        <p class="eyebrow">S2 <b>/</b> Chronologie</p>
+        <h2 id="e-chrono" class="display h2">Temps<br />inter&shy;médiaires.</h2>
+        <p class="muted" style="margin-top:24px;max-width:38ch">Seules les dates confirmées sont indiquées. Les autres étapes restent à compléter avec l'entreprise.</p>
+      </div>
+      <ol class="e-laps" style="grid-column: 7 / span 6">
+        <li><span class="e-laps__t">2004</span><div><h3 class="h3">Fondation</h3><p>Deux frères passionnés d'automobile créent la carrosserie à Grolley.</p></div></li>
+        <li><span class="e-laps__t e-laps__t--todo">20··</span><div><h3 class="h3">Le nouveau bâtiment</h3><p>Installation dans le bâtiment actuel de la Route de l'Industrie-Ouest, avec atelier, sous-sol de gardiennage et espace d'accueil.</p><Todo text="Année à confirmer" /></div></li>
+        <li><span class="e-laps__t">05·2021</span><div><h3 class="h3">TESLA Approved Body Shop</h3><p>Entrée dans le réseau d'ateliers de carrosserie approuvés par TESLA, après une formation spécifique.</p></div></li>
+        <li><span class="e-laps__t e-laps__t--todo">20··</span><div><h3 class="h3">Station de lavage</h3><p>Ouverture d'un tunnel de lavage dernière génération.</p><Todo text="Année à confirmer" /></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="freres" aria-labelledby="e-bros">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="3" name="Les frères" id="freres" />
+    <div class="wrap">
+      <div class="grid" style="margin-bottom:clamp(40px,5vw,72px)">
+        <div style="grid-column: 1 / span 7">
+          <p class="eyebrow">S3 <b>/</b> Les fondateurs</p>
+          <h2 id="e-bros" class="display h2">Deux noms<br />sur la grille.</h2>
+        </div>
+      </div>
+      <div class="grid e-bros">
+        {company.founders.map((f, i) => (
+          <article class={`e-bro e-bro--${i}`}>
+            <Placeholder text={`Portrait de ${f.first} Winiger à l'atelier — format vertical.`} ratio="4/5" />
+            <p class="mono e-bro__num">0{i + 1}</p>
+            <h3 class="e-bro__name">{f.first}<br /><span>{f.last}</span></h3>
+            <p class="muted">Rôle et parcours <Todo /></p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="metier" aria-labelledby="e-metier">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="4" name="Le métier" id="metier" />
+    <div class="wrap grid e-metier">
+      <div class="e-metier__img"><Pic name="atelier-6314" ratio="3/2" sizes="(min-width: 901px) 55vw, 100vw" class="corner-tr" /></div>
+      <div class="e-metier__txt">
+        <p class="eyebrow">S4 <b>/</b> Trois terrains</p>
+        <h2 id="e-metier" class="display h2">Réparer,<br />restaurer,<br />courir.</h2>
+        <dl class="spec" style="margin-top:32px">
+          <div><dt>Réparation</dt><dd>Toutes marques, avec un personnel constamment formé et un outillage de dernière génération.</dd></div>
+          <div><dt>Restauration</dt><dd>Véhicules anciens et de collection, peinture ancienne.</dd></div>
+          <div><dt>Compétition</dt><dd>Une passion pour le sport automobile qui se retrouve dans l'atelier.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-ink on-dark" id="reseau" aria-labelledby="e-net">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="5" name="Réseau" id="reseau" side="r" />
+    <div class="wrap grid" style="row-gap:48px">
+      <div style="grid-column: 1 / span 5">
+        <p class="eyebrow">S5 <b>/</b> Certifications & assurances</p>
+        <h2 id="e-net" class="display h2">Reconnus<br />par la branche.</h2>
+      </div>
+      <div style="grid-column: 7 / span 6">
+        <ul class="e-certs">
+          {certifications.map((c) => (
+            <li><a href={c.href} target="_blank" rel="noopener"><strong>{c.name}</strong><span class="mono">{c.detail}</span><span class="sr-only">(nouvel onglet)</span></a></li>
+          ))}
+        </ul>
+        <p class="mono muted" style="margin:40px 0 14px">Facilité avec les assurances — partenaires annoncés</p>
+        <p class="e-ins">{insurers.join(' · ')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" id="suite" aria-label="Contact">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <div class="wrap e-cta">
+      <h2 class="display h2">Passez<br />à l'atelier<span class="red">.</span></h2>
+      <div class="btns"><Btn href="/contact/" variant="solid">Contacter l'atelier</Btn><Btn href="/locaux/">Voir nos locaux</Btn></div>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+  .e-hero__title { font-size: min(clamp(2.8rem, 15vw, 16rem), 14cqi); display: grid; margin-bottom: clamp(24px, 3vw, 48px); }
+  .e-hero__amp { padding-left: 0.5em; }
+  .e-hero__intro { margin-bottom: clamp(40px, 6vw, 88px); }
+  .e-hero__img { max-width: var(--max); margin-inline: auto; padding-inline: var(--m); }
+  .e-laps { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
+  .e-laps li { display: grid; grid-template-columns: minmax(110px, 9rem) 1fr; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .e-laps__t { font-family: var(--f-mono); font-size: clamp(1.2rem, 2vw, 1.7rem); color: var(--red); letter-spacing: .02em; }
+  .e-laps__t--todo { color: var(--steel-2); }
+  .e-laps p { color: var(--ink-2); margin: 10px 0 12px; }
+  .e-bros { row-gap: 56px; }
+  .e-bro--0 { grid-column: 1 / span 5; }
+  .e-bro--1 { grid-column: 7 / span 5; margin-top: clamp(0px, 10vw, 160px); }
+  .e-bro__num { color: var(--red); margin: 22px 0 6px; }
+  .e-bro__name { font-size: min(clamp(2rem, 4.4vw, 4.2rem), 12cqi); font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.03em; margin-bottom: 14px; }
+  .e-bro__name span { color: var(--steel); }
+  .e-metier { align-items: center; row-gap: 48px; }
+  .e-metier__img { grid-column: 1 / span 7; }
+  .e-metier__txt { grid-column: 9 / span 4; }
+  .e-certs { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--white); }
+  .e-certs a { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,.16); text-decoration: none; }
+  .e-certs strong { font-size: clamp(1.3rem, 2.2vw, 2rem); font-stretch: 120%; text-transform: uppercase; letter-spacing: -0.01em; }
+  .e-certs a:hover strong { color: var(--red); }
+  .e-certs .mono { color: var(--steel); }
+  .e-ins { font-size: 1.2rem; font-weight: 600; color: rgba(255,255,255,.85); }
+  .e-cta { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
+</style>

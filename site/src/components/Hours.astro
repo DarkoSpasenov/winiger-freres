@@ -1,0 +1,11 @@
+---
+import { hours } from '../data/site';
+---
+<table class="hours" data-hours>
+  <caption class="sr-only">Horaires d'ouverture de l'atelier</caption>
+  <tbody>
+    {hours.map((h, i) => (
+      <tr data-day={i}><th scope="row">{h.days}</th><td>{h.slots.map((s) => <div>{s}</div>)}</td></tr>
+    ))}
+  </tbody>
+</table>

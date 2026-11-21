@@ -1,0 +1,38 @@
+---
+import { nav, company } from '../data/site';
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Winiger Frères — Carrosserie de Grolley, accueil">
+      <img src="/brand/logo-winiger-freres.png" alt="Winiger Frères — Carrosserie de Grolley" width="209" height="68" />
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      {nav.map((n) => (
+        <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}><sup>{n.sector}</sup>{n.short}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a class="header-call" href={`tel:${company.phoneHref}`} aria-label={`Appeler l'atelier au ${company.phone}`}>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5.2 1.5H2.5a1 1 0 0 0-1 1.1A12 12 0 0 0 13.4 14.5a1 1 0 0 0 1.1-1v-2.7l-3-1.2-1.4 1.6a8.5 8.5 0 0 1-4.3-4.3l1.6-1.4z"/></svg>
+        <span class="label">{company.phone}</span>
+      </a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Ouvrir le menu"><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mnav" id="mnav">
+  <nav aria-label="Navigation mobile">
+    <ol>
+      <li><a href="/" aria-current={path === '/' ? 'page' : undefined}><span>00</span>Départ</a></li>
+      {nav.map((n) => (
+        <li><a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}><span>{n.sector}</span>{n.label}</a></li>
+      ))}
+    </ol>
+  </nav>
+  <div class="mnav__contact">
+    <a class="btn btn--solid" href={`tel:${company.phoneHref}`}><span>Appeler · {company.phone}</span><span class="arr" aria-hidden="true"></span></a>
+    <a class="btn" href={`mailto:${company.email}`}><span>{company.email}</span><span class="arr" aria-hidden="true"></span></a>
+  </div>
+</div>

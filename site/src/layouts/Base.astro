@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { company, SITE_URL, hours } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  schema?: boolean;
+  noindex?: boolean;
+}
+const { title, description, ogImage = '/images/facade-enseigne-1440.webp', schema = false, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const fullTitle = title.includes('Winiger') ? title : `${title} · Winiger Frères, Carrosserie de Grolley`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoBodyShop',
+  '@id': `${SITE_URL}/#carrosserie`,
+  name: company.name,
+  alternateName: 'Carrosserie de Grolley',
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/logo-winiger-freres.png`,
+  image: `${SITE_URL}/images/facade-enseigne-1440.webp`,
+  telephone: '+41 26 476 06 06',
+  faxNumber: '+41 26 476 06 07',
+  email: company.email,
+  foundingDate: '2004',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.street,
+    postalCode: company.zip,
+    addressLocality: company.city,
+    addressRegion: 'FR',
+    addressCountry: 'CH',
+  },
+  areaServed: ['Grolley', 'Fribourg', 'Canton de Fribourg'],
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '07:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '13:30', closes: '18:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: '07:00', closes: '13:30' },
+  ],
+  sameAs: [company.facebook, company.instagram],
+};
+void hours;
+---
+<!doctype html>
+<html lang="fr-CH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_CH" />
+    <meta property="og:site_name" content="Winiger Frères — Carrosserie de Grolley" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, SITE_URL).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="geo.region" content="CH-FR" />
+    <meta name="geo.placename" content="Grolley" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <Header />
+    <main id="contenu" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <script>import '../scripts/main.ts';</script>
+  </body>
+</html>
