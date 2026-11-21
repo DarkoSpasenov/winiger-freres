@@ -147,8 +147,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --bg: transparent; --fg: var(--ink); --bd: var(--ink);
   position: relative; display: inline-flex; align-items: center; gap: 0.9em;
   min-height: 52px; padding: 0.95rem 1.35rem 1rem;
-  background: var(--bg); color: var(--fg); border: 2px solid var(--bd); border-radius: 0; transform: skewX(-14deg);
-  font-family: var(--f-sans); font-weight: 800; font-stretch: 118%; font-style: italic; font-size: 0.84rem;
+  background: var(--bg); color: var(--fg); border: 2px solid var(--bd); border-radius: 0;
+  font-family: var(--f-sans); font-weight: 700; font-stretch: 112%; font-size: 0.84rem;
   letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; line-height: 1;
   cursor: pointer; overflow: hidden; isolation: isolate;
   transition: background-color .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
@@ -158,13 +158,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease); z-index: -1;
 }
 .btn:hover::after, .btn:focus-visible::after { transform: scaleX(1); }
-.btn > span { display: inline-block; transform: skewX(14deg); }
 .btn > .sr-only { position: absolute !important; }
 .btn .arr { display: inline-block; width: 18px; height: 10px; position: relative; transition: transform .35s var(--ease); }
-.btn > .arr { transform: skewX(14deg); }
 .btn .arr::before { content: ''; position: absolute; left: 0; right: 2px; top: 50%; height: 1.5px; background: currentColor; transform: translateY(-50%); }
 .btn .arr::after { content: ''; position: absolute; right: 1px; top: 50%; width: 7px; height: 7px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: translateY(-50%) rotate(45deg); }
-.btn:hover > .arr { transform: translateX(4px) skewX(14deg); }
+.btn:hover > .arr { transform: translateX(4px); }
 .btn--solid { --bg: var(--ink); --fg: var(--white); --bd: var(--ink); }
 .btn--solid:hover { --bg: var(--red); --bd: var(--red); }
 .btn--red { --bg: var(--red); --fg: var(--white); --bd: var(--red); }
