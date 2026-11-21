@@ -131,8 +131,8 @@ def header(current):
         f'<a href="{h}"' + (' aria-current="page"' if h == current else "") + f">{l}</a>" for h, l in NAV
     )
     return f'''<a class="skip" href="#main">Aller au contenu</a>
-<header class="hdr wrap dark"><div class="inner">
-  <a class="logo" href="index.html"><img src="assets/img/logo-winiger-480.webp" srcset="assets/img/logo-winiger-480.webp 480w, assets/img/logo-winiger-960.webp 960w" sizes="110px" width="480" height="258" alt="Winiger Frères, Carrosserie de Grolley : accueil"></a>
+<header class="hdr wrap hdr-light"><div class="inner">
+  <a class="logo" href="index.html"><img src="assets/img/logo-winiger-clair-480.webp" srcset="assets/img/logo-winiger-clair-480.webp 480w, assets/img/logo-winiger-clair-960.webp 960w" sizes="110px" width="480" height="258" alt="Winiger Frères, Carrosserie de Grolley : accueil"></a>
   <nav class="nav" id="menu" aria-label="Navigation principale">
     {links}
     <div class="nav-extra"><a href="{TEL_HREF}">Appeler le {TEL}</a>{btn("contact.html#demande", "Demander un devis")}</div>
@@ -540,8 +540,7 @@ def page_accueil():
     <div class="acc-btns"><a class="acc-b acc-b-red" href="contact.html#demande">Demander un devis {arr}</a><a class="acc-b" href="visite.html">{play}Découvrir l'atelier</a></div>
   </div></div>
   <div class="acc-tour wrap"><div class="inner">
-    <div class="acc-tour-t"><p class="acc-eyebrow">Explorez nos installations</p><p>L'atelier, la cabine de peinture, le sous-sol de gardiennage et les stations de lavage, en maquette 3D.</p></div>
-    <a class="acc-pill" href="visite.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>Visite 3D de l'atelier {arr}</a>
+    <div class="acc-tour-t"><p class="acc-eyebrow">Explorez nos installations</p><p>L'atelier, la cabine de peinture, le sous-sol et les lavages, en maquette 3D.</p><a class="acc-pill" href="visite.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>Visite 3D de l'atelier {arr}</a></div>
     <a class="acc-thumb" href="visite.html" aria-label="Ouvrir la visite 3D">{img("visite-3d", "", "220px")}<span>{play}</span></a>
   </div></div>
 </section>
