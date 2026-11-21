@@ -1,0 +1,37 @@
+---
+import { images, WIDTHS, type ImageName } from '../data/images';
+interface Props {
+  name: ImageName;
+  alt?: string;
+  sizes?: string;
+  class?: string;
+  ratio?: string;          // ex. "4/5" — recadrage via object-fit
+  mask?: boolean | 'corner';
+  priority?: boolean;
+  caption?: string;
+  position?: string;       // object-position
+  style?: string;
+}
+const { name, alt, sizes = '100vw', class: cls = '', ratio, mask = true, priority = false, caption, position, style = '' } = Astro.props;
+const meta = images[name];
+const widths = WIDTHS.filter((w) => w < meta.w).concat(meta.w).filter((v, i, a) => a.indexOf(v) === i);
+const src = (w: number) => `/images/${name}-${w}.webp`;
+const srcset = widths.map((w) => `${src(w)} ${w}w`).join(', ');
+const fallback = src(widths.find((w) => w >= 960) ?? widths[widths.length - 1]);
+const boxStyle = [ratio ? `aspect-ratio:${ratio}` : '', style].filter(Boolean).join(';');
+---
+<figure class:list={['pic', cls]} data-mask={mask === true ? '' : mask || undefined} style={boxStyle || undefined}>
+  <img
+    src={fallback}
+    srcset={srcset}
+    sizes={sizes}
+    width={meta.w}
+    height={meta.h}
+    alt={alt ?? meta.alt}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding={priority ? 'sync' : 'async'}
+    fetchpriority={priority ? 'high' : undefined}
+    style={position ? `object-position:${position}` : undefined}
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

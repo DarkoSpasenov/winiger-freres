@@ -1,0 +1,8 @@
+---
+// Emplacement photo honnête : indique précisément la photographie à fournir.
+interface Props { label?: string; text: string; class?: string; ratio?: string; }
+const { label = 'Photo à fournir', text, class: cls = '', ratio } = Astro.props;
+---
+<div class:list={['ph', cls]} style={ratio ? `aspect-ratio:${ratio}` : undefined} role="img" aria-label={`${label} : ${text}`}>
+  <span class="ph__inner"><span class="ph__label">{label}</span><span class="ph__text">{text}</span></span>
+</div>

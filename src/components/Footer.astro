@@ -1,0 +1,50 @@
+---
+import { company, nav, certifications, mapsLink } from '../data/site';
+import Hours from './Hours.astro';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="kerb" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="grid footer-top">
+      <div class="footer-brand">
+        <a class="logo-plate" href="/" aria-label="Accueil"><img src="/brand/logo-winiger-freres.png" alt="Winiger Frères — Carrosserie de Grolley" width="209" height="68" loading="lazy" /></a>
+        <p style="margin-top:22px;max-width:34ch">Carrosserie toutes marques, véhicules de prestige et de collection, gardiennage et station de lavage à Grolley, canton de Fribourg. Depuis {company.founded}.</p>
+        <p class="mono" style="color:var(--steel)">{certifications.map((c) => c.name).join(' · ')}</p>
+      </div>
+      <div class="footer-col">
+        <h2>Le circuit</h2>
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h2>Atelier</h2>
+        <ul>
+          <li>{company.name}</li>
+          <li>{company.street}</li>
+          <li>{company.zip} {company.city}</li>
+          <li><a href={mapsLink(company.mapsQuery)} target="_blank" rel="noopener">Itinéraire<span class="sr-only"> (nouvel onglet)</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col--wide footer-col">
+        <h2>Contact & horaires</h2>
+        <ul style="margin-bottom:18px">
+          <li><a href={`tel:${company.phoneHref}`}>Tél. {company.phone}</a></li>
+          <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
+        </ul>
+        <div class="bg-ink" style="background:none"><Hours /></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {company.name} · {company.tagline}</span>
+      <nav aria-label="Liens légaux">
+        <a href="/mentions-legales/">Mentions légales</a>
+        <a href="/confidentialite/">Protection des données</a>
+        <a href={company.facebook} target="_blank" rel="noopener">Facebook</a>
+        <a href={company.instagram} target="_blank" rel="noopener">Instagram</a>
+      </nav>
+    </div>
+  </div>
+</footer>

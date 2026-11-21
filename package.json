@@ -1,14 +1,23 @@
 {
   "name": "winiger-freres-site",
+  "version": "1.0.0",
   "private": true,
-  "description": "Site Winiger Frères : pages statiques (tools/build.py) et expérience 3D (src/3d, Three.js)",
+  "type": "module",
+  "description": "Site internet Winiger Frères Sàrl — Carrosserie de Grolley",
   "scripts": {
-    "build:3d": "esbuild src/3d/main.js --bundle --format=esm --minify --target=es2020 --outfile=assets/js/experience.js --legal-comments=none",
-    "watch:3d": "esbuild src/3d/main.js --bundle --format=esm --sourcemap --target=es2020 --outfile=assets/js/experience.js --watch",
-    "build": "python3 tools/build.py && npm run build:3d"
+    "images": "node scripts/optimize-images.mjs && node scripts/extract-logo.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "preview:local": "node scripts/make-preview.mjs"
+  },
+  "dependencies": {
+    "astro": "5.18.2",
+    "@astrojs/sitemap": "3.7.6",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0"
   },
   "devDependencies": {
-    "esbuild": "0.25.10",
-    "three": "0.180.0"
+    "sharp": "^0.34.0"
   }
 }

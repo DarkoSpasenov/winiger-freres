@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import Btn from '../components/Btn.astro';
+---
+<Base title="Hors piste — page introuvable" description="Cette page n'existe pas." noindex>
+  <section class="page-top section">
+    <div class="wrap">
+      <p class="eyebrow">Erreur 404</p>
+      <h1 class="display giant">Hors<br />piste<span class="red">.</span></h1>
+      <p class="lead" style="margin:28px 0 32px">Cette page n'existe pas ou a été déplacée. Retour sur la bonne trajectoire :</p>
+      <div class="btns"><Btn href="/" variant="solid">Retour à l'accueil</Btn><Btn href="/contact/">Contact</Btn></div>
+    </div>
+  </section>
+</Base>

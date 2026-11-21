@@ -1,0 +1,5 @@
+---
+interface Props { text?: string; }
+const { text = 'À compléter' } = Astro.props;
+---
+<span class="todo">{text}</span>
