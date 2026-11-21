@@ -24,9 +24,9 @@ export function initCircuit() {
   base.setAttribute('class', 'circuit__base');
   run.setAttribute('class', 'circuit__run');
   halo.setAttribute('class', 'circuit__halo');
-  halo.setAttribute('r', '13');
+  halo.setAttribute('r', '16');
   car.setAttribute('class', 'circuit__car');
-  car.setAttribute('r', '5.5');
+  car.setAttribute('r', '7.5');
   svg.append(base, run, halo, car);
   layer.append(svg);
   document.body.prepend(layer);
