@@ -41,8 +41,8 @@ import { prestigeBrands } from '../../data/site';
     <span class="wp" data-wp="r" style="top:40px"></span>
     <Sector n="3" name="Restauration" id="restauration" />
     <div class="wrap grid p-resto">
-      <div class="p-resto__a"><Pic name="resto-3463" ratio="4/3" sizes="(min-width: 901px) 50vw, 100vw" class="corner-tl" /></div>
-      <div class="p-resto__b hide-m"><Pic name="atelier-9877" ratio="4/3" sizes="30vw" /></div>
+      <div class="p-resto__a"><Pic name="resto-alpine-tolerie" ratio="4/3" sizes="(min-width: 901px) 50vw, 100vw" class="corner-tl" /></div>
+      <div class="p-resto__b hide-m"><Pic name="resto-911-appret" ratio="4/3" sizes="30vw" /></div>
       <div class="p-resto__t">
         <p class="eyebrow">S3 <b>/</b> Collection & restauration</p>
         <h2 id="p-resto" class="display h2">Rendre<br />son éclat.</h2>
@@ -50,8 +50,12 @@ import { prestigeBrands } from '../../data/site';
           <p>Sur un véhicule de collection ou une voiture ancienne, la peinture nécessite la plupart du temps une restauration pour retrouver tout son éclat. Le travail est réalisé dans les règles de l'art, pour une qualité durable à un prix compétitif.</p>
           <p>La peinture mate, très demandée aujourd'hui, requiert la même attention pour rester belle dans le temps.</p>
         </div>
-        <p style="margin-top:12px">Restaurations présentées <Todo text="Projets & photos avant/après à fournir" /></p>
       </div>
+    </div>
+    <div class="wrap p-resto__strip">
+      <Pic name="resto-911-caisse" ratio="16/10" sizes="(min-width: 901px) 33vw, 100vw" />
+      <Pic name="resto-alpine-appret" ratio="16/10" sizes="(min-width: 901px) 33vw, 100vw" />
+      <Pic name="resto-3463" ratio="16/10" sizes="(min-width: 901px) 33vw, 100vw" />
     </div>
   </section>
 
@@ -67,10 +71,10 @@ import { prestigeBrands } from '../../data/site';
         <p class="lead" style="grid-column: 8 / span 5; align-self:end">La compétition fait partie des domaines de spécialisation de l'entreprise depuis ses débuts. Une passion pour le sport automobile qui se ressent dans l'atelier.</p>
       </div>
       <div class="p-comp__row">
-        <Pic name="course-fb3" ratio="16/9" sizes="(min-width: 901px) 60vw, 100vw" />
-        <Pic name="atelier-6191" ratio="4/5" sizes="(min-width: 901px) 30vw, 100vw" position="30% 50%" />
-        <Pic name="atelier-2441" ratio="4/3" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__c" />
-        <Pic name="atelier-fb6" ratio="16/9" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__d" />
+        <Pic name="course-gt4" ratio="16/9" sizes="(min-width: 901px) 60vw, 100vw" position="50% 45%" />
+        <Pic name="course-911-cup" ratio="4/5" sizes="(min-width: 901px) 30vw, 100vw" />
+        <Pic name="proto-competition" ratio="4/3" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__c" />
+        <Pic name="cup-reparation" ratio="16/9" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__d" />
       </div>
       <p class="muted" style="margin-top:20px">Engagements, voitures et palmarès <Todo /></p>
     </div>
@@ -86,6 +90,7 @@ import { prestigeBrands } from '../../data/site';
           <h2 id="p-tesla" class="display h1">TESLA<br />Approved<br />Body Shop</h2>
         </div>
       </div>
+      <div class="p-tesla__img"><Pic name="tesla-model-y" ratio="21/9" sizes="100vw" position="50% 60%" /></div>
       <div class="grid p-tesla__body">
         <div class="prose" style="grid-column: 1 / span 5">
           <p class="lead">Membre du réseau d'ateliers de carrosserie approuvés par TESLA depuis mai 2021.</p>
@@ -110,6 +115,9 @@ import { prestigeBrands } from '../../data/site';
   </section>
 </Base>
 <style is:global>
+  .p-resto__strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--g); margin-top: clamp(32px, 4vw, 56px); }
+  .p-tesla__img { margin-block: clamp(32px, 4vw, 56px); }
+  @media (max-width: 900px) { .p-resto__strip { grid-template-columns: 1fr 1fr; } .p-resto__strip > :first-child { grid-column: 1 / -1; } }
   .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
   .p-hero { min-height: min(100svh, 980px); display: flex; align-items: flex-end; padding: calc(var(--header) + 40px) 0 clamp(48px, 6vw, 96px); overflow: hidden; }
   .p-hero__img { position: absolute; inset: 0; }
