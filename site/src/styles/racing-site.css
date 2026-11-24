@@ -17,7 +17,7 @@ main > .section.bg-paper:not([class*="h-"]) { clip-path: polygon(0 0, 100% var(-
 
 /* Photos en parallélogramme (hors photos plein écran) */
 main .pic:not(.h-hero__bg):not(.p-hero__img .pic), main .ph { clip-path: polygon(24px 0, 100% 0, calc(100% - 24px) 100%, 0 100%); border-radius: 0 !important; }
-.p-hero__img .pic { clip-path: none; }
+.p-hero__img .pic, main .h-full > .pic { clip-path: none !important; }
 @media (max-width: 900px) { main .pic:not(.h-hero__bg), main .ph { clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); } }
 
 /* Codes des prestations en plaque de course */
