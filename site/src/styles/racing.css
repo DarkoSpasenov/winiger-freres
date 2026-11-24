@@ -28,6 +28,6 @@
 
 @media (max-width: 900px) {
   .tile { clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
-  .tile__no { width: 48px; height: 48px; font-size: 1.4rem; left: 20px; }
-  .tile--1 .tile__no { width: 64px; height: 64px; font-size: 2rem; }
+  .tile__no { width: auto; min-width: 0; height: 40px; padding: 0 14px 0 12px; border-radius: 999px; font-size: 1.2rem; left: 24px; top: 14px; border-width: 3px; overflow: visible; }
+  .tile--1 .tile__no { width: auto; height: 48px; font-size: 1.5rem; padding: 0 16px 0 14px; }
 }

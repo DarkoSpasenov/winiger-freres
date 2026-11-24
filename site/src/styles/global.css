@@ -233,7 +233,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* ---------- Header ---------- */
 .site-header {
   position: fixed; inset: 0 0 auto 0; z-index: 90; height: var(--header);
-  background: rgba(255,255,255,0.96); border-bottom: 1px solid transparent;
+  background: #fff; border-bottom: 1px solid transparent;
   transition: border-color .3s, transform .4s var(--ease);
 }
 .site-header.is-scrolled { border-bottom-color: var(--line); }
