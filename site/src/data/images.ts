@@ -23,6 +23,7 @@ export const images = {
   'gard-6295': { w: 1920, h: 1280, alt: "Rangée de boxes fermés" },
   'atelier-2441': { w: 1024, h: 768, alt: "Coque de voiture de compétition rouge avec arceau, en préparation à l'atelier" },
   'atelier-9880': { w: 1024, h: 768, alt: "Réparation d'une face avant sur le banc de redressage" },
+  'reception-2023': { w: 2400, h: 1799, alt: "La réception de la carrosserie : comptoir rouge et anthracite, capot exposé au mur, sièges baquets" },
   'reception-9997': { w: 1024, h: 768, alt: "Comptoir de réception de la carrosserie" },
   'atelier-fb1': { w: 960, h: 540, alt: "Voitures de sport rouges dans l'atelier" },
   'atelier-fb2': { w: 1920, h: 1080, alt: "Vue d'ensemble de l'atelier Winiger Frères" },
