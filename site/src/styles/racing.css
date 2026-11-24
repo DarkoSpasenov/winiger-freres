@@ -2,8 +2,6 @@
    Accueil — accents « course » : coupes en biais façon livrée, photos en
    parallélogramme, numéros en plaque de course, bandes de vitesse sous les titres.
    ========================================================================== */
-:root { --slant: 4vw; }
-@media (max-width: 900px) { :root { --slant: 7vw; } }
 
 /* Coupes en biais entre les sections, bande rouge et blanche sous la photo d'accueil */
 .h-hero { clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--slant)), 0 100%); padding-bottom: var(--slant); }
@@ -27,11 +25,6 @@
 .tile--1 .tile__no { width: 96px; height: 96px; min-width: 0; font-size: 3rem; }
 .tile > a::before { transform: scaleX(1); height: 6px; }
 
-/* Bande de vitesse sous les titres */
-.h-head h2::after, .h-storage h2::after {
-  content: ""; display: block; width: 180px; height: 10px; margin-top: 18px; transform: skewX(-30deg);
-  background: linear-gradient(90deg, var(--red) 0 60%, transparent 60% 66%, var(--red) 66% 78%, transparent 78% 84%, var(--red) 84% 90%, transparent 90%);
-}
 
 @media (max-width: 900px) {
   .tile { clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }

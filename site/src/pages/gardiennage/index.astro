@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Pic from '../../components/Pic.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
@@ -15,22 +16,16 @@ const profiles = [
 ];
 ---
 <Base title="Gardiennage automobile à Grolley — sous-sol chauffé et sécurisé" description="Gardiennage de véhicules de collection, de prestige, de sport et de compétition à Grolley (FR) : sous-sol chauffé accessible par ascenseur, sécurisé. Dès CHF 200.– par mois, hivernage CHF 1'000.–, annuel CHF 2'500.–.">
-  <section class="g-hero page-top" id="abri" aria-labelledby="g-title">
-    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
-    <Sector n="1" name="À l'abri" id="abri" />
-    <div class="wrap grid g-hero__grid">
-      <div class="g-hero__t">
-        <p class="eyebrow" data-reveal>Gardiennage automobile</p>
-        <h1 id="g-title" class="display h1" data-reveal>Au chaud.<br />À l'abri.<br /><span class="red">En sécurité.</span></h1>
-        <p class="lead" style="margin-top:28px" data-reveal>{storage.intro}</p>
-        <div class="btns" style="margin-top:32px"><Btn href="#reserver" variant="solid">Demander une place</Btn><Btn href="#tarifs">Voir les tarifs</Btn></div>
-      </div>
-      <div class="g-hero__img">
-        <Pic name="gard-2" ratio="4/5" sizes="(min-width: 901px) 42vw, 100vw" priority position="40% 50%" />
-        <div class="g-bays" aria-hidden="true"><span>B.01</span><span>B.02</span></div>
-      </div>
-    </div>
-  </section>
+  <PageHero img="gard-2" id="abri" labelledby="g-title" position="50% 60%">
+    <Fragment slot="marks">
+      <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+      <Sector n="1" name="À l'abri" id="abri" />
+    </Fragment>
+    <p class="eyebrow">Gardiennage automobile</p>
+    <h1 id="g-title" class="display">Au chaud.<br />À l'abri.<br /><span class="red">En sécurité.</span></h1>
+    <p class="lead">{storage.intro}</p>
+    <div class="btns"><Btn href="#reserver" variant="red">Demander une place</Btn><Btn href="#tarifs">Voir les tarifs</Btn></div>
+  </PageHero>
 
   <section class="section bg-paper" id="installations" aria-labelledby="g-inst">
     <span class="wp" data-wp="r" style="top:40px"></span>

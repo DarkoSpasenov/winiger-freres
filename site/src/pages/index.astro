@@ -364,7 +364,6 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
     .tiles > .tile--1 { grid-row: auto !important; height: 260px; }
     .tile__no { min-width: 48px; height: 40px; font-size: 1.5rem; top: 10px; left: 10px; }
     .tile__title, .tile--1 .tile__title { font-size: 1.3rem; left: 14px; right: 14px; bottom: 16px; }
-    .h-trio__a .tile__title { font-size: .8rem; left: 10px; right: 10px; }
     .tile--cta { grid-row: auto !important; }
   }
 
@@ -387,6 +386,7 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
   @media (max-width: 900px) {
     .h-trio { grid-template-columns: 1fr 1fr; }
     .h-trio__a--low { margin-top: 0; }
+    .h-trio__a .tile__title { font-size: clamp(.95rem, 4.6vw, 1.3rem); left: 12px; right: 12px; bottom: 14px; }
     .h-tesla { grid-column: 1 / -1; aspect-ratio: auto; min-height: 280px; }
   }
 

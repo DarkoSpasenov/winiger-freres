@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Pic from '../../components/Pic.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
@@ -14,22 +15,21 @@ const steps = [
 ];
 ---
 <Base title="Carrosserie & services — réparation toutes marques à Grolley" description="Réparation toutes marques, travaux de carrosserie, débosselage, peinture au four et peinture mate, pare-brise et vitrages, teintage, climatisation et voitures de remplacement à Grolley (FR).">
-  <section class="c-hero page-top" id="grille" aria-labelledby="c-title">
-    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
-    <Sector n="1" name="Prestations" id="grille" />
-    <div class="wrap grid c-hero__grid">
-      <div class="c-hero__t">
-        <p class="eyebrow" data-reveal>Carrosserie & services <b>·</b> 07 prestations</p>
-        <h1 id="c-title" class="display h1" data-reveal>Carrosserie<br />toutes<br />marques<span class="red">.</span></h1>
-      </div>
-      <nav class="c-toc" aria-label="Prestations">
-        <ol>
-          {services.map((s) => <li><a href={`#${s.id}`}><span class="mono">{s.code}</span>{s.title}</a></li>)}
-        </ol>
-      </nav>
-    </div>
-    <div class="wrap"><Pic name="atelier-fb2" ratio="24/9" sizes="100vw" priority class="corner-br" /></div>
-  </section>
+  <PageHero img="atelier-fb2" id="grille" labelledby="c-title" position="50% 55%">
+    <Fragment slot="marks">
+      <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+      <Sector n="1" name="Prestations" id="grille" />
+    </Fragment>
+    <p class="eyebrow">Carrosserie & services <b>·</b> 07 prestations</p>
+    <h1 id="c-title" class="display">Carrosserie<br />toutes marques<span class="red">.</span></h1>
+  </PageHero>
+  <div class="wrap c-tocwrap">
+    <nav class="c-toc" aria-label="Prestations">
+      <ol>
+        {services.map((s) => <li><a href={`#${s.id}`}><span class="mono">{s.code}</span>{s.title}</a></li>)}
+      </ol>
+    </nav>
+  </div>
 
   <div class="c-chapters">
     {services.map((s, i) => (
@@ -76,7 +76,8 @@ const steps = [
   .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
   .c-hero__grid { align-items: end; row-gap: 40px; margin-bottom: clamp(40px, 5vw, 72px); }
   .c-hero__t { grid-column: 1 / span 7; }
-  .c-toc { grid-column: 9 / span 4; }
+  .c-tocwrap { padding-top: clamp(40px, 5vw, 72px); }
+  .c-toc ol { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); column-gap: var(--g); }
   .c-toc ol { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
   .c-toc a { display: flex; gap: 16px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; font-stretch: 110%; transition: padding .3s var(--ease), color .3s; }
   .c-toc a .mono { color: var(--steel); }

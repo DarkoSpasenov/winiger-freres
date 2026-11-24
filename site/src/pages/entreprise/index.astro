@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Pic from '../../components/Pic.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
@@ -8,20 +9,15 @@ import Placeholder from '../../components/Placeholder.astro';
 import { company, certifications, insurers } from '../../data/site';
 ---
 <Base title="Notre entreprise — deux frères, une passion depuis 2004" description="Winiger Frères Sàrl, Carrosserie de Grolley : une entreprise familiale fribourgeoise née en 2004 de la passion de deux frères pour l'automobile. Réparation toutes marques, restauration et compétition.">
-  <section class="e-hero page-top" id="origine" aria-labelledby="e-title">
-    <Sector n="1" name="Origine" id="origine" />
-    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
-    <div class="wrap">
-      <p class="eyebrow" data-reveal>Notre entreprise <b>·</b> Grolley, canton de Fribourg</p>
-      <h1 id="e-title" class="display e-hero__title" data-reveal>
-        <span>Winiger</span><span class="e-hero__amp">Frères<span class="red">.</span></span>
-      </h1>
-      <div class="grid e-hero__intro">
-        <p class="lead" style="grid-column: 7 / span 5" data-reveal>L'entreprise est née en 2004 de la passion de deux frères pour l'automobile. Une passion qui les a menés de la réparation toutes marques à la restauration et à la compétition.</p>
-      </div>
-    </div>
-    <div class="e-hero__img"><Pic name="facade-nuit-b" ratio="21/9" sizes="100vw" priority /></div>
-  </section>
+  <PageHero img="facade-nuit-b" id="origine" labelledby="e-title" position="60% 50%">
+    <Fragment slot="marks">
+      <Sector n="1" name="Origine" id="origine" />
+      <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+    </Fragment>
+    <p class="eyebrow">Notre entreprise <b>·</b> Grolley, canton de Fribourg</p>
+    <h1 id="e-title" class="display">Winiger<br />Frères<span class="red">.</span></h1>
+    <p class="lead">L'entreprise est née en 2004 de la passion de deux frères pour l'automobile. Une passion qui les a menés de la réparation toutes marques à la restauration et à la compétition.</p>
+  </PageHero>
 
   <section class="section" id="chronologie" aria-labelledby="e-chrono">
     <span class="wp" data-wp="r" style="top:40px"></span>

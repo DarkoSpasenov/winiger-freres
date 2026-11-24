@@ -44,6 +44,7 @@ export const images = {
   'atelier-fb7': { w: 540, h: 960, alt: "Carrosserie rouge mise à nu, vue verticale" },
   'atelier-6194': { w: 1920, h: 1280, alt: "L'atelier : carrossiers au travail et véhicules en réparation" },
   'flyer-tunnel-lavage': { w: 822, h: 1231, alt: "Affiche Winiger Frères annonçant le nouveau tunnel de lavage dernière génération" },
+  'lavage-haute-pression': { w: 2048, h: 1536, alt: "Lavage haute pression Winiger Frères sous l'auvent rouge, à côté de l'atelier" },
 } as const;
 
 export type ImageName = keyof typeof images;

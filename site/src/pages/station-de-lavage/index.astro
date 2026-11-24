@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Pic from '../../components/Pic.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
@@ -8,25 +9,19 @@ import Placeholder from '../../components/Placeholder.astro';
 import { wash, company, mapsLink, appleMapsLink } from '../../data/site';
 ---
 <Base title="Station de lavage à Grolley — tunnel de lavage dernière génération" description="Tunnel de lavage dernière génération de Winiger Frères, Route de l'Industrie-Ouest 7 à Grolley (FR). Pour un lavage soigneux et efficace. Adresse, itinéraire et informations pratiques.">
-  <section class="w-hero page-top" id="entree" aria-labelledby="w-title">
-    <span class="wp" data-wp="r" style="top:calc(var(--header) + 20px)"></span>
-    <Sector n="1" name="Entrée de voie" id="entree" side="r" />
-    <div class="w-lanes" aria-hidden="true"></div>
-    <div class="wrap grid w-hero__grid">
-      <div class="w-hero__t">
-        <p class="eyebrow" data-reveal>Station de lavage <b>·</b> Grolley</p>
-        <h1 id="w-title" class="display h1" data-reveal>Le soin<br />jusqu'au<br />dernier<br />détail<span class="red">.</span></h1>
-        <p class="lead" style="margin-top:28px" data-reveal>{wash.type}. {wash.promise}</p>
-        <div class="btns" style="margin-top:32px">
-          <Btn href="#infos" variant="solid">Informations pratiques</Btn>
-          <Btn href={mapsLink(wash.mapsQuery)} external>Nous trouver</Btn>
-        </div>
-      </div>
-      <div class="w-hero__media">
-        <Placeholder text="Photographie du tunnel de lavage : entrée de la voie, lumière du jour, véhicule propre en sortie de tunnel." ratio="4/5" />
-      </div>
+  <PageHero img="lavage-haute-pression" id="entree" labelledby="w-title" position="50% 45%">
+    <Fragment slot="marks">
+      <span class="wp" data-wp="r" style="top:calc(var(--header) + 20px)"></span>
+      <Sector n="1" name="Entrée de voie" id="entree" side="r" />
+    </Fragment>
+    <p class="eyebrow">Station de lavage <b>·</b> Grolley</p>
+    <h1 id="w-title" class="display">Le soin jusqu'au<br />dernier détail<span class="red">.</span></h1>
+    <p class="lead">{wash.type}. {wash.promise}</p>
+    <div class="btns">
+      <Btn href="#infos" variant="red">Informations pratiques</Btn>
+      <Btn href={mapsLink(wash.mapsQuery)} external>Nous trouver</Btn>
     </div>
-  </section>
+  </PageHero>
 
   <section class="section bg-paper" id="installation" aria-labelledby="w-inst">
     <span class="wp" data-wp="l" style="top:40px"></span>
