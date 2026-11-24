@@ -1,0 +1,148 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Btn from '../../components/Btn.astro';
+import Sector from '../../components/Sector.astro';
+import Todo from '../../components/Todo.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { storage, company } from '../../data/site';
+const profiles = [
+  { t: 'Collection', d: 'Un véhicule ancien qui mérite des conditions stables toute l’année.' },
+  { t: 'Prestige & sport', d: 'Une voiture d’exception que vous ne souhaitez pas garder chez vous, pour des raisons personnelles ou de confidentialité.' },
+  { t: 'Compétition', d: 'Une voiture de course entre deux saisons.' },
+  { t: 'Manque de place', d: 'Un garage trop petit, ou un hivernage de six mois.' },
+  { t: 'Retrait de permis', d: 'Un véhicule immobilisé temporairement, à l’abri le temps nécessaire.' },
+];
+---
+<Base title="Gardiennage automobile à Grolley — sous-sol chauffé et sécurisé" description="Gardiennage de véhicules de collection, de prestige, de sport et de compétition à Grolley (FR) : sous-sol chauffé accessible par ascenseur, sécurisé. Dès CHF 200.– par mois, hivernage CHF 1'000.–, annuel CHF 2'500.–.">
+  <section class="g-hero page-top" id="abri" aria-labelledby="g-title">
+    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+    <Sector n="1" name="À l'abri" id="abri" />
+    <div class="wrap grid g-hero__grid">
+      <div class="g-hero__t">
+        <p class="eyebrow" data-reveal>Gardiennage automobile</p>
+        <h1 id="g-title" class="display h1" data-reveal>Au chaud.<br />À l'abri.<br /><span class="red">En sécurité.</span></h1>
+        <p class="lead" style="margin-top:28px" data-reveal>{storage.intro}</p>
+        <div class="btns" style="margin-top:32px"><Btn href="#reserver" variant="solid">Demander une place</Btn><Btn href="#tarifs">Voir les tarifs</Btn></div>
+      </div>
+      <div class="g-hero__img">
+        <Pic name="gard-2" ratio="4/5" sizes="(min-width: 901px) 42vw, 100vw" priority position="40% 50%" />
+        <div class="g-bays" aria-hidden="true"><span>B.01</span><span>B.02</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="installations" aria-labelledby="g-inst">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="2" name="Installations" id="installations" />
+    <div class="wrap">
+      <div class="grid" style="row-gap:40px">
+        <div style="grid-column: 1 / span 5">
+          <p class="eyebrow">S2 <b>/</b> Les installations</p>
+          <h2 id="g-inst" class="display h2">Niveau −1.</h2>
+          <dl class="spec" style="margin-top:32px">
+            <div><dt>Lieu</dt><dd>Sous-sol chauffé, spécialement réservé au gardiennage</dd></div>
+            <div><dt>Accès</dt><dd>Par ascenseur</dd></div>
+            <div><dt>Infrastructure</dt><dd>Moderne et sécurisée</dd></div>
+            <div><dt>Durée</dt><dd>{storage.duration}</dd></div>
+            <div><dt>Restitution</dt><dd>{storage.returnState}</dd></div>
+            <div><dt>Capacité</dt><dd><Todo /></dd></div>
+          </dl>
+        </div>
+        <div class="g-inst__imgs" style="grid-column: 7 / span 6">
+          <Pic name="gard-3" ratio="4/3" sizes="(min-width: 901px) 45vw, 100vw" />
+          <Pic name="gard-1" ratio="1/1" sizes="(min-width: 901px) 22vw, 50vw" />
+          <Pic name="gard-6295" ratio="1/1" sizes="(min-width: 901px) 22vw, 50vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pour-qui" aria-labelledby="g-who">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="3" name="Pour qui" id="pour-qui" />
+    <div class="wrap grid" style="row-gap:40px">
+      <div style="grid-column: 1 / span 4">
+        <p class="eyebrow">S3 <b>/</b> Pour qui</p>
+        <h2 id="g-who" class="display h2">Pour les<br />véhicules<br />d'excep&shy;tion.</h2>
+      </div>
+      <ol class="g-who" style="grid-column: 6 / span 7">
+        {profiles.map((p, i) => <li><span class="mono">{String(i + 1).padStart(2, '0')}</span><h3 class="h3">{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-ink on-dark" id="tarifs" aria-labelledby="g-rates">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="4" name="Tarifs" id="tarifs" side="r" />
+    <div class="wrap">
+      <p class="eyebrow">S4 <b>/</b> Tarifs</p>
+      <h2 id="g-rates" class="display h2" style="margin-bottom:clamp(40px,5vw,64px)">Feuille de temps.</h2>
+      <table class="g-rates">
+        <caption class="sr-only">Tarifs du gardiennage</caption>
+        <thead><tr><th scope="col">Formule</th><th scope="col">Durée</th><th scope="col">Tarif</th></tr></thead>
+        <tbody>
+          {storage.rates.map((r) => <tr><th scope="row">{r.label}</th><td>{r.note}</td><td class="g-rates__p">{r.price}<span> / {r.unit}</span></td></tr>)}
+        </tbody>
+      </table>
+      <p class="mono muted" style="margin-top:20px">Tarifs publiés sur le site officiel. TVA et conditions <Todo text="à confirmer" /></p>
+    </div>
+  </section>
+
+  <section class="section" id="questions" aria-labelledby="g-faq">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="5" name="Questions" id="questions" />
+    <div class="wrap grid" style="row-gap:40px">
+      <div style="grid-column: 1 / span 4"><p class="eyebrow">S5 <b>/</b> Questions</p><h2 id="g-faq" class="display h2">En bref.</h2></div>
+      <div class="faq" style="grid-column: 6 / span 7">
+        <details><summary>Pour combien de temps puis-je confier mon véhicule ?</summary><div>{storage.duration}. Un tarif d'hivernage couvre une période totale de six mois.</div></details>
+        <details><summary>Dans quel état mon véhicule est-il restitué ?</summary><div>En parfait état, nettoyé à l'intérieur comme à l'extérieur.</div></details>
+        <details><summary>Comment le véhicule est-il stocké ?</summary><div>Dans un sous-sol chauffé, accessible par ascenseur, doté d'infrastructures modernes et sécurisées, réservé au gardiennage.</div></details>
+        <details><summary>Le véhicule est-il entretenu pendant le gardiennage ?</summary><div>Entretien de la batterie, démarrages, contrôles : <Todo /></div></details>
+        <details><summary>Puis-je récupérer ma voiture à tout moment ?</summary><div>Modalités d'accès et préavis : <Todo /></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="reserver" aria-labelledby="g-book">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="6" name="Réserver" id="reserver" />
+    <div class="wrap grid" style="row-gap:40px">
+      <div style="grid-column: 1 / span 4">
+        <p class="eyebrow">S6 <b>/</b> Réserver une place</p>
+        <h2 id="g-book" class="display h2">Une place<br />pour votre<br />voiture.</h2>
+        <p style="margin-top:24px">Ou par téléphone : <a href={`tel:${company.phoneHref}`}><strong>{company.phone}</strong></a></p>
+      </div>
+      <div style="grid-column: 6 / span 7; background:var(--white); padding:clamp(22px,3vw,44px)"><ContactForm subject="Gardiennage" idPrefix="gard" /></div>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+  .g-hero { padding-bottom: clamp(72px, 9vw, 140px); }
+  .g-hero__grid { align-items: center; row-gap: 48px; }
+  .g-hero__t { grid-column: 1 / span 6; }
+  .g-hero__img { grid-column: 8 / span 5; position: relative; }
+  .g-hero__img .pic { border-top-right-radius: clamp(60px, 9vw, 160px); }
+  .g-bays { position: absolute; left: -24px; right: 0; bottom: -24px; height: 48px; display: grid; grid-template-columns: 1fr 1fr; border-left: 2px solid var(--ink); pointer-events: none; }
+  .g-bays span { border-right: 2px solid var(--ink); display: flex; align-items: flex-end; padding: 0 0 4px 10px; font-family: var(--f-mono); font-size: .66rem; letter-spacing: .14em; }
+  .g-inst__imgs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--g); }
+  .g-inst__imgs .pic:first-child { grid-column: 1 / -1; }
+  .g-who { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
+  .g-who li { display: grid; grid-template-columns: 56px minmax(140px, 1fr) 2fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .g-who .mono { color: var(--red); }
+  .g-who p { margin: 0; color: var(--ink-2); }
+  @media (max-width: 700px) { .g-who li { grid-template-columns: 40px 1fr; } .g-who p { grid-column: 2; } }
+  .g-rates { width: 100%; border-collapse: collapse; }
+  .g-rates th, .g-rates td { text-align: left; padding: 24px 16px 24px 0; border-bottom: 1px solid rgba(255,255,255,.16); vertical-align: baseline; }
+  .g-rates thead th { font-family: var(--f-mono); font-size: var(--fs-mono); font-weight: 400; letter-spacing: .14em; text-transform: uppercase; color: var(--steel); border-bottom: 1.5px solid var(--white); padding-top: 0; }
+  .g-rates tbody th { font-size: clamp(1.1rem, 1.8vw, 1.6rem); font-stretch: 115%; text-transform: uppercase; }
+  .g-rates td { color: rgba(255,255,255,.75); }
+  .g-rates__p { font-family: var(--f-mono); font-size: clamp(1.3rem, 2.6vw, 2.4rem); color: var(--white) !important; white-space: nowrap; text-align: right !important; }
+  .g-rates__p span { font-size: .8rem; color: var(--steel); }
+  @media (max-width: 700px) {
+    .g-rates thead { display: none; }
+    .g-rates tr { display: grid; grid-template-columns: 1fr; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,.16); }
+    .g-rates th, .g-rates td { border: 0; padding: 2px 0; text-align: left !important; }
+  }
+</style>

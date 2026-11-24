@@ -1,0 +1,15 @@
+# Redirections depuis l'ancien site WordPress (Apache / Infomaniak)
+Redirect 301 /nos-services/ /carrosserie/
+Redirect 301 /nos-locaux/ /locaux/
+Redirect 301 /notre-entreprise/ /entreprise/
+Redirect 301 /nous-trouver/ /contact/
+Redirect 301 /tesla/ /prestige-collection/#tesla
+Redirect 301 /assurances-2/ /entreprise/#reseau
+ErrorDocument 404 /404.html
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>

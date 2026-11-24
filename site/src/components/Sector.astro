@@ -1,0 +1,9 @@
+---
+// Point de passage du circuit. Le script le replace exactement sur le tracé.
+// ghost : le point existe pour la tour de chronométrage, mais son repère est déjà dessiné dans la page.
+interface Props { n: string; name: string; id: string; side?: 'l' | 'r'; ghost?: boolean; href?: string; offset?: number; }
+const { n, name, id, side = 'l', ghost = false, href, offset } = Astro.props;
+---
+<div class:list={['sector', ghost && 'sector--ghost']} data-sector={n} data-name={name} data-target={id} data-href={href} data-side={side} data-offset={offset}>
+  <i></i><span>S{n}</span><b>{name}</b>
+</div>

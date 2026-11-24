@@ -1,0 +1,137 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Btn from '../../components/Btn.astro';
+import Sector from '../../components/Sector.astro';
+import Todo from '../../components/Todo.astro';
+import { prestigeBrands } from '../../data/site';
+---
+<Base title="Prestige, collection & compétition — TESLA Approved Body Shop" description="Carrosserie spécialisée en véhicules de sport, de prestige et de collection à Grolley : restauration, peinture ancienne, compétition. Atelier TESLA Approved Body Shop depuis mai 2021.">
+  <section class="p-hero bg-ink on-dark" id="paddock" aria-labelledby="p-title">
+    <span class="wp" data-wp="r" style="top:calc(var(--header) + 20px)"></span>
+    <Sector n="1" name="Paddock" id="paddock" side="r" />
+    <div class="p-hero__img"><Pic name="ferrari-6215" sizes="100vw" priority mask={false} /></div>
+    <div class="wrap p-hero__content">
+      <p class="eyebrow">Prestige, collection & compétition</p>
+      <h1 id="p-title" class="display giant">Paddock<span class="red">.</span></h1>
+      <p class="lead">Une grande expérience acquise au fil des années sur les véhicules de sport, de prestige et de collection.</p>
+    </div>
+  </section>
+
+  <section class="section" id="prestige" aria-labelledby="p-pres">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="2" name="Sport & prestige" id="prestige" />
+    <div class="wrap grid p-pres">
+      <div class="p-pres__t">
+        <p class="eyebrow">S2 <b>/</b> Sport & prestige</p>
+        <h2 id="p-pres" class="display h2">Les mêmes<br />exigences<br />que la marque.</h2>
+        <div class="prose" style="margin-top:28px">
+          <p>Notre carrosserie répare régulièrement des marques prestigieuses. Spécialisés en véhicules de sport, de prestige et de collection, nous avons obtenu la reconnaissance de nombreux représentants de marques de prestige.</p>
+        </div>
+      </div>
+      <ul class="p-brands" aria-label="Marques réparées régulièrement">
+        {prestigeBrands.map((b, i) => <li><span class="mono">{String(i + 1).padStart(2, '0')}</span>{b}</li>)}
+        <li class="p-brands__more"><span class="mono">··</span>et d'autres marques</li>
+      </ul>
+      <p class="mono muted p-pres__note">Marques citées par l'entreprise comme exemples de véhicules réparés. Aucun partenariat officiel n'est sous-entendu.</p>
+    </div>
+  </section>
+
+  <section class="section bg-paper" id="restauration" aria-labelledby="p-resto">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="3" name="Restauration" id="restauration" />
+    <div class="wrap grid p-resto">
+      <div class="p-resto__a"><Pic name="resto-3463" ratio="4/3" sizes="(min-width: 901px) 50vw, 100vw" class="corner-tl" /></div>
+      <div class="p-resto__b hide-m"><Pic name="atelier-9877" ratio="4/3" sizes="30vw" /></div>
+      <div class="p-resto__t">
+        <p class="eyebrow">S3 <b>/</b> Collection & restauration</p>
+        <h2 id="p-resto" class="display h2">Rendre<br />son éclat.</h2>
+        <div class="prose" style="margin-top:28px">
+          <p>Sur un véhicule de collection ou une voiture ancienne, la peinture nécessite la plupart du temps une restauration pour retrouver tout son éclat. Le travail est réalisé dans les règles de l'art, pour une qualité durable à un prix compétitif.</p>
+          <p>La peinture mate, très demandée aujourd'hui, requiert la même attention pour rester belle dans le temps.</p>
+        </div>
+        <p style="margin-top:12px">Restaurations présentées <Todo text="Projets & photos avant/après à fournir" /></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="competition" aria-labelledby="p-comp">
+    <span class="wp" data-wp="l" style="top:40px"></span>
+    <Sector n="4" name="Compétition" id="competition" />
+    <div class="wrap">
+      <div class="grid">
+        <div style="grid-column: 1 / span 6">
+          <p class="eyebrow">S4 <b>/</b> Compétition</p>
+          <h2 id="p-comp" class="display h1">La course<br /><span class="outline-text">dans le sang.</span></h2>
+        </div>
+        <p class="lead" style="grid-column: 8 / span 5; align-self:end">La compétition fait partie des domaines de spécialisation de l'entreprise depuis ses débuts. Une passion pour le sport automobile qui se ressent dans l'atelier.</p>
+      </div>
+      <div class="p-comp__row">
+        <Pic name="course-fb3" ratio="16/9" sizes="(min-width: 901px) 60vw, 100vw" />
+        <Pic name="atelier-6191" ratio="4/5" sizes="(min-width: 901px) 30vw, 100vw" position="30% 50%" />
+        <Pic name="atelier-2441" ratio="4/3" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__c" />
+        <Pic name="atelier-fb6" ratio="16/9" sizes="(min-width: 901px) 45vw, 100vw" class="p-comp__d" />
+      </div>
+      <p class="muted" style="margin-top:20px">Engagements, voitures et palmarès <Todo /></p>
+    </div>
+  </section>
+
+  <section class="section bg-ink on-dark" id="tesla" aria-labelledby="p-tesla">
+    <span class="wp" data-wp="r" style="top:40px"></span>
+    <Sector n="5" name="Tesla" id="tesla" side="r" />
+    <div class="wrap">
+      <div class="grid p-tesla__head">
+        <div style="grid-column: 1 / span 8">
+          <p class="eyebrow">S5 <b>/</b> Agrément constructeur · depuis mai 2021</p>
+          <h2 id="p-tesla" class="display h1">TESLA<br />Approved<br />Body Shop</h2>
+        </div>
+      </div>
+      <div class="grid p-tesla__body">
+        <div class="prose" style="grid-column: 1 / span 5">
+          <p class="lead">Membre du réseau d'ateliers de carrosserie approuvés par TESLA depuis mai 2021.</p>
+          <p>Nous avons suivi une formation rigoureuse pour garantir une prise en charge complète, au niveau d'exigence requis pour réparer un véhicule électrique de prestige en aluminium.</p>
+          <p>Les réparations TESLA demandent une connaissance précise de l'ensemble du véhicule et des systèmes électriques haute tension. Les Model S et X sont construites en aluminium, la Model 3 en acier et aluminium. Avec les aides à la conduite comme l'Autopilot, chaque réparation exige des compétences et des outils spécifiques, dont l'atelier est équipé.</p>
+          <p>Après un sinistre, chaque TESLA fait l'objet de contrôles et de (re)paramétrages spécifiques, pour la sécurité des occupants et des tiers.</p>
+        </div>
+        <div style="grid-column: 7 / span 6">
+          <dl class="spec">
+            <div><dt>Étalonnage radar</dt><dd>Obligatoire dès que le capteur radar, ou un composant à son contact, est réglé ou déposé. Sur Model S, après repose du carénage avant, et uniquement avec un parallélisme correct.</dd></div>
+            <div><dt>Tôlerie</dt><dd>Matériaux et méthodes spécifiques : chaleur et vibrations excessives peuvent décoller le patch butyle et le capteur à ultrasons.</dd></div>
+            <div><dt>Peinture</dt><dd>Épaisseur limitée à 300 microns (12 mils) dans la zone des capteurs à ultrasons.</dd></div>
+            <div><dt>Haute tension</dt><dd>Intervention sur les systèmes HT réservée à des professionnels qualifiés et certifiés TESLA.</dd></div>
+          </dl>
+          <div class="btns" style="margin-top:32px">
+            <Btn href="/contact/" variant="solid">Prendre contact</Btn>
+            <Btn href="https://www.tesla.com/fr_ch/support/body-shop-support" external>Réseau TESLA</Btn>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+  .p-hero { min-height: min(100svh, 980px); display: flex; align-items: flex-end; padding: calc(var(--header) + 40px) 0 clamp(48px, 6vw, 96px); overflow: hidden; }
+  .p-hero__img { position: absolute; inset: 0; }
+  .p-hero__img .pic { height: 100%; }
+  .p-hero__img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(23,25,27,.25) 0%, rgba(23,25,27,.1) 40%, rgba(23,25,27,.85) 100%); }
+  .p-hero__content { position: relative; z-index: 2; }
+  .p-hero .lead { color: rgba(255,255,255,.85); margin-top: 20px; }
+  .p-pres { row-gap: 40px; align-items: start; }
+  .p-pres__t { grid-column: 1 / span 5; }
+  .p-brands { grid-column: 7 / span 6; list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--ink); }
+  .p-brands li { display: flex; gap: 20px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: clamp(1.6rem, 3.4vw, 3.2rem); font-weight: 800; font-stretch: 125%; text-transform: uppercase; letter-spacing: -0.03em; line-height: 1; }
+  .p-brands li .mono { color: var(--red); }
+  .p-brands__more { color: var(--steel); font-size: clamp(1rem, 1.6vw, 1.4rem) !important; }
+  .p-pres__note { grid-column: 7 / span 6; }
+  .p-resto { row-gap: 40px; align-items: start; }
+  .p-resto__a { grid-column: 1 / span 6; }
+  .p-resto__b { grid-column: 3 / span 4; grid-row: 2; margin-top: -12%; border: 10px solid var(--paper); }
+  .p-resto__t { grid-column: 8 / span 5; grid-row: 1 / span 2; }
+  .p-comp__row { display: grid; grid-template-columns: 2fr 1fr; gap: var(--g); margin-top: clamp(40px, 5vw, 72px); align-items: end; }
+  .p-comp__row .p-comp__c { grid-column: 1 / span 1; width: 62%; justify-self: end; }
+  .p-comp__row .p-comp__d { grid-column: 2 / span 1; align-self: start; }
+  .p-tesla__head { margin-bottom: clamp(40px, 5vw, 72px); }
+  .p-tesla__body { row-gap: 40px; }
+  @media (max-width: 900px) { .p-comp__row { grid-template-columns: 1fr; } .p-resto__t { grid-row: auto; } }
+</style>

@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import Todo from '../../components/Todo.astro';
+import { company } from '../../data/site';
+---
+<Base title="Mentions légales" description="Mentions légales du site de Winiger Frères Sàrl, Carrosserie de Grolley." noindex>
+  <section class="page-top section legal">
+    <div class="wrap grid">
+      <div style="grid-column: 1 / span 4"><p class="eyebrow">Informations légales</p><h1 class="display h2">Mentions<br />légales.</h1></div>
+      <div class="prose" style="grid-column: 6 / span 7">
+        <h2 class="h3">Éditeur du site</h2>
+        <p>{company.name}<br />{company.tagline}<br />{company.street}<br />{company.zip} {company.city}, Suisse<br />Tél. <a href={`tel:${company.phoneHref}`}>{company.phone}</a> · <a href={`mailto:${company.email}`}>{company.email}</a></p>
+        <p>Forme juridique : société à responsabilité limitée (Sàrl)<br />Numéro IDE (CHE) : <Todo /><br />Inscription au registre du commerce du canton de Fribourg : <Todo /><br />Numéro de TVA : <Todo /><br />Associés gérants / personnes autorisées à signer : <Todo /></p>
+        <h2 class="h3">Hébergement</h2>
+        <p>Hébergeur du site : <Todo /></p>
+        <h2 class="h3">Propriété intellectuelle</h2>
+        <p>Le logo Winiger Frères, les textes et les photographies de ce site sont la propriété de {company.name}, sauf mention contraire. Toute reproduction sans autorisation écrite est interdite.</p>
+        <h2 class="h3">Responsabilité</h2>
+        <p>Les informations de ce site sont fournies avec soin mais sans garantie d'exactitude ou d'exhaustivité. Les tarifs indiqués peuvent évoluer ; seule une offre écrite de l'entreprise fait foi. Les liens vers des sites tiers sont fournis à titre informatif ; {company.name} n'est pas responsable de leur contenu.</p>
+        <h2 class="h3">Marques citées</h2>
+        <p>Les marques automobiles mentionnées appartiennent à leurs titulaires respectifs. Leur citation illustre des véhicules réparés à l'atelier et n'implique aucun partenariat, à l'exception de l'agrément TESLA Approved Body Shop et des certifications indiquées.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+<style is:global>.legal .prose h2 { margin: 40px 0 14px; } .legal .prose h2:first-child { margin-top: 0; }</style>
