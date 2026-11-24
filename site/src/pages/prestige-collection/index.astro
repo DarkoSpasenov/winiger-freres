@@ -70,6 +70,10 @@ import { prestigeBrands } from '../../data/site';
         </div>
         <p class="lead" style="grid-column: 8 / span 5; align-self:end">La compétition fait partie des domaines de spécialisation de l'entreprise depuis ses débuts. Une passion pour le sport automobile qui se ressent dans l'atelier.</p>
       </div>
+      <div class="p-comp__track">
+        <Pic name="course-438-face" ratio="3/2" sizes="(min-width: 901px) 50vw, 100vw" caption="En course, n° 438 · Photo Sébastien Montagny / Sport-Auto.ch" />
+        <Pic name="course-438-profil" ratio="3/2" sizes="(min-width: 901px) 50vw, 100vw" caption="Photo Sébastien Montagny / Sport-Auto.ch" />
+      </div>
       <div class="p-comp__row">
         <Pic name="course-gt4" ratio="16/9" sizes="(min-width: 901px) 60vw, 100vw" position="50% 45%" />
         <Pic name="course-911-cup" ratio="4/5" sizes="(min-width: 901px) 30vw, 100vw" />
@@ -115,6 +119,9 @@ import { prestigeBrands } from '../../data/site';
   </section>
 </Base>
 <style is:global>
+  .p-comp__track { display: grid; grid-template-columns: 1fr 1fr; gap: var(--g); margin-block: clamp(32px, 4vw, 56px) var(--g); }
+  .p-comp__track figcaption { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .04em; color: var(--steel); padding: 10px 28px 0; }
+  @media (max-width: 900px) { .p-comp__track { grid-template-columns: 1fr; } }
   .p-resto__strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--g); margin-top: clamp(32px, 4vw, 56px); }
   .p-tesla__img { margin-block: clamp(32px, 4vw, 56px); }
   @media (max-width: 900px) { .p-resto__strip { grid-template-columns: 1fr 1fr; } .p-resto__strip > :first-child { grid-column: 1 / -1; } }
