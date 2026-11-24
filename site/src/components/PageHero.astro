@@ -1,0 +1,13 @@
+---
+// En-tête de page « course » : photo plein cadre sombre, grand titre italique,
+// bas coupé en biais avec la bande rouge (même langage que l'accueil).
+import Pic from './Pic.astro';
+import type { ImageName } from '../data/images';
+interface Props { img: ImageName; position?: string; class?: string; id: string; labelledby: string; }
+const { img, position = '50% 50%', class: cls = '', id, labelledby } = Astro.props;
+---
+<section class:list={['x-hero', 'bg-ink', 'on-dark', 'page-top', cls]} id={id} aria-labelledby={labelledby}>
+  <slot name="marks" />
+  <div class="x-hero__img"><Pic name={img} sizes="100vw" priority mask={false} position={position} /></div>
+  <div class="wrap x-hero__content"><slot /></div>
+</section>

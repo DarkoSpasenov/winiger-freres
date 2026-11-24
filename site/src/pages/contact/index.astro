@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
 import Hours from '../../components/Hours.astro';
@@ -8,12 +9,20 @@ import ContactForm from '../../components/ContactForm.astro';
 import { company, mapsLink, appleMapsLink, wash, urgent } from '../../data/site';
 ---
 <Base title="Contact — Carrosserie de Grolley, 026 476 06 06" description="Contactez Winiger Frères Sàrl, Carrosserie de Grolley : Route de l'Industrie-Ouest 11, 1772 Grolley. Tél. 026 476 06 06, carrosserie@winiger-artcar.ch. Horaires, itinéraire et formulaire." schema>
-  <section class="k-hero page-top" id="coordonnees" aria-labelledby="k-title">
-    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
-    <Sector n="1" name="Coordonnées" id="coordonnees" />
+  <PageHero img="ext-013" id="coordonnees" labelledby="k-title" position="50% 55%">
+    <Fragment slot="marks">
+      <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+      <Sector n="1" name="Coordonnées" id="coordonnees" />
+    </Fragment>
+    <p class="eyebrow">Contact <b>·</b> Ligne d'arrivée</p>
+    <h1 id="k-title" class="display"><a href={`tel:${company.phoneHref}`} class="k-tel">026 476 06 06</a><span class="red">.</span></h1>
+    <div class="btns">
+      <Btn href={`tel:${company.phoneHref}`} variant="red">Appeler l'atelier</Btn>
+      <Btn href={`mailto:${company.email}`}>Écrire un e-mail</Btn>
+    </div>
+  </PageHero>
+  <section class="section section--tight k-info" aria-label="Coordonnées détaillées">
     <div class="wrap">
-      <p class="eyebrow" data-reveal>Contact <b>·</b> Ligne d'arrivée</p>
-      <h1 id="k-title" class="display giant" data-reveal>026 476<br />06 06<span class="red">.</span></h1>
       <div class="grid k-grid">
         <div class="k-col">
           <p class="mono muted">Atelier</p>

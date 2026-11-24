@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import Pic from '../../components/Pic.astro';
 import Btn from '../../components/Btn.astro';
 import Sector from '../../components/Sector.astro';
@@ -22,18 +23,18 @@ const groups: G[] = [
 const big = (n: ImageName) => `/images/${n}-${Math.min(1920, images[n].w)}.webp`;
 ---
 <Base title="Nos locaux & réalisations — l'atelier en images" description="Le bâtiment, l'atelier, l'espace de gardiennage et les réalisations de Winiger Frères à Grolley, en photographies.">
-  <section class="l-hero page-top" id="galerie" aria-labelledby="l-title">
-    <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
-    <div class="wrap grid" style="align-items:end;row-gap:24px">
-      <div style="grid-column: 1 / span 8">
-        <p class="eyebrow" data-reveal>Nos locaux & réalisations</p>
-        <h1 id="l-title" class="display h1" data-reveal>L'atelier<br />en images<span class="red">.</span></h1>
-      </div>
-      <nav class="l-toc" style="grid-column: 9 / span 4" aria-label="Rubriques de la galerie">
-        {groups.map((g) => <a href={`#${g.id}`}><span class="mono">0{g.n}</span>{g.title}</a>)}
-      </nav>
-    </div>
-  </section>
+  <PageHero img="ext-020" id="galerie" labelledby="l-title" position="50% 55%">
+    <Fragment slot="marks">
+      <span class="wp" data-wp="l" style="top:calc(var(--header) + 20px)"></span>
+    </Fragment>
+    <p class="eyebrow">Nos locaux & réalisations</p>
+    <h1 id="l-title" class="display">L'atelier<br />en images<span class="red">.</span></h1>
+  </PageHero>
+  <div class="wrap l-tocwrap">
+    <nav class="l-toc" aria-label="Rubriques de la galerie">
+      {groups.map((g) => <a href={`#${g.id}`}><span class="mono">0{g.n}</span>{g.title}</a>)}
+    </nav>
+  </div>
 
   {groups.map((g, gi) => (
     <section class:list={['section section--tight l-group', gi % 2 === 1 && 'bg-paper']} id={g.id} aria-labelledby={`lt-${g.id}`}>
@@ -73,7 +74,8 @@ const big = (n: ImageName) => `/images/${n}-${Math.min(1920, images[n].w)}.webp`
 <style is:global>
   .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
   .l-hero { padding-bottom: clamp(24px, 4vw, 56px); }
-  .l-toc { display: grid; border-top: 1.5px solid var(--ink); }
+  .l-tocwrap { padding-top: clamp(40px, 5vw, 72px); }
+  .l-toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); column-gap: var(--g); border-top: 1.5px solid var(--ink); }
   .l-toc a { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; font-stretch: 110%; }
   .l-toc a .mono { color: var(--red); }
   .l-toc a:hover { color: var(--red); }
