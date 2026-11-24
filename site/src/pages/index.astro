@@ -17,6 +17,7 @@ const tileImg: Record<string, string> = {
   remplacement: 'ext-6177',
   complementaires: 'atelier-9877',
 };
+import '../styles/racing.css';
 const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Approved Body Shop', 'Compétition', 'Gardiennage chauffé', 'Tunnel de lavage', 'Grolley · Fribourg'];
 ---
 <Base
@@ -27,13 +28,25 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
   <!-- ========== S1 · DÉPART ========== -->
   <section class="h-hero" id="depart" aria-labelledby="h-hero-title">
     <Sector n="1" name="Départ" id="ligne-depart" href="#depart" ghost />
-    <Pic name="ext-008" class="h-hero__bg" sizes="100vw" priority mask={false} position="50% 62%" />
+    <Pic name="ext-008" class="h-hero__bg h-hero__bg--wide" sizes="100vw" priority mask={false} position="50% 62%" />
+    <Pic name="ext-009" class="h-hero__bg h-hero__bg--tall" sizes="100vw" priority mask={false} position="50% 60%" />
     <div class="h-hero__shade" aria-hidden="true"></div>
     <div class="wrap h-hero__inner">
       <div class="h-start" id="ligne-depart" aria-hidden="true">
         <span class="wp" data-wp="l"></span>
-        <div class="h-start__grid checker"></div>
-        <div class="lights"><i></i><i></i><i></i><i></i><i></i></div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" class="h-flag" width="120" height="96" focusable="false">
+         <defs>
+          <pattern id="ck" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="skewY(-6)">
+           <rect width="16" height="16" fill="#fff"/><rect width="8" height="8" fill="#111"/><rect x="8" y="8" width="8" height="8" fill="#111"/>
+          </pattern>
+          <linearGradient id="sh" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".35" stop-color="#000" stop-opacity=".28"/><stop offset=".6" stop-color="#fff" stop-opacity=".12"/><stop offset=".85" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".05"/></linearGradient>
+          <clipPath id="fl"><path d="M8 6 C30 -2 46 14 66 8 S100 0 116 6 L116 54 C100 48 86 58 66 56 S30 46 8 56 Z"/></clipPath>
+         </defs>
+         <g clip-path="url(#fl)"><rect x="0" y="-10" width="130" height="80" fill="url(#ck)"/><rect x="0" y="-10" width="130" height="80" fill="url(#sh)"/></g>
+         <path d="M8 6 C30 -2 46 14 66 8 S100 0 116 6 L116 54 C100 48 86 58 66 56 S30 46 8 56 Z" fill="none" stroke="#111" stroke-width="1.2" opacity=".5"/>
+         <rect x="4" y="2" width="5" height="94" rx="2.5" fill="#e2001a"/>
+         <circle cx="6.5" cy="3" r="4" fill="#e2001a"/>
+        </svg>
       </div>
       <p class="h-hero__kicker mono">Carrosserie de Grolley <b>·</b> depuis {company.founded}</p>
       <h1 id="h-hero-title" class="display giant h-hero__title">
@@ -45,7 +58,6 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
         <Btn href={`tel:${company.phoneHref}`}>{company.phone}</Btn>
       </div>
     </div>
-    <div class="h-hero__grid checker" aria-hidden="true"></div>
   </section>
 
   <div class="ticker" aria-hidden="true">
@@ -249,7 +261,7 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
   .wp { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
   section { position: relative; }
 
-  /* HERO — photo plein écran, feux de départ */
+  /* HERO — photo plein écran (portrait sur téléphone), drapeau de départ */
   .h-hero { min-height: max(640px, 100svh); display: flex; flex-direction: column; justify-content: flex-end; color: var(--white); overflow: hidden; background: var(--ink); }
   .h-hero__bg { position: absolute !important; inset: 0; background: var(--ink); }
   .h-hero__bg img { height: 100%; animation: heroZoom 9s var(--ease) both; }
@@ -258,30 +270,28 @@ const ticker = ['Carrosserie toutes marques', 'Prestige & collection', 'TESLA Ap
   .h-hero__inner { position: relative; z-index: 4; padding-top: calc(var(--header) + 24px); padding-bottom: clamp(36px, 5vw, 72px); }
   .h-hero__kicker { color: rgba(255,255,255,.85); margin: 0 0 14px; }
   .h-hero__kicker b { color: #ff5c6c; font-weight: 500; }
-  .h-hero__title { margin: 0 0 clamp(24px, 3vw, 40px); font-size: min(clamp(3rem, 9.6vw, 10.4rem), 9.4cqi); text-shadow: 0 2px 30px rgba(0,0,0,.25); }
+  .h-hero__title { margin: 0 0 clamp(24px, 3vw, 40px); font-size: min(clamp(2.4rem, 6.4vw, 6.8rem), 7cqi); text-shadow: 0 2px 30px rgba(0,0,0,.25); }
   .h-hero__title .line { display: block; white-space: nowrap; }
   .h-hero__title .line:last-child { padding-left: 0.5em; }
   .h-hero .btn:not(.btn--red) { --fg: var(--white); --bd: rgba(255,255,255,.75); background: rgba(23,25,27,.25); }
   .h-hero .btn:not(.btn--red):hover { --bg: var(--white); --fg: var(--ink); background: var(--white); }
   .h-hero__grid { position: relative; z-index: 4; height: 32px; background-size: 16px 16px; }
 
-  .h-start { position: relative; display: flex; align-items: center; gap: 18px; margin: 0 0 clamp(20px, 3vw, 40px) calc(var(--m) * -0.54); }
-  @media (max-width: 900px) { .h-start { margin-left: -11px; } }
-  .h-start .wp { top: 50%; left: 0; }
-  .h-start__grid { width: calc(var(--m) * 0.54 + 56px); height: 24px; flex: none; background-size: 12px 12px; }
-  .lights { display: flex; gap: 8px; padding: 8px 10px; background: #0d0e0f; border-radius: 4px; box-shadow: 0 0 0 1px rgba(255,255,255,.12); }
-  .lights i { width: 18px; height: 18px; border-radius: 50%; background: #3a1216; box-shadow: inset 0 -2px 3px rgba(0,0,0,.6); animation: light .25s steps(1) both; }
-  .lights i:nth-child(1) { animation-delay: .5s; } .lights i:nth-child(2) { animation-delay: .9s; } .lights i:nth-child(3) { animation-delay: 1.3s; }
-  .lights i:nth-child(4) { animation-delay: 1.7s; } .lights i:nth-child(5) { animation-delay: 2.1s; }
-  @keyframes light { from { background: #3a1216; } to { background: var(--red); box-shadow: 0 0 14px 2px rgba(226,0,26,.75), inset 0 -2px 3px rgba(0,0,0,.25); } }
-  @media (prefers-reduced-motion: reduce) { .lights i { animation: none; background: var(--red); } .h-hero__bg img { animation: none; } }
+  /* Drapeau à damier : la ligne du circuit part du pied du mât */
+  .h-start { position: relative; height: 96px; margin: 0 0 14px calc(var(--m) * -0.54 - 7px); }
+  @media (max-width: 900px) { .h-start { margin-left: -18px; } }
+  .h-start .wp { top: auto; bottom: 0; left: 7px; }
+  .h-flag { display: block; width: 120px; height: 96px; filter: drop-shadow(0 8px 14px rgba(0,0,0,.45)); }
+  .h-hero__bg--tall { display: none; }
+  @media (prefers-reduced-motion: reduce) { .h-hero__bg img { animation: none; } }
 
   @media (max-width: 900px) {
-    .h-hero { min-height: max(560px, 92svh); }
-    .h-hero__title { font-size: min(clamp(2rem, 10.5vw, 5rem), 11cqi); }
+    .h-hero { min-height: max(540px, 88svh); }
+    .h-hero__title { font-size: min(clamp(1.9rem, 8.6vw, 3.4rem), 9cqi); }
     .h-hero__title .line { white-space: normal; }
     .h-hero__title .line:last-child { padding-left: 0; }
-    .lights i { width: 13px; height: 13px; }
+    .h-hero__bg--wide { display: none; }
+    .h-hero__bg--tall { display: block; }
   }
 
   /* Bandeau défilant */
