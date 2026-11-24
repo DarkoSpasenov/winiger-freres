@@ -240,7 +240,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .site-header.is-hidden { transform: translateY(-100%); }
 .site-header .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .brand { display: block; flex: none; text-decoration: none; }
-.brand img { height: 44px; width: auto; }
+.brand img { height: 56px; width: auto; }
 .nav { display: flex; align-items: center; gap: clamp(14px, 1.6vw, 28px); }
 .nav a {
   position: relative; text-decoration: none; font-size: 0.84rem; font-weight: 560; font-stretch: 108%;
